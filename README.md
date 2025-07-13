@@ -44,7 +44,7 @@ Alternatively, use the Web UI and IDE directly by [signing up for an account](ht
 
 Before getting started, ensure the following:
 
-### 1. **Node.js Installed**
+**Node.js Installed**
 
 Aloma requires Node.js (which includes npm). To check if it’s already installed, run:
 
@@ -57,6 +57,8 @@ npm -v
 If not, [download and install Node.js](https://nodejs.org/en/download/).
 
 ---
+
+## Instructions
 
 ### Step 1: Get the CLI Package
 
