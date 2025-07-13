@@ -12,7 +12,7 @@ After entering a name, giving it optional tags for filtering and creating it, th
 
 The overview of a workspace holds the automation rate and task metrics.
 
-![Overiew](/asset/img/workspace-overview.png)
+![Overiew](../static/asset/img/workspace-overview.png)
 
 ## Configuration
 
@@ -26,25 +26,25 @@ See <a href="integration">integrations</a>.
 
 The environment can hold static configuration values. These can be referenced in a task via `task.config('API_KEY')`.
 
-![Overiew](/asset/img/workspace-environment.png)
+![Overiew](../static/asset/img/workspace-environment.png)
 
 ### Settings
 
 Name, tags, as well as health checks can be configured in the overview. Health checks give an indicator about unused steps, connectors or webhooks.
 
-![Overiew](/asset/img/workspace-settings-overview.png)
+![Overiew](../static/asset/img/workspace-settings-overview.png)
 
 ### Notifications
 
 Notifications can be configured to receive notifications via e-Mail about errors in tasks. E-Mails will not be sent immediately when a task fails, but in an interval like 15 - 30 minutes.
 
-![Overiew](/asset/img/workspace-settings-notifications.png)
+![Overiew](../static/asset/img/workspace-settings-notifications.png)
 
 ### Source
 
 Steps can be synchronized from git into a workspace or vice versa.
 
-![Overiew](/asset/img/workspace-settings-source-1.png)
+![Overiew](../static/asset/img/workspace-settings-source-1.png)
 
 In order to get started, use the [workspace-sdk](https://github.com/aloma-io/integration/tree/main/workspace-sdk) to create a new project.
 
@@ -62,7 +62,7 @@ Afterwards import into a git repository.
 
 Then enable the source sync in the aloma workspace and provide the necessary info like username, password, git https:// url (git:// urls are not supported).
 
-![Overiew](/asset/img/workspace-settings-source-2.png)
+![Overiew](../static/asset/img/workspace-settings-source-2.png)
 
 The workspace will then synchronize steps from the git repository. 
 Note that, steps, which do not exist in the git repository, will be deleted. Steps that have been modified in the aloma ui will be overwritten by the steps in the git repository.
