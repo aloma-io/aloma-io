@@ -141,7 +141,17 @@ Take a look at a [connector example](https://github.com/aloma-io/integration/tre
 <br />
 1. Register your connector (after creation navigate to my connectors and take note of the connector ID, e.g. 1234)
 ![Add](../static/asset/img/create-connector-registration.png)
-2. Create a new connector with our [SDK](https://github.com/aloma-io/integration) by running <br /> `npx @aloma.io/integration-sdk@latest create my-connector --connector-id 1234`
+
+2. Create a new connector with our [SDK](https://github.com/aloma-io/integration) by running
+```bash
+npx @aloma.io/integration-sdk@latest create my-connector --connector-id 1234`
+```
+
 3. Add the connector to a workspace.
-4. Start the connector by running `yarn build; yarn start`.
+
+4. Start the connector by running
+```bash
+yarn build; yarn start.
+```
+
 5. Once up, configure as necessary.
