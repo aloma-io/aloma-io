@@ -113,19 +113,19 @@ You will see a list of available connectors, and can add them by clicking on the
 
 ![Add](../static/asset/img/connecter-list.png)
 
-If you add a connector to a workspace and the connector needs configuration, you can see that in the connector list:
+If you add a connector to a workspace and the connector needs configuration - generally to add access credentials, you can see that in the connector list:
 
 ![Add](../static/asset/img/configure-connector.png)
 
-Just navigate to the connector to configure it. 
+Just navigate to the connector in the list of installed connectors to configure it. 
 
-API Key (Example):
+To add an API Key:
 ![Add](../static/asset/img/configure-connector-details.png)
 
-OAuth (Example):
+To authourise via OAuth (this will open the oauth permissions window):
 ![Add](../static/asset/img/configure-connector-details-oauth.png)
 
-Username/Password (Example):
+Username/Password (these are set as secrets in the UI):
 ![Add](../static/asset/img/configure-connector-details-username-password.png)
 
 
@@ -141,7 +141,7 @@ Take a look at a [connector example](https://github.com/aloma-io/integration/tre
 <br />
 1. Register your connector (after creation navigate to my connectors and take note of the connector ID, e.g. 1234)
 ![Add](../static/asset/img/create-connector-registration.png)
-1. Create a new connector with our [SDK](https://github.com/aloma-io/integration) by running <br /> `npx @aloma.io/integration-sdk@latest create my-connector --connector-id 1234`
-1. Add the connector to a workspace.
-1. Start the connector by running `yarn build; yarn start`.
-1. Once up, configure as necessary.
+2. Create a new connector with our [SDK](https://github.com/aloma-io/integration) by running <br /> `npx @aloma.io/integration-sdk@latest create my-connector --connector-id 1234`
+3. Add the connector to a workspace.
+4. Start the connector by running `yarn build; yarn start`.
+5. Once up, configure as necessary.
