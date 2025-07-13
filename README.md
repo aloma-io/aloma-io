@@ -1,82 +1,136 @@
-# Aloma - End-to-End Business Process Automation
+# ALOMA
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Documentation](https://img.shields.io/badge/docs-latest-brightgreen.svg)](docs/)
-[![Examples](https://img.shields.io/badge/examples-available-orange.svg)](examples/)
-
-Aloma enables end-to-end, vast and complex, variable and continuous business process automation with a developer-first approach.
-
-## 🚀 Features
-
-- **✅ Developer First** - Built for developers with familiar tools and workflows
-- **✅ Agile/Iterative/Continuous** - Support for rapid development and deployment cycles
-- **✅ Context Aware** - Intelligent task processing with context understanding
-- **✅ Self-Contained Steps** - Modular, reusable automation components
-- **✅ Workspace Organization** - Separate business logic into organized workspaces
-
-## 🎯 What is Aloma?
-
-Aloma is a powerful business process automation platform that allows you to create complex workflows using:
-
-- **Workspaces** - Contain all necessary steps, tasks, integrations, and business logic
-- **Tasks** - JSON data that flows through your automation processes
-- **Steps** - Self-contained match and code logic that processes tasks in context
-- **Integrations** - Connect to external services and APIs seamlessly
-
-## 📚 Documentation
-
-### Getting Started
-- [Introduction](docs/intro.md) - Core concepts and overview
-- [Getting Started Guide](docs/getting-started.md) - Step-by-step tutorial with video
-- [Quick Start](docs/basics/) - Essential concepts and setup
-
-### Core Concepts
-- [Workspaces](docs/basics/workspaces.md) - Organizing your automation projects
-- [Tasks](docs/basics/tasks.md) - Understanding data flow
-- [Steps](docs/basics/steps.md) - Building automation logic
-- [Integrations](docs/basics/integration.md) - Connecting external services
-
-### Advanced Topics
-- [API Reference](docs/api/overview.md) - Technical API documentation
-- [Advanced Features](docs/advanced/limits.mdx) - Performance and limitations
-- [Administration](docs/admin/members.mdx) - Team and workspace management
-- [Policies](docs/policies/data-retention.mdx) - Data handling and retention
-
-## 🛠️ Examples
-
-Explore real-world automation examples:
-
-- **[HubSpot Integration](examples/hubspot/)** - Company and contact management automation
-- **[Waitlist Automation](examples/waitlist_automation/)** - Complete lead processing workflow
-
-Each example includes:
-- Complete workflow configuration
-- Step-by-step implementation
-- Connector configurations
-- Deployment instructions
-
-## 🏃‍♂️ Quick Start
-
-1. **Create an Account** - Sign up at [aloma.io](https://home.aloma.io/)
-2. **Set Up Your First Workspace** - Follow the [Getting Started Guide](docs/getting-started.md)
-3. **Add Integrations** - Connect your first external service
-4. **Create Steps** - Build your automation logic
-5. **Deploy and Monitor** - Watch your automation in action
-
-## 🔗 Resources
-
-- **Homepage**: [aloma.io](https://aloma.io/)
-- **Documentation**: [docs/](docs/)
-- **Examples**: [examples/](examples/)
-
-## 🤝 Contributing
-
-We welcome contributions! Please see our contributing guidelines and feel free to submit issues and pull requests.
-
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
+**No infra. No no-code. Just code and let ALOMA handle the rest.**
 
 ---
 
-**Ready to automate?** Start with our [Getting Started Guide](docs/getting-started.md) or explore the [examples](examples/) to see Aloma in action!
+## Overview
+
+ALOMA is a code-first workflow automation platform.
+
+Define your automation logic in **coded JavaScript** steps. Send data to ALOMA in **JSON** using Webhooks or API calls. Build your workflows step-by-step by **instantly deploying and testing** each step on our infrastructure.
+
+Use with the **CLI** to edit in your own IDE, or use our **web-based IDE** in the UI.
+
+**Tasks**, which are schemaless JSON payloads (including files), are streamed into your Aloma workspaces. ALOMA continuously evaluates the tasks against available steps and executes those that match; each **step** containing matching conditions and a block of JavaScript logic. The task is continuously updated after step execution, triggering downstream logic as needed by invoking **connectors** - authorised, reusable wrappers to external services. 
+
+**Automation-as-code**, self-contained steps structured with IDE, makes debugging and maintenance easy - especially as compared to no-code tools like n8n. It also makes it easy to build long, complex workflows with many paths, as the conditions in the step controls when it is triggered. Adding the 100th step to a workflow is as easy as adding the first.
+
+Use ALOMA to build your AI Agents, pipelines, application integrations - any workflow where data can be sent to ALOMA in JSON logic, can be expressed in code, and can trigger services that can be reached by our connectors.
+
+The ALOMA platform is robust and automatically scales to handle your workloads. Tasks are processed in parallel, with built in exception handling.
+
+
+## Documentation
+
+The general user documentation for ALOMA, is located under the docs directory [docs directory](https://github.com/aloma-io/aloma-io/tree/main/docs) of the present repo here including for the CLI.
+
+There is a growing [library of workflows with steps](https://github.com/aloma-io/aloma-io/tree/main/examples) that can be deployed to your ALOMA workspace via the CLI as per instructions. Please feel free to share your steps here for the community.
+
+There is a [connector repo](https://github.com/aloma-io/connectors) with an SDK to build an on prem connector for your local environment and several example connectors,
+
+Please send requests for new cloud connectors to us here at connector-request@aloma.io.
+
+
+## Getting Started with CLI
+
+This guide will walk you through installing the CLI, authenticating, and deploying your first automation example using a HubSpot connector. 
+
+Alternatively, use the Web UI and IDE directly by [signing up for an account](https://home.aloma.io) online.
+
+---
+
+## Prerequisites
+
+Before getting started, ensure the following:
+
+### 1. **Node.js Installed**
+
+Aloma requires Node.js (which includes npm). To check if it’s already installed, run:
+
+```bash
+node -v
+# or
+npm -v
+```
+
+If not, [download and install Node.js](https://nodejs.org/en/download/).
+
+---
+
+### Step 1: Get the CLI Package
+
+[URL]
+
+### Step 2: Install the CLI Globally
+
+
+```bash
+npm install -g aloma-1.0.0.tgz
+```
+
+### Step 3: Setup
+
+```bash
+aloma setup
+```
+
+This command configures your CLI environment.
+
+### Step 4: Authenticate
+
+```bash
+aloma auth
+```
+
+This will guide you through authentication via your Aloma account.
+
+We’ll now deploy a HubSpot integration workflow as an example.
+
+### Step 5: Get the Example Folder
+
+Download or clone the example folder containing the [**HubSpot connector**](https://github.com/aloma-io/aloma-io/tree/main/examples/hubspot).
+
+Unzip the folder if needed.
+
+### Step 6: Update API Token
+
+Inside the project folder, open:
+
+```text
+connector/connector-hubspot.json
+```
+
+Replace the placeholder with your actual HubSpot token:
+
+```json
+"apiToken": "your-real-token-here"
+```
+### Step 7: Deploy the Workflow
+
+Inside the folder, run:
+
+```bash
+aloma deploy deploy.yaml
+```
+
+This will deploy your automation to the Aloma platform.
+
+---
+
+## Next Steps
+
+Now that you've set up and deployed the Hubspot connector with example steps to get contacts and get companies, you can start automating with ALOMA.
+
+- [Access ALOMA getting started documentation](https://github.com/aloma-io/aloma-io/tree/main/docs/getting-started)
+- [Watch the Toy getting started video and documentation](https://github.com/aloma-io/aloma-io/blob/main/docs/getting-started/toy-example.md)
+- [Read documentation for the Hubspot Example](https://github.com/aloma-io/aloma-io/tree/main/examples/hubspot)
+- [Access more example workflows](https://github.com/aloma-io/aloma-io/tree/main/examples)
+- Join the community (coming soon!)
+
+
+## License
+Licensed under the Apache 2.0 License.
+
+
+
