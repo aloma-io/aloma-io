@@ -111,11 +111,11 @@ This provides you a list of installed connectors. By clicking on the manage butt
 
 You will see a list of available connectors, and can add them by clicking on the "add" button. On prem and cloud connectors are shown on the list and differentiated by their icons. You can also create on prem "local" connectors by clicking on the "create" button. This is done using the [SDK](https://github.com/aloma-io/connectors)
 
-![Add](../static/asset/img/manage-connectors.png)
+![Add](../static/asset/img/connecter-list.png)
 
 If you add a connector to a workspace and the connector needs configuration, you can see that in the connector list:
 
-![Add](../static/asset/img/connecter-list.png)
+![Add](../static/asset/img/configure-connector.png)
 
 Just navigate to the connector to configure it. 
 
