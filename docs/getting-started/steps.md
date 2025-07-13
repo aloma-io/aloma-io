@@ -340,7 +340,7 @@ In order to aquire missing data, approval, ..., human interaction in general, on
 
 Forms are useful for asking for structured data. Use the nocode form builder by creating a new step of type `Form`.
 
-![Nocode Form Step](/asset/img/nocode.png)
+![Nocode Form Step](../static/asset/img/nocode.png)
 
 ### Presentation
 
