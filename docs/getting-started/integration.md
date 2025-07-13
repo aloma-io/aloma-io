@@ -1,7 +1,3 @@
----
-sidebar_position: 3
----
-
 # Integration
 
 For automating processes you need to integrate aloma with other systems.
