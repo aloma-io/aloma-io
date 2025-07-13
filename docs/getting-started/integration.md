@@ -6,24 +6,40 @@ __Example: Sync data from jira (inbound) to hubspot (outbound).__
 
 
 1. Add a jira and hubspot connector to a workspace.
-1. Connect jira via one click OAuth.
-1. Connect hubspot via API Token.
-1. For receiving events from jira, create a webhook in aloma in configure in [jira](https://developer.atlassian.com/server/jira/platform/webhooks/).
-1. Done. Use the connectors to read/write data from both systems.
+2. Connect jira via one click OAuth.
+3. Connect hubspot via API Token.
+4. For receiving events from jira, create a webhook in aloma in configure in [jira](https://developer.atlassian.com/server/jira/platform/webhooks/).
+5. Done. Use the connectors to read/write data from both systems.
 
+---
 
 ## Webhooks  
 
 [Webhooks](https://en.wikipedia.org/wiki/Webhook) are an easy means to get data into or out of aloma.
 
+### Incoming webhooks
 
-## Incoming webhooks
+Incoming webhooks create tasks in aloma. In the integration configuration one can simply add new hooks as desired.
 
-Incoming webhooks create tasks in aloma. In the integration configuration one can simply add new hooks as desired:
+**Using the CLI**
+
+
+
+**Using the Web UI**
+
+First, in your workspace navigate to the integration menu.
+
+![integration menu](../static/asset/img/integration-menu.png)
+
+Then select the webhooks tab 
+
+![webhooks tab](../static/asset/img/webhooks-integration.png)
+
+Then add a webhook by giving it a names and clicking create.
 
 ![Webhooks](../static/asset/img/webhooks.png)
 
-These can then be used in a foreign system.
+Clicking on the webhook copies it to the clipboard. These can then be used in the external system.
 
 As an example, here is what a curl call looks like to create a task via webhook:
 
@@ -33,11 +49,27 @@ curl -v -X POST -H'Content-type: application/json' --data-binary '{"a": "hello",
 
 ## Outgoing webhooks
 
+**Using the CLI**
+
+
+
+**Using the Web UI**
+
 Outgoing webhooks can be used by making a [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) request to them. 
 
-If you need access tokens, these can be configured in the workspace configuration:
+If you need access tokens, these can be configured in the workspace configuration accessible here:
 
-![Workspace Configuration](../static/asset/img/secrets.png)
+![Configuration access](../static/asset/img/secret-configuration.png) 
+
+Simply enter you secret 
+
+![Enter secret](../static/asset/img/set-secret1.png)
+
+and it will be accessible in the workspace by referring to it as a variable
+
+```bash
+task.config("MySecondSecret");
+```
 
 In a step:
 
@@ -49,7 +81,7 @@ const result = await connectors.fetch({
     body: JSON.stringify({"hello": "world"}), 
     headers: { 
       'Content-type': 'application/json',
-      'Authorization': `Bearer ${task.config('WEBHOOK_SECRET')}`
+      'Authorization': `Bearer ${task.config('MySecondSecret')}`
     } 
   } 
 });
@@ -59,20 +91,31 @@ const result = await connectors.fetch({
 
 Connectors are useful for any kind of complex integration. The aloma connectors and SDK support a wide range of easy configuration like [API Keys](https://en.wikipedia.org/wiki/API_key), [OAuth](https://en.wikipedia.org/wiki/OAuth), ...
 
+Connectors are managed in a Workspace and need to be setup in each individual workspace.
 
 ### Manage Connectors
 
-One can manage the connectors of a workspace and add/remove connectors.
+**Using the CLI**
+
+
+
+**Using the Web UI**
+
+Navigate to the integration menu.
+
+![integration menu](../static/asset/img/integration-menu.png)
+
+This provides you a list of installed connectors. By clicking on the manage button you can add connectors.
 
 ![Manage](../static/asset/img/manage-connectors.png)
 
-You will see a list of available connectors.
+You will see a list of available connectors, and can add them by clicking on the "add" button. On prem and cloud connectors are shown on the list and differentiated by their icons. You can also create on prem "local" connectors by clicking on the "create" button. This is done using the [SDK](https://github.com/aloma-io/connectors)
 
-![Add](../static/asset/img/add-connectors.png)
+![Add](../static/asset/img/manage-connectors.png)
 
 If you add a connector to a workspace and the connector needs configuration, you can see that in the connector list:
 
-![Add](../static/asset/img/configure-connector.png)
+![Add](../static/asset/img/connecter-list.pngg)
 
 Just navigate to the connector to configure it. 
 
