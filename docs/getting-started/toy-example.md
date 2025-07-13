@@ -1,4 +1,4 @@
-# Kitchen Sink
+# Toy Example
 
 Aloma in 10 Minutes.
 
