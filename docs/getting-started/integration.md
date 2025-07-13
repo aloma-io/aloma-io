@@ -115,7 +115,7 @@ You will see a list of available connectors, and can add them by clicking on the
 
 If you add a connector to a workspace and the connector needs configuration, you can see that in the connector list:
 
-![Add](../static/asset/img/connecter-list.pngg)
+![Add](../static/asset/img/connecter-list.png)
 
 Just navigate to the connector to configure it. 
 
