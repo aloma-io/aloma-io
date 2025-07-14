@@ -8,6 +8,8 @@ A step consists of a `match` and a `do`.
 The match specifies in which state of the task the step may be applied.
 The do specifies what to execute if applied.
 
+**Open the outline view for easier navigation**
+
 ### Match
 
 Given a task, a match can match any subset of the data of the task.
