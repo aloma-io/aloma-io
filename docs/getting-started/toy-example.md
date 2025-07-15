@@ -64,19 +64,21 @@ A task is any valid `JSON` data, e.g.:
 
 ## Building the Workflow
 
-Once you create a new task, you will be redirected to the task execution screen. We have not created any steps yet, so there is nothing to match and ALOMA reports "Task is incomplete" and add new step to start building the workflow. In ALOMA we build workflows based on data in context, we create a task from JSON and then write steps iteratively using real data, which makes it easier to build steps.
+Once the new task is created, you will be redirected to the task execution screen. We have not created any steps yet, so there is nothing to match and ALOMA reports "Task is incomplete". We now need to add a new step to start building the workflow, which is how they are built in ALOMA. Workflows are built based on data in context using real data, which makes it easy to build iteratively. 
+
+Press `Add new step` to continue.
 
 ![retire-ship-task-start](../static/asset/img/retire-ship-1.png)
 
 ## Offboarding the Crew
 
-Click on the "Add New Step" button to continue, which launches the create new step pop-up. 
+The "Add New Step" button launches the create new step pop-up. 
 
 Enter the Step Name `offboard crew`. Hit `create`.
 
 ![name-step](../static/asset/img/name-new-step.png)
 
-**The step consists of two parts, a `match` and the `code` to apply. Copy the parts over to the step.**
+**The step consists of two parts, a `match` section and the `code` section. Copy the parts listed below over to the step.**
 
 ![blank-step](../static/asset/img/blank-step.png)
 
@@ -92,9 +94,8 @@ Enter the Step Name `offboard crew`. Hit `create`.
 
 ![matching-conditions-json](../static/asset/img/matching-json.png)
 
-> **Note:** This step only offboards the **crew**, we are adding steps one-by-one to complete the task assuming they are being done one-by-one in real time. 
 
-** Copy the following code into the step and save the step:**
+**Copy the following code into the code area of the step and saveit:**
 
 ```js title="code - offboard crew" showLineNumbers
 data.ship.crew = 0
@@ -104,13 +105,13 @@ console.log('offboarded crew');
 
 ![step-code](../static/asset/img/code-new-step.png)
 
- Now save the step by clicking on the Save button in the upper right corner of the step. It is not deployed and available for use.
+ Now save the step by clicking on the Save button in the upper right corner of the step. It is now deployed and available for use.
 
-**Click on the lightning bolt to create a new task using the same data. There is no need to create a new task or trigger one externally, it just creates a new task using the same data.**
+**To use it, click on the lightning bolt symbol, which creates a new task using the same data. This avoids the need to trigger a new task in external software.**
 
 ![relaunch-task](../static/asset/img/relaunch-task.png)
 
-**It will open to the task execution, you can see the new step has executed and console log of offboarded crew**. 
+**It will open the task execution screen, you can see the new step has executed and console log of offboarded crew**. 
 
 ![second-task-execution](../static/asset/img/second-task-execution.png)
 
@@ -118,7 +119,7 @@ console.log('offboarded crew');
 
 ![show-changes](../static/asset/img/show-changes.png)
 
-**If we click on the change button, we can see the data before and after code execution**
+**If we click on the change button, we can see the data change before and after code execution**
 
 ![data-changes](../static/asset/img/data-changes.png)
 
@@ -128,7 +129,7 @@ console.log('offboarded crew');
 
 Now that we have added the first step and seen how the basics work, let's proceed to add additional steps to build out the workflow.
 
-Click on the `Add New Step` buttong again. Name it `unload cargo`. Hit `create`.
+Click on the `Add New Step` button again. Name it `unload cargo`. Hit `create`.
 
 * Click on `Match Invalid` and copy and paste the following matching condition:
 
@@ -140,22 +141,20 @@ Click on the `Add New Step` buttong again. Name it `unload cargo`. Hit `create`.
 }
 ```
 
-> **Note:** As before, this step claims only processes the **cargo** of the ship.
-
-* Copy the following code into the step and save the step:
+* Copy the following code into the step and save it:
 
 ```js title="code - unload cargo" showLineNumbers
 data.ship.cargo.forEach((item) => console.log(`unloaded ${item}`));
 
 delete(data.ship.cargo)
 ```
-Create a new task with the same starting data again.
+Again, create a new task with the same starting data again using the lightning bolt button.
 
 ![relaunch-task](../static/asset/img/relaunch-task.png)
 
 **Note in our case ALOMA detected that both step conditions matched the task data and it chose to run the new one first. The order the steps run in are not consequential, so this is perfectly acceptable. You can also open each step and see how the data has changed**
 
-![relaunch-task](../static/asset/img/relaunch-task.png)
+![task-execution-2](../static/asset/img/task-execution-2.png)
 
 **Perhaps we want the crew to offboard before the cargo is unloaded. Let's change the match condition of the `unload cargo` step to make this happen. Open the `unload cargo` step.**
 
@@ -182,7 +181,7 @@ Create a new task with the same starting data again.
 
 ![task-execution-3](../static/asset/img/task-execution-3.png)
 
-Now have a look at the data and you will see it has changed in the opposite order but the end result is the same. 
+Now have a look at the change data and you will see it has changed in the opposite order but the end result is the same. 
 
 ## Retiring the ship
 
@@ -205,9 +204,11 @@ console.log('retiring the ship');
 delete(data.ship);
 ```
 
-This step will only run last based on the matching conditions. 
+This step will only run last based on the matching conditions, which require that cargo and crew be unloaded first. 
 
 Now create a new task with same data and see that all 3 steps are executed and the ship is retired. 
+
+
 
 ## INSTANT DEPLOYMENT and TESTING
 
