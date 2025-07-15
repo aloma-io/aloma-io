@@ -45,7 +45,7 @@ Ensure **Node.js Installed**
 
 
 ```bash
-npm install -g aloma-1.0.0.tgz
+npm install -g @juanjoserodriguez/aloma
 ```
 
 ### Step 2: Setup
