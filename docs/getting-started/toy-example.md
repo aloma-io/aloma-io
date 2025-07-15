@@ -12,22 +12,19 @@ The toy task we want to solve is `Retire a ship`.
 
 Like any real world process, it has certain steps and rules:
 
+* All instructions must be carried out individually
 * The ship can be retired only after the cargo and crew have been offboarded
-* Only the captain can retire the ship
-* Offboarding the crew and unloading the cargo are handled by two different responsible parties
 
 ## Video Tutorial
 
 Watch this first!
 
-<video controls width="100%">
-  <source src="/static/asset/kitchen-sink.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
 
 ## Before you begin
 
-Login and enter the Getting Started workspace. 
+[Login](https://home.aloma.io) and enter the Getting Started workspace. 
+
+![getting-started](../static/asset/img/getting-started-screen.png)
 
 ## Creating the Task
 
@@ -231,4 +228,35 @@ task.complete()
 
 Let's post to Slack to let the team know that the ship is retired.
 
-First navigate back to the 
+First got to the settings menu and select `integration`.
+
+
+
+You are on the Connectors tab, beside it is the Webhook tab where you can create a Webhook. Now navigate down the list of available connectors and find `Email (SMTP - OAuth)` and select `Add`.
+
+
+
+In the list of added connectors, Email will have a red symbol next to it indicating it needs to be connected. Click Connect and grant OAuth access.
+
+
+Now go back to the last task you ran and select the final step, in our case `retire ship`.
+
+
+
+Add the following code just before the `task complete()`
+```js title="code - send email" showLineNumbers
+connectors.eMailSmtpOAuth.send({
+  from: "youremail@company.com",
+  to: "joe.bloggs@company.com",
+  subject: 'Ship has been retired',
+  html: `
+  <p>Dear Joe,</p>
+
+  <p>The ship arrived today has been retired!</p>
+
+  <p> Kind Regards, <br>
+  Aloma team </p>
+  `
+});```
+
+Save and create a new task again with the lightning bolt and VOILA! Email added and sent.
