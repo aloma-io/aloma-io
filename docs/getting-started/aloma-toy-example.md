@@ -91,7 +91,10 @@ Business rules:
 2. Name the step `offboard crew`  
    ![Name Step](../static/asset/img/name-new-step.png)
 
-3. Set the Match Condition:
+3. Click on `match invalid`
+![matching-conditions-json](../static/asset/img/blank-step.png)
+
+4. Set the Match Condition and `x` to close:
 
 ```js
 {
@@ -103,7 +106,7 @@ Business rules:
 
 ![Match JSON](../static/asset/img/matching-json.png)
 
-4. Add the code:
+5. Add the code:
 
 ```js
 data.ship.crew = 0;
@@ -112,12 +115,15 @@ console.log('offboarded crew');
 
 ![Code Step](../static/asset/img/code-new-step.png)
 
-5. Click **Save**, then press the lightning bolt icon  
+6. Click **Save**, then press the lightning bolt icon  
    ![Relaunch Task](../static/asset/img/relaunch-task.png)
 
-6. Confirm execution:  
-   ![Task Executed](../static/asset/img/second-task-execution.png)  
-   ![Code Shown](../static/asset/img/show-changes.png)  
+7. Confirm execution:  
+   ![Task Executed](../static/asset/img/second-task-execution.png)
+
+8. Click **Change** to see the task data diff
+   ![Code Shown](../static/asset/img/show-changes.png)
+   
    ![Data Changes](../static/asset/img/data-changes.png)
 
 ---
@@ -149,7 +155,7 @@ delete(data.ship.cargo);
 5. Result:  
    ![Task Executed with Cargo](../static/asset/img/task-execution-2.png)
 
-6. To ensure crew is offboarded first, update match condition:
+6. To ensure crew is offboarded first, update match condition by clicking on **Matches Task** and replacing the existing condition:
 
 ```js
 {
@@ -160,13 +166,12 @@ delete(data.ship.cargo);
 }
 ```
 
-![Step Matches Task](../static/asset/img/step-matches-task.png)  
 ![Match Crew and Ship](../static/asset/img/match-crew-and-ship.png)
 
-7. If no match:  
+7. As the condition is no longer matching with the task data, it shows `No Match`:  
    ![No Match](../static/asset/img/step-no-match.png)
 
-8. Re-run task:  
+8. Re-run task and the crew has been offboarded first:  
    ![Execution Order Confirmed](../static/asset/img/task-execution-3.png)
 
 ---
@@ -199,17 +204,19 @@ Re-run the task and confirm all steps execute in order.
 
 ## Instant Deployment and Testing
 
+Experiment with conditions, add new steps and create new tasks with new data.
 - Click the lightning bolt to re-trigger using same data
 - Logs and data diffs update instantly
 - Code changes are live as soon as you hit **Save**
 
-To mark task as complete:
+To mark task as complete after retiring the ship, add this code as the last line to the `retire ship` step:
 
 ```js
 task.complete();
 ```
 
 Create a new task and confirm:  
+
 ![Task Done](../static/asset/img/task-done.png)
 
 ---
@@ -218,16 +225,22 @@ Create a new task and confirm:
 
 1. Go to **Settings → Integrations**
 
+![integration-menu](../static/asset/img/integration-menu.png)
+
 2. Under **Connectors**, add `Email (SMTP - OAuth)`
 
+![email smtp connector](../static/asset/img/email-smtp-connector.png)
+
 3. Connect and authorize
+
+![connect-email](../static/asset/img/connect-email.png)
 
 4. In the `retire ship` step, add before `task.complete()`:
 
 ```js
 connectors.eMailSmtpOAuth.send({
   from: "youremail@company.com",
-  to: "joe.bloggs@company.com",
+  to: "someone@company.com",
   subject: 'Ship has been retired',
   html: `
     <p>Dear Joe,</p>
@@ -236,6 +249,8 @@ connectors.eMailSmtpOAuth.send({
   `
 });
 ```
+
+![email-in-step](../static/asset/img/email-in-step.png)
 
 Run the task again. A notification will be sent by email.
 
