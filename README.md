@@ -2,114 +2,87 @@
 
 **No infra. No no-code. Just code and let ALOMA handle the rest.**
 
----
+ALOMA is a code-first workflow automation platform that lets you define automation logic in JavaScript, send data via JSON webhooks, and instantly deploy and test each step on our infrastructure.
 
-## Overview
+## Quick Start
 
-ALOMA is a code-first workflow automation platform.
+**Get up and running in 5 minutes:**
 
-Define your automation logic in **coded JavaScript** steps. Send data to ALOMA in **JSON** using Webhooks or API calls. Build your workflows step-by-step by **instantly deploying and testing** each step on our infrastructure.
+1. **Install the CLI**
+   ```bash
+   npm install -g @aloma.io/aloma
+   ```
 
-Use with the **CLI** to edit in your own IDE, or use our **web-based IDE** in the UI.
+2. **Setup and authenticate**
+   ```bash
+   aloma setup
+   aloma auth
+   ```
 
-**Tasks**, which are schemaless JSON payloads (including files), are streamed into your Aloma workspaces. ALOMA continuously evaluates the tasks against available steps and executes those that match; each **step** containing matching conditions and a block of JavaScript logic. The task is continuously updated after step execution, triggering downstream logic as needed by invoking **connectors** - authorised, reusable wrappers to external services. 
+3. **Deploy your first workflow**
+   ```bash
+   # Clone an example
+   git clone https://github.com/aloma-io/aloma-io.git
+   cd aloma-io/examples/hubspot
+   
+   # Update the API token in connector/connector-hubspot.json
+   # Then deploy
+   aloma deploy deploy.yaml
+   ```
 
-**Automation-as-code**, self-contained steps structured with IDE, makes debugging and maintenance easy - especially as compared to no-code tools like n8n. It also makes it easy to build long, complex workflows with many paths, as the conditions in the step controls when it is triggered. Adding the 100th step to a workflow is as easy as adding the first.
+**New to ALOMA?** Start with our [toy example](https://github.com/aloma-io/aloma-io/blob/main/docs/getting-started/toy-example.md) to understand the basics, then check out the [complete getting started guide](https://github.com/aloma-io/aloma-io/tree/main/docs/getting-started).
 
-Use ALOMA to build your AI Agents, pipelines, application integrations - any workflow where data can be sent to ALOMA in JSON logic, can be expressed in code, and can trigger services that can be reached by our connectors.
+## How It Works
 
-The ALOMA platform is robust and automatically scales to handle your workloads. Tasks are processed in parallel, with built in exception handling.
+ALOMA processes **tasks** (schemaless JSON payloads) through **steps** (JavaScript logic with matching conditions). When a task matches a step's conditions, the step executes and updates the task, potentially triggering downstream logic via **connectors** - reusable wrappers to external services.
 
+**Key concepts:**
+- **Tasks** - JSON payloads (including files) streamed into your workspace
+- **Steps** - JavaScript logic with matching conditions that process tasks
+- **Connectors** - Authorized, reusable wrappers to external services
 
-## Documentation
+## Why Choose ALOMA?
 
-The general user documentation for ALOMA, is located under the docs directory [docs directory](https://github.com/aloma-io/aloma-io/tree/main/docs) of the present repo here including for the CLI.
+**Pipeline nightmares solved.** Traditional tools are either brittle, inflexible and hard-to-debug like n8n or require you to build out a full infrastructure as code application and maintain it. ALOMA's code-first approach to automation combined with a fully hosted platform makes it easy to build the complex pipelines you need:
 
-There is a growing [library of workflows with steps](https://github.com/aloma-io/aloma-io/tree/main/examples) that can be deployed to your ALOMA workspace via the CLI as per instructions. Please feel free to share your steps here for the community.
+- **Easy to debug** - Use and IDE to write and debug your pipelines
+- **Developer-friendly** - Work in your preferred IDE or our web-based IDE
+- **Robust platform** - Automatic scaling with parallel processing and exception handling
 
-There is a [connector repo](https://github.com/aloma-io/connectors) with an SDK to build an on prem connector for your local environment and several example connectors,
+## What You Can Build
 
-Please send requests for new cloud connectors to us here at connector-request@aloma.io.
+- **AI Agents** - Intelligent automation with decision-making logic
+- **Data Pipelines** - Transform and route data between systems
+- **Application Integrations** - Connect services and automate workflows
+- **Custom Workflows** - Any logic that can be expressed in JavaScript
 
+## Development Options
 
-## Getting Started with CLI
+**CLI Development** (Recommended)
+- Use your preferred IDE and tools
+- Full version control integration
+- [CLI Documentation](https://github.com/aloma-io/aloma-io/blob/main/docs/CLI)
 
-This guide will walk you through installing the CLI, authenticating, and deploying your first automation example using a HubSpot connector. 
+**Web UI Development**
+- Browser-based IDE
+- Great for quick prototyping
+- [Web UI Documentation](https://github.com/aloma-io/aloma-io/blob/main/docs/web-UI)
 
-[Signing up for an account](https://home.aloma.io).
+## Examples & Resources
 
-Ensure **Node.js Installed**
+- **[Example Workflows](https://github.com/aloma-io/aloma-io/tree/main/examples)** - Ready-to-deploy workflows including HubSpot, Slack, and more
+- **[Complete Documentation](https://github.com/aloma-io/aloma-io/tree/main/docs)** - Full user guide and API reference
+- **[Connector SDK](https://github.com/aloma-io/connectors)** - Build your own connectors
 
+**Need a new cloud connector?** Email us at connector-request@aloma.io
 
-### Step 1: Install the CLI
+## Prerequisites
 
-
-```bash
-npm install -g @aloma.io/aloma
-```
-
-### Step 2: Setup
-
-```bash
-aloma setup
-```
-
-This command configures your CLI environment.
-
-### Step 3: Authenticate
-
-```bash
-aloma auth
-```
-
-This will guide you through authentication via your Aloma account.
-
-We’ll now deploy a HubSpot integration workflow as an example.
-
-### Step 4: Get the Example Folder
-
-Download or clone the example folder containing the [**HubSpot example**](https://github.com/aloma-io/aloma-io/tree/main/examples/hubspot).
-
-Note, there are other example workflows you can choose from here [**examples**](https://github.com/aloma-io/aloma-io/tree/main/examples) along with documentation. You can install a different workflow if you prefer using the same commands.
-
-### Step 5: Update API Token
-
-Inside the project folder, open:
-
-```text
-connector/connector-hubspot.json
-```
-
-Replace the placeholder with your actual HubSpot token:
-
-```json
-"apiToken": "your-real-token-here"
-```
-### Step 6: Deploy the Workflow
-
-Inside the folder, run:
-
-```bash
-aloma deploy deploy.yaml
-```
-
-This will deploy your automation to the Aloma platform.
-
----
-
-## Next Steps
-
-Now that you've set up and deployed the Hubspot connector with example steps to get contacts and get companies, you can start automating with ALOMA.
-
-- [Access ALOMA getting started documentation](https://github.com/aloma-io/aloma-io/tree/main/docs/getting-started)
-- [Watch the Toy getting started video and documentation](https://github.com/aloma-io/aloma-io/blob/main/docs/getting-started/toy-example.md)
-- [Read documentation for the Hubspot Example](https://github.com/aloma-io/aloma-io/tree/main/examples/hubspot)
-- [Access more example workflows](https://github.com/aloma-io/aloma-io/tree/main/examples)
-- Join the community (coming soon!)
-
+- Node.js (for CLI usage)
+- [ALOMA account](https://home.aloma.io) (sign up for free)
 
 ## License
-Licensed under the Apache 2.0 License.
 
+Licensed under the MIT License.
 
 
