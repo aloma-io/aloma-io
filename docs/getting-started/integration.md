@@ -1,15 +1,6 @@
 # Integration
 
-For automating processes you need to integrate aloma with other systems.
-
-__Example: Sync data from jira (inbound) to hubspot (outbound).__
-
-
-1. Add a jira and hubspot connector to a workspace.
-2. Connect jira via one click OAuth.
-3. Connect hubspot via API Token.
-4. For receiving events from jira, create a webhook in aloma in configure in [jira](https://developer.atlassian.com/server/jira/platform/webhooks/).
-5. Done. Use the connectors to read/write data from both systems.
+For automating pipelines you need to integrate aloma with other systems.
 
 ---
 
@@ -20,10 +11,6 @@ __Example: Sync data from jira (inbound) to hubspot (outbound).__
 ### Incoming webhooks
 
 Incoming webhooks create tasks in aloma. In the integration configuration one can simply add new hooks as desired.
-
-**Using the CLI**
-
-
 
 **Using the Web UI**
 
@@ -48,10 +35,6 @@ curl -v -X POST -H'Content-type: application/json' --data-binary '{"a": "hello",
 ```
 
 ## Outgoing webhooks
-
-**Using the CLI**
-
-
 
 **Using the Web UI**
 
@@ -94,10 +77,6 @@ Connectors are useful for any kind of complex integration. The aloma connectors 
 Connectors are managed in a Workspace and need to be setup in each individual workspace.
 
 ### Manage Connectors
-
-**Using the CLI**
-
-
 
 **Using the Web UI**
 
