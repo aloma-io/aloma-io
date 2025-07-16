@@ -5,7 +5,7 @@ Build your first automation with ALOMA in under 10 minutes.
 
 In this walkthrough, you'll create a simple multi-step workflow to simulate retiring a ship — complete with conditional execution, state changes, and an optional email notification. You'll learn how to define tasks, write matching logic, and deploy code in real time.
 
-This example uses the WebUI, equivalent CLI commands can be found in the [documentation](docs/CLI)
+This example uses the WebUI, equivalent CLI commands can be found in the [documentation](../CLI)
 
 ---
 
