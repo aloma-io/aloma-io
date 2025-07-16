@@ -54,7 +54,7 @@ Business rules:
 
 ## Creating the Task
 
-1. Go to the **Task** tab  
+1. Go to the **Tasks** tab  
    ![Task Tab](../static/asset/img/task-menu-selection.png)
 
 2. Click `New Task`  
