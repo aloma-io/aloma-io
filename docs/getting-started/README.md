@@ -11,9 +11,9 @@ Your top-level access point for managing workspaces, monitoring usage, and contr
 
 ### Workspaces
 **What it is**: An isolated environment where your automations run  
-**Key point**: Each workspace is completely independent - connectors, steps, and tasks don't share between workspaces
+**Key point**: Each workspace is completely independent - connectors, webhooks, steps, and tasks don't share between workspaces
 
-**Why this matters**: If you have a Slack connector in Workspace A and want to use Slack in Workspace B, you need to add a separate Slack connector to Workspace B.
+**Why this matters**: If you have a Slack connector in Workspace A and want to use Hubspot in Workspace B, you need to add a separate Hubspot connector to Workspace B. This gives you controls of the workflows that execute in each workspace.
 
 [Learn more about Workspaces →](https://github.com/aloma-io/aloma-io/blob/main/docs/getting-started/workspaces.md)
 
