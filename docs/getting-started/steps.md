@@ -1,12 +1,10 @@
 # Steps
 
-About steps.
-
 ## Overview
 
-A step consists of a `match` and a `do`.
+A step consists of a `match` and `code`.
 The match specifies in which state of the task the step may be applied.
-The do specifies what to execute if applied.
+The code specifies what to execute if applied.
 
 **Open the outline view for easier navigation**
 
@@ -15,6 +13,11 @@ The do specifies what to execute if applied.
 Given a task, a match can match any subset of the data of the task.
 One can match for type or for value.
 One should exactly match the data that is needed for the do part, not more and not less.
+
+  - Use JSON format to define match conditions
+  - Match against specific fields using dot notation (e.g. contact.name)
+  - Use operators like $eq, $ne, $gt, $lt, $in, $nin
+  - Combine conditions with $and, $or, $not
 
 ```js
 {
@@ -34,11 +37,28 @@ One should exactly match the data that is needed for the do part, not more and n
     }
   }
 }
+
+// Match contacts with specific name
+{
+  "contact.name": "John Doe"
+}
+
+// Match contacts with age > 25
+{
+  "contact.age": { "$gt": 25 }
+}
+
+// Match contacts from specific countries
+{
+  "contact.country": { "$in": ["US", "UK", "CA"] }
+}
 ```
 
-### Do
 
-Do is `javascript`, it can change the task data or interact with connectors. There are also some builtins.
+
+### Code
+
+Code is `javascript`, it can change the task data or interact with connectors. There are also some builtins.
 
 ```js
 // get an set the name of a task
@@ -75,7 +95,7 @@ Step framework.
 
 ### Debugging
 
-One can use `console.log` to debug a step in the `development` view of a task.
+One can use `console.log` to debug a step in the task execution view.
 
 ```js
 console.log('task data', data);
@@ -88,7 +108,7 @@ A workspace can have static configuration.
 ```js
 let endpoint = task.config('SERVER_ENDPOINT');
 ```
-
+These are set as Environment variables in the Workspace configuration.
 
 ### Graph
 
