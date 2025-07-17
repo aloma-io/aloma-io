@@ -1,16 +1,23 @@
-# Waitlist Automation Workflow
+**Automates the complete lead capture process from signup to team notification with AI-powered research.**
 
-This workflow automates the process of handling new waitlist contacts by:
-1. Adding contacts to HubSpot
-2. Sending welcome emails
-3. Posting notifications to Slack
-4. Researching CTO information using Perplexity AI
-5. Updating HubSpot with research findings
-6. Adding contact information to Google Sheets
+## What This Workflow Does
+
+Transforms raw lead signups into enriched contacts with automated team notifications and AI research. Perfect for SaaS companies wanting to qualify and engage leads immediately using ALOMA's code-first automation platform.
+
+## Workflow Steps
+
+| Step Name | Trigger Condition | Action |
+|-----------|-------------------|---------|
+| `add_contact_to_hubspot` | `$via.name = "Webform"` | Creates contact in HubSpot CRM |
+| `add_to_google_sheet` | `hubspotCreate = true` | Logs contact data to spreadsheet |
+| `send_email_for_new_contact` | `googleAdded = true` | Sends personalized welcome email |
+| `post_to_slack_when_new_contact` | `emailSent = true` | Notifies team in Slack channel |
+| `cto_research` | `jobTitle = "CTO" AND hubspotCreate = true` | AI research for CTO prospects |
+| `update_hubspot_with_cto_research` | `contactResearch = String` | Updates CRM with research findings |
 
 ## Prerequisites
 
-- Aloma CLI installed
+- Aloma [CLI installed](../../CLI/)
 - Access to HubSpot, Google Sheets, Slack, and Perplexity AI accounts
 - SMTP email service (Gmail, Outlook, etc.)
 
@@ -20,10 +27,28 @@ This workflow automates the process of handling new waitlist contacts by:
 
 ```bash
 git clone <repository-url>
-cd workflow-examples/waitlist_automation
+cd workflow-examples/capture-lead-sign-up-with-research-agent
 ```
 
 ### 2. Update Connector Keys/Tokens
+
+**1. API Credentials**
+- **HubSpot**: Create Private App in Settings → Integrations with contacts:write permissions
+- **Perplexity**: Get API key from https://www.perplexity.ai/settings/api
+- **Google Sheets**: Create spreadsheet and note the ID from URL
+- **Slack**: Get channel ID by right-clicking channel → Copy channel ID
+
+**2. API Keys and Environment Variables**
+
+Configure required credentials:
+
+| File/Location | Variable/Key | Value | Notes |
+|---------------|-------------|--------|--------|
+| `connector/connector-hubspot.json` | `apiToken` | HubSpot Private App Token | Requires contacts:write permission |
+| `connector/connector-perplexity.json` | `apiKey` | Perplexity API Key | From perplexity.ai settings |
+| `deploy.yaml` secrets | `HUBSPOT_ACCOUNT_ID` | Your HubSpot Account ID | Found in HubSpot Settings → Account Setup |
+| `deploy.yaml` secrets | `WAIT_LIST_SPREADSHEET` | Google Sheet ID | Extract from sheet URL |
+| `deploy.yaml` secrets | `SLACK_CHANNEL` | Slack Channel ID | Right-click channel → Copy channel ID |
 
 #### HubSpot Connector
 Edit `connector/connector-hubspot.json`:
