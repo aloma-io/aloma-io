@@ -5,7 +5,7 @@ Real-world automation examples that demonstrate Aloma's capabilities for busines
 ## Available Examples
 
 ### [HubSpot Integration](hubspot/): **Company and Contact Management Automation**
-### [Waitlist Automation](waitlist_automation/): **Complete Lead Processing Workflow**
+### [Capture lead sign up with research agent](capture-lead-sign-up-with-research-agent/): **Complete Lead Processing Workflow**
 
 ## Getting Started with Examples
 
@@ -14,31 +14,26 @@ Real-world automation examples that demonstrate Aloma's capabilities for busines
 - [Basic understanding](../getting-started/) of Aloma concepts
 - [Install CLI](../CLI/)
 
-
 ### 1. Clone the Repository
 
 ```bash
 git clone <repository-url>
-cd workflow-examples/waitlist_automation
+cd workflow-examples/capture-lead-sign-up-with-research-agent
 ```
 
-### 2. Update Secret and Connector Keys/Tokens
+### 2. Update Secret and Connector Keys/Tokens in Deploy File
 
-#### HubSpot Connector (example)
-Edit `connector/connector-hubspot.json`:
-```json
-{
-  "config": {
-    "apiToken": "your-hubspot-api-token"
-  }
-}
-```
-
-### 3. Update Secrets in Deploy File
-
-Edit `deploy.yaml` and update the following secrets with your actual values:
+Edit `deploy.yaml` and update the following secrets and connector keys/tokens with your actual values:
 
 ```yaml
+connectors:
+  - connectorName: "hubspot.com (private)"
+    config:
+      apiToken: "********"
+  - connectorName: "Perplexity"
+    config:
+      apiKey: "***********"
+
 secrets:
   - name: "HUBSPOT_ACCOUNT_ID"
     value: "your-hubspot-account-id"

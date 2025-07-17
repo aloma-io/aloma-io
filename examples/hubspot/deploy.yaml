@@ -1,6 +1,3 @@
-# Company to switch to (optional)
-# company: "Aloma Demo"
-
 # List of workspaces to create and configure
 workspaces:
   - name: "Hubspot-test"
@@ -15,7 +12,8 @@ workspaces:
     # Connectors configuration
     connectors:
       - connectorName: "hubspot.com (private)"
-        file: "connector/connector-hubspot.json"
+        config:
+          apiToken: "********"
 
     # Tasks configuration
     tasks:

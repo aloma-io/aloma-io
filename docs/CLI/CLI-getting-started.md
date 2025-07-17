@@ -40,17 +40,15 @@ Note, there are other example workflows you can choose from here [**examples**](
 
 ### Step 5: Update API Token
 
-Inside the project folder, open:
+Replace the in the deply file the placeholder with your actual HubSpot token:
 
-```text
-connector/connector-hubspot.json
+```yaml
+connectors:
+  - connectorName: "hubspot.com (private)"
+    config:
+      apiToken: "********"
 ```
 
-Replace the placeholder with your actual HubSpot token:
-
-```json
-"apiToken": "your-real-token-here"
-```
 ### Step 6: Deploy the Workflow
 
 Inside the folder, run:
