@@ -12,7 +12,7 @@ Real-world automation examples that demonstrate Aloma's capabilities for busines
 ### Prerequisites
 - Aloma account ([sign up here](https://home.aloma.io/))
 - [Basic understanding](../getting-started/) of Aloma concepts
-- [Install CLI](../CLI/)
+- [Install CLI](CLI/README.md)
 
 ### 1. Clone the Repository
 
