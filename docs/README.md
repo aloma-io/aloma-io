@@ -1,13 +1,13 @@
-# Aloma Documentation
+# ALOMA Documentation
 
-Documentation for Aloma, a code-first workflow automation platform.
+Documentation for ALOMA, a code-first workflow automation platform.
 
 ## Getting Started
 
-**New to Aloma? Start here:**
+**New to ALOMA? Start here:**
 
-1. **[Introduction](../README.md)** - What is Aloma and core concepts
-2. **[Getting Started Guide](getting-started/README.md)** - Understand the basics of how Aloma works
+1. **[Introduction](../README.md)** - What is ALOMA and core concepts
+2. **[Getting Started Guide](getting-started/README.md)** - Understand the basics of how ALOMA works
 3. **[Toy Example](getting-started/toy-example.md)** - Step-by-step tutorial with video walkthrough
 4. **[Examples Directory](../examples/)** - Example code to explore and use
 
@@ -47,7 +47,7 @@ Documentation for Aloma, a code-first workflow automation platform.
 ### Developers
 1. Review [Steps](getting-started/steps.md) and [Tasks](getting-started/tasks.md) to build pipelines
 2. Check [Integrations](getting-started/integration.md) for API connections
-3. Explore the [Toy Example](getting-started/toy-example.md) to see Aloma in action
+3. Explore the [Toy Example](getting-started/toy-example.md) to see ALOMA in action
 4. Use the [CLI Getting Started](CLI/CLI-getting-started.md) guide for command-line development
 
 ### Administrators
@@ -71,4 +71,4 @@ Real-world implementations:
 
 ---
 
-**Ready to start?** Begin with the [Getting Started Guide](getting-started.md) or explore our [examples](../examples/) to see Aloma in action.
+**Ready to start?** Begin with the [Getting Started Guide](getting-started.md) or explore our [examples](../examples/) to see ALOMA in action.
