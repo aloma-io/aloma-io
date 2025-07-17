@@ -77,7 +77,15 @@ aloma workspace list
 aloma workspace switch <workspace-name>
 ```
 
-#### API Keys and Environment Variables
+#### Setup Instructions
+
+**1. API Credentials**
+- **HubSpot**: Create Private App in Settings → Integrations with contacts:write permissions
+- **Perplexity**: Get API key from https://www.perplexity.ai/settings/api
+- **Google Sheets**: Create spreadsheet and note the ID from URL
+- **Slack**: Get channel ID by right-clicking channel → Copy channel ID
+
+**2. API Keys and Environment Variables**
 
 Configure required credentials:
 
@@ -88,6 +96,32 @@ Configure required credentials:
 | `deploy.yaml` secrets | `HUBSPOT_ACCOUNT_ID` | Your HubSpot Account ID | Found in HubSpot Settings → Account Setup |
 | `deploy.yaml` secrets | `WAIT_LIST_SPREADSHEET` | Google Sheet ID | Extract from sheet URL |
 | `deploy.yaml` secrets | `SLACK_CHANNEL` | Slack Channel ID | Right-click channel → Copy channel ID |
+
+**3. Deploy and Configure**
+```bash
+# Deploy all resources
+aloma deploy deploy.yaml
+
+# List deployed connectors
+aloma connector list
+
+# Configure OAuth for connectors requiring it
+aloma connector oauth <google-sheets-connector-id>
+aloma connector oauth <email-smtp-connector-id>  
+aloma connector oauth <slack-connector-id>
+```
+
+**4. Test the Workflow**
+```bash
+# Create test task
+aloma task new "test signup" -f task/test_waitlist.json
+
+# Monitor execution in real-time
+aloma task list --watch
+
+# View detailed execution logs
+aloma task log <task-id> --logs --changes
+```
 
 #### Complete CLI Workflow
 ```bash
