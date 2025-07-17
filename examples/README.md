@@ -4,95 +4,85 @@ Real-world automation examples that demonstrate Aloma's capabilities for busines
 
 ## Available Examples
 
-### [HubSpot Integration](hubspot/)
-**Company and Contact Management Automation**
-
-Complete example showing how to:
-- Connect to HubSpot API for company and contact management
-- Process incoming webhook data
-- Automate contact creation and company updates
-- Handle data transformation and validation
-
-**Key features:**
-- Webhook integration for real-time data
-- HubSpot API integration
-- Data transformation and mapping
-- Error handling and validation
-
-### [Waitlist Automation](waitlist_automation/)
-**Complete Lead Processing Workflow**
-
-Full-featured automation demonstrating:
-- Multi-step lead processing pipeline
-- Integration with multiple services (HubSpot, Google Sheets, Slack)
-- AI-powered research and enrichment
-- Automated notifications and follow-ups
-
-**Key features:**
-- Lead capture and validation
-- AI-powered CTO research using Perplexity
-- Multi-platform data distribution
-- Automated email notifications
-- Slack integration for team alerts
+### [HubSpot Integration](hubspot/): **Company and Contact Management Automation**
+### [Waitlist Automation](waitlist_automation/): **Complete Lead Processing Workflow**
 
 ## Getting Started with Examples
 
 ### Prerequisites
 - Aloma account ([sign up here](https://home.aloma.io/))
-- Required service accounts (HubSpot, Airtable, etc.)
-- Basic understanding of Aloma concepts
+- [Basic understanding](../getting-started/) of Aloma concepts
+- [Install CLI](../CLI/)
 
-### How to Use Examples
 
-1. **Choose an example** - Select the example that matches your use case
-2. **Review configuration** - Examine the connector and step configurations
-3. **Set up dependencies** - Create required accounts and API keys
-4. **Deploy** - Use the provided `deploy.yaml` files
-5. **Customize** - Modify steps and logic for your specific needs
+### 1. Clone the Repository
 
-### Example Structure
+```bash
+git clone <repository-url>
+cd workflow-examples/waitlist_automation
+```
 
-Each example includes:
+### 2. Update Secret and Connector Keys/Tokens
 
-example-name/
-├── connector/          # API connector configurations
-├── step/              # Individual automation steps
-├── task/              # Sample task data
-├── deploy.yaml        # Deployment configuration
-└── README.md          # Detailed setup instructions
+#### HubSpot Connector (example)
+Edit `connector/connector-hubspot.json`:
+```json
+{
+  "config": {
+    "apiToken": "your-hubspot-api-token"
+  }
+}
+```
 
-## Customization Guide
+### 3. Update Secrets in Deploy File
 
-### Modifying Examples
+Edit `deploy.yaml` and update the following secrets with your actual values:
 
-1. **Clone the structure** - Use existing examples as templates
-2. **Update connectors** - Modify API configurations for your services
-3. **Adjust steps** - Customize logic and data transformations
-4. **Test thoroughly** - Validate with sample data before production
+```yaml
+secrets:
+  - name: "HUBSPOT_ACCOUNT_ID"
+    value: "your-hubspot-account-id"
+    description: "Hubspot account ID"
+    encrypted: false
+  - name: "WAIT_LIST_SPREADSHEET"
+    value: "your-google-sheet-id"
+    description: "Google sheet ID"
+    encrypted: false
+  - name: "SLACK_CHANNEL"
+    value: "your-slack-channel-id"
+    description: "Slack channel ID"
+    encrypted: false
+```
 
-### Best Practices
+### 4. Deploy the Workflow
 
-- Start with simple examples and gradually add complexity
-- Use descriptive names for steps and connectors
-- Implement proper error handling
-- Document your customizations
-- Test with realistic data volumes
+Run the following command from the `waitlist_automation` folder:
 
-## Contributing Examples
+```bash
+aloma deploy deploy.yaml
+```
 
-We welcome new examples! To contribute:
+### 5. Complete OAuth Configuration
 
-1. **Create a new directory** - Use a descriptive name
-2. **Include all components** - Connectors, steps, tasks, and deployment config
-3. **Add documentation** - Clear README with setup instructions
-4. **Test thoroughly** - Ensure examples work as documented
-5. **Submit pull request** - Share your automation with the community
+After deployment, you'll need to configure OAuth for the required connectors (see examples for specifics and requirements):
+
+#### Slack Example
+1. Run `aloma connector list` to find the "slack.com" connector id
+2. Run `aloma connector oauth <id>` (replace `<id>` with the actual connector id)
+3. Follow the OAuth flow to authorize Slack access
+
+### 6. Test the Workflow
+
+Create the test task provided in the example to verify everything is working. 
 
 ## Support
 
-- **Example Issues** - Open an issue in this repository
-- **Product Support** - Contact support at support@aloma.io
-- **Community** - Join discussions and share your automations - coming soon
+- [Toy Example Tutorial](https://github.com/aloma-io/aloma-io/blob/main/docs/getting-started/toy-example.md)
+- [CLI Documentation](https://github.com/aloma-io/aloma-io/blob/main/docs/CLI)
+- [Create an issue](../../issues) in the repository
+- Email connector-request@aloma.io for new connector requests
+- Check [ALOMA documentation](https://github.com/aloma-io/aloma-io/tree/main/docs) for detailed guides
+- Review [Getting Started Guide](../../docs/getting-started) for fundamentals
 
 ---
 
