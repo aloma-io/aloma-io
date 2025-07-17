@@ -25,7 +25,8 @@ ALOMA is a code-first workflow automation platform that lets you define automati
    git clone https://github.com/aloma-io/aloma-io.git
    cd aloma-io/examples/hubspot
    
-   # Update the API token in connector/connector-hubspot.json
+   # Update the API token
+   
    # Then deploy
    aloma deploy deploy.yaml
    ```
