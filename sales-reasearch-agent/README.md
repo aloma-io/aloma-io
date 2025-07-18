@@ -1,4 +1,4 @@
-# Aalto Capital Industry News Automation
+# Bank sales research automation
 
 This workflow automates the process of gathering, processing, and distributing industry news for selected companies. It integrates with Google Sheets, Perplexity AI, Claude AI, Google Drive, and email to streamline research and communication.
 
