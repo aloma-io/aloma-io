@@ -30,10 +30,3 @@ workspaces:
       - connectorName: "Claude-ai"
         config:
           apiKey: "*******"
-
-    # Tasks configuration
-    # tasks:
-    #   - name: "get industry news"
-    #     data: {"getData":true,"getIndustryNews":true}
-
-    

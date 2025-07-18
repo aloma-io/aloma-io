@@ -4,18 +4,7 @@ workspaces:
     
     # Steps configuration
     steps:
-      - name: "Add contact to Hubspot"
-        file: "step/add_contact_to_hubspot.js"
-      - name: "Send email for new contact"
-        file: "step/send_email_for_new_contact.js"
-      - name: "Post to slack when new contact"
-        file: "step/post_to_slack_when_new_contact.js"
-      - name: "CTO research"
-        file: "step/cto_research.js"
-      - name: "Update Hubspot with CTO research"
-        file: "step/update_hubspot_with_cto_research.js"
-      - name: "Add to google sheet"
-        file: "step/add_to_google_sheet.js"
+      - syncPath: "steps/"
 
     # Connectors configuration
     connectors:

@@ -1,6 +1,5 @@
 /**
  * Step: get company news - step 1
- * ID: mzicun85nc0c3ooe9y55t7ge9c2nzx79
  * 
  * Edit the condition and content below.
  * The condition should be a valid JavaScript object (trailing commas are allowed).

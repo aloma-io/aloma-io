@@ -1,6 +1,5 @@
 /**
  * Step: get google sheet data
- * ID: bjulwbbpywm2lqzur3x3l2ddozqlizbo
  * 
  * Edit the condition and content below.
  * The condition should be a valid JavaScript object (trailing commas are allowed).

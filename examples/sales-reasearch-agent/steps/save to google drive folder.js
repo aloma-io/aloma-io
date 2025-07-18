@@ -1,6 +1,5 @@
 /**
  * Step: save to google drive folder
- * ID: xpjje5njvha9v80hhgmnpx7xt5iif9h0
  * 
  * Edit the condition and content below.
  * The condition should be a valid JavaScript object (trailing commas are allowed).

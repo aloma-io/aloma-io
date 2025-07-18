@@ -26,10 +26,7 @@ export const content = async () => {
 console.log(data.company)
 const company = data.company;
 const companyName = company?.['Client name'];
-//const companyWebsite = company.Website;
-//I added line below - please check for accuracy
 const industry = company?.['Business Industry Type'];
-//const ceo = company.Name;
 
 const companyNewsPrompt = `You are a research analyst at anybank (https://anybank.com/), a bank that provides financial advisory services to industry companies. You work for a partner at anybank who has worked for 20 years in industry.
 

@@ -1,6 +1,5 @@
 /**
  * Step: email message construction
- * ID: rd30jm732r4mc2l7pu3qzdct0xdejzwl
  * 
  * Edit the condition and content below.
  * The condition should be a valid JavaScript object (trailing commas are allowed).

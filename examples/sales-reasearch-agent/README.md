@@ -14,7 +14,7 @@ This workflow automates the process of gathering, processing, and distributing i
 
 ```bash
 git clone <repository-url>
-cd workflow-examples/Aalto\ Capital
+cd workflow-examples/sales-reasearch-agent
 ```
 
 ### 2. Update Secrets and Connectors api keys in Deploy File
@@ -47,7 +47,7 @@ connectors:
 
 ### 3. Deploy the Workflow
 
-Run the following command from the `Aalto Capital` folder:
+Run the following command from the `sales-reasearch-agent` folder:
 
 ```bash
 aloma deploy deploy.yaml

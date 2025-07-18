@@ -4,10 +4,7 @@ workspaces:
     
     # Steps configuration
     steps:
-      - name: "get hubspot companies"
-        file: "step/get_hubspot_companies.js"
-      - name: "get company contacts"
-        file: "step/get_company_contacts.js"
+      - syncPath: "steps/"
     
     # Connectors configuration
     connectors:

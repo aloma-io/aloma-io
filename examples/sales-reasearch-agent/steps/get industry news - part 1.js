@@ -1,6 +1,5 @@
 /**
  * Step: get industry news - part 1
- * ID: tvuwsbybboxe8qtawln4mzid99gwgxgt
  * 
  * Edit the condition and content below.
  * The condition should be a valid JavaScript object (trailing commas are allowed).

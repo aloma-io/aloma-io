@@ -1,6 +1,5 @@
 /**
  * Step: get industry news - part 3
- * ID: p62vesnrx0lzwpxsgd5ddkl0mwbaw17r
  * 
  * Edit the condition and content below.
  * The condition should be a valid JavaScript object (trailing commas are allowed).

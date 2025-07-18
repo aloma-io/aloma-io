@@ -1,6 +1,5 @@
 /**
  * Step: email industry news
- * ID: o8iaiqrsll3jjem2vk5hjagiu7njsf4a
  * 
  * Edit the condition and content below.
  * The condition should be a valid JavaScript object (trailing commas are allowed).

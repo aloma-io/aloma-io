@@ -1,6 +1,5 @@
 /**
  * Step: get industry news - subtask
- * ID: ochwmrum7lcn920536s43man1eck3z7x
  * 
  * Edit the condition and content below.
  * The condition should be a valid JavaScript object (trailing commas are allowed).

@@ -1,6 +1,5 @@
 /**
  * Step: get company news - step 2
- * ID: f35vnflqiap5wr72a75xo2pvfyqtkfr2
  * 
  * Edit the condition and content below.
  * The condition should be a valid JavaScript object (trailing commas are allowed).
