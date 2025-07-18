@@ -34,11 +34,11 @@ for (const company of data.companies) {
 
   const messagePrompt = `You are an expert in lead generation and write cold emails to potential prospects. 
 
-  You are creating an email on behalf of a partner in an investment bank to send to the CEO of a prospective client company. You work for Aalto Capital (https://aaltocapital.com/), a boutique investment bank that specialises in advising Telecom companies on capital raising and acquisition strategies, including fundraising, acquisition, merger and strategic partnership advisory services. The partner you are representing has 35 years of experience in Telecoms, is the lead partner for Telecoms and used to be GM for International Business at Verizon. 
+  You are creating an email on behalf of a partner in an investment bank to send to the CEO of a prospective client company. You work for AnyBank (https://anybank.com/), a boutique bank that specialises in advising companies on financial advisory services. The partner you are representing is the lead partner for anyindustry. 
 
   Your job today is to write a sentence of maximum 35 words to put in a cold email that is to be sent to the CEO of ${companyName}. The sentence should reference the main competitive threat the company faces, a potential solution to this threat, the most relevant announced growth event in the last 6 months and that ${companyName} is a leading company amongst its competitors. 
 
-  Also write a subject line for the email that emphasizes the proposed problem, that Aalto has sector expertise and that will grab a CEO's attention and stand out from other emails. Use this as an example: "Strategic Partnership Opportunity to Navigate ${companyName}’s Next Phase" .  
+  Also write a subject line for the email that emphasizes the proposed problem and your sector expertise and that will grab a CEO's attention and stand out from other emails. Use this as an example: "Strategic Partnership Opportunity to Navigate ${companyName}’s Next Phase" .  
 
   Return only the subject line followed by the paragraph without any introductory text or explanations.
   You must return in the following format with the titles "Subject" and "Paragraph":
@@ -68,26 +68,26 @@ for (const company of data.companies) {
   const subject = subjectMatch ? subjectMatch[1].trim() : "";
   const paragraph = paragraphMatch ? paragraphMatch[1].trim() : "";
 
+    //A formal, professional email to be sent to a CEO - a template is used to ensure compliance. 
   const email = `Dear [CEO],
 
-  My name is Richard Montgomery, TMT Partner at Aalto Capital and former General Manager for International Business at Verizon. I work with CEOs to help/advise high-growth connectivity companies to navigate the current AI transition based on my 35 years of experience leading telecom companies through technology transitions. 
+  My name is xxx, Partner at anybank...
 
-  Companies are looking to partner with leading ISPs with the infrastructure to scale and meet their AI needs. ${paragraph}. Investors are now active in the UK ISP market, backing transactions (FullFibre/ZZoomm merger, Gigafibre’s fundraising) and as industry consolidation accelerates, we can work with you to ensure your success in the industry.
+  Companies are looking to partner with you to scale and meet their AI needs. ${paragraph}. Investors...
 
   I'd welcome a brief call to discuss how we can support ${companyName} in:
-  1. Attracting AI/cloud-focused investors—a segment commanding 30%+ premium valuations.
-  2. Optimizing capital strategy to balance expansion, customer density, and competitive positioning.
-  3. Exploring strategic partnerships or M&A opportunities to strengthen market leadership
+  1. Point 1
+  2. Point 2
+  3. Point 3
   
-  Aalto Capital is an independent Pan-European corporate finance advisor with offices in London, Helsinki, Munich, Stockholm, Zurich and Oslo.  We have an extensive investor base in Europe, US and APAC of over 3,000 private equity, HNWI and strategic investors who are looking for attractive investment opportunities. I lead our TMT team in London, focusing on equity fundraising and M&A and providing strategic advice to our clients which include a number of growing businesses like Hyperoptic. Our track record includes:
-  • Structuring a £[X]M growth equity round for a UK [xxx] provider to accelerate rollout in [xxx] markets.
-  • Facilitating a strategic partnership between [X] and a global [Y] provider.
-  • Advising on an acquisition that expanded a client’s [xxxx].  PERHAPS YOU CAN ADD EMILIO AND KRZYSZTOF’S TRACK RECORD HERE
+  Anybank is an independent... 
+  • Case study 1
+  • Case study 2
+  • Case study 3
 
-  Would you be available for a call next week? I'm confident we can add immediate value, whether through refining your capital strategy or identifying untapped opportunities.
+  Would you be available for a call next week? I'm confident...
 
-  Richard Montgomery
-  Partner, Aalto Capital`;
+  Partner, anybank`;
 
   company.subject = subject;
   company.message = email
