@@ -1,0 +1,39 @@
+
+# List of workspaces to create and configure
+workspaces:
+  - name: "Aalto-test"
+    
+    # # Steps configuration
+    steps:
+      - syncPath: "steps/"
+    
+    # # Secrets configuration
+    secrets:
+      - name: "GOOGLE_DRIVE_FOLDER"
+        value: "******"
+        description: "Google drive folder ID"
+        encrypted: false
+      - name: "GOOGLE_SHEET"
+        value: "********"
+        description: "Google sheet ID"
+        encrypted: false
+
+    # Connectors configuration
+    connectors:      
+      - connectorName: "Document Generation"
+      - connectorName: "Google Sheets"
+      - connectorName: "E-Mail (SMTP - OAuth)"
+      - connectorName: "Perplexity"
+        config:
+          apiKey: "*******"
+      - connectorName: "Google Drive"
+      - connectorName: "Claude-ai"
+        config:
+          apiKey: "*******"
+
+    # Tasks configuration
+    # tasks:
+    #   - name: "get industry news"
+    #     data: {"getData":true,"getIndustryNews":true}
+
+    
