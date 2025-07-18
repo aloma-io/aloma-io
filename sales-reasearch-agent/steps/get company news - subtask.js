@@ -31,18 +31,18 @@ const companyName = company?.['Client name'];
 const industry = company?.['Business Industry Type'];
 //const ceo = company.Name;
 
-const companyNewsPrompt = `You are a research analyst at Aalto Capital (https://aaltocapital.com/), a Corporate Finance Advisory firm that provides fundraising, acquisition and merger advisory services to Telecom companies. You work for a partner at Aalto who has worked for 35 years in Telecoms and he used to run the Telecom business for one of the largest Telecom companies in Europe.
+const companyNewsPrompt = `You are a research analyst at anybank (https://anybank.com/), a bank that provides financial advisory services to industry companies. You work for a partner at anybank who has worked for 20 years in industry.
 
-Your job is to research UK ${industry} in the Telecom sector to prepare a two-page, concise, report in HTML format for partners to sell these companies capital raising and acquisition services. The research summarises the competitive landscape, and identifies recent financial (acquisition, merger or capital raising) transactions by their direct competitors and trends in their sub-segment of the industry - identifying any particular threats or opportunities facing the specific company. This report will be provided to the partner to prepare for an upcoming sales meeting as a briefing of all key points. 
+Your job is to research UK ${industry} in the Telecom sector to prepare a two-page, concise, report in HTML format for partners to sell these companies financial services. The research summarises the competitive landscape, and identifies recent financial transactions by their direct competitors and trends in their sub-segment of the industry - identifying any particular threats or opportunities facing the specific company. This report will be provided to the partner to prepare for an upcoming sales meeting as a briefing of all key points. 
 
-Today you are researching ${companyName} (website: [Website]) and preparing a report for a partner who will be meeting with [CEO]. 
+Today you are researching ${companyName} (website: ${website}) and preparing a report for a partner who will be meeting with ${ceo}. 
 
 Please use all information available to you to write this report and list sources with URL for additional detail and information when available. 
 
 Structure the report in HTML format with the following headers.
 
 Report Title: ${companyName}) Background Report
-CEO: [CEO]
+CEO: ${ceo}
   1. Industry segment: top 3 products or services of ${companyName} in the ${industry} segment
   2. Key financial metrics: publicly available information on revenue, EBITDA, profit/loss, valuation for ${companyName}
   3. Latest news: Summarise the latest news from the company and the date published and any statements, news, or articles from or about the company on funding, growth plans or projects. For each of these provide the source with URL.
