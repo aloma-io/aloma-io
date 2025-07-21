@@ -1,0 +1,28 @@
+{
+  "resourceId": "example_resource_id",
+  "type": "add",
+  "item": {
+    "kind": "Pod",
+    "apiVersion": "v1",
+    "metadata": {
+      "name": "example_name",
+      "generateName": "example_generate_name",
+      "namespace": "example_namespace",
+      "uid": "example_uid",
+      "resourceVersion": "example_resource_version",
+      "creationTimestamp": "example_creation_timestamp",
+      "labels": {"app": "example_app", "pod-template-hash": "example_pod_template_hash"},
+      "ownerReferences": [
+        {
+          "apiVersion": "apps/v1",
+          "kind": "ReplicaSet",
+          "name": "example_name",
+          "uid": "example_uid",
+          "controller": true,
+          "blockOwnerDeletion": true
+        }
+      ]
+    },
+    "status": {"phase": "Pending", "qosClass": "Burstable"}
+  }
+}
