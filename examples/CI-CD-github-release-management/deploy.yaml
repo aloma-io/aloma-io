@@ -1,0 +1,23 @@
+# List of workspaces to create and configure
+workspaces:
+  - name: "github"
+    
+    # Steps configuration
+    steps:
+      - syncPath: "steps/"
+
+    # Connectors configuration
+    connectors:
+      - connectorName: "github.com"
+
+    # Secrets configuration
+    secrets:
+      - name: "SLACK_CHANNEL"
+        value: "********"
+        description: "Slack channel ID"
+        encrypted: false
+    
+    # Tasks configuration
+    # tasks:
+    #   - name: "example"
+    #     file: "task/example.yaml"
