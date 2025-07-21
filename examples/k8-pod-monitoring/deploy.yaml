@@ -1,0 +1,20 @@
+# List of workspaces to create and configure
+workspaces:
+  - name: "azure"
+    
+    # Steps configuration
+    steps:
+      - syncPath: "steps/"
+
+    # Connectors configuration
+    connectors:
+      - connectorName: "kubernetes"
+
+    # Webhooks configuration
+    webhooks:
+      - name: "aloma ui feedback"
+    
+    # Tasks configuration
+    # tasks:
+    #   - name: "example"
+    #     file: "task/example.yaml"
