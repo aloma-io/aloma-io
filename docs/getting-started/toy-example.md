@@ -52,7 +52,7 @@ Business rules:
 
 **Watch the full walkthrough before proceeding.**
 
-[![Toy Example](https://img.youtube.com/vi/lNssZy4SzcU/0.jpg)](https://www.youtube.com/watch?v=lNssZy4SzcU)
+[![Toy Example](https://img.youtube.com/vi/-ih1JYL-baw/0.jpg)](https://www.youtube.com/watch?-ih1JYL-baw)
 
 ---
 
