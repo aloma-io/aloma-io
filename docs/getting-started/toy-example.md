@@ -50,7 +50,9 @@ Business rules:
 
 ## Video Tutorial
 
-**Watch the full walkthrough before proceeding.** *(Embed or link to video tutorial here)*
+**Watch the full walkthrough before proceeding.**
+
+[![Video Title](https://img.youtube.com/vi/5EogCAahuqA/0.jpg)](https://www.youtube.com/watch?v=5EogCAahuqA)
 
 ---
 
