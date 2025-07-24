@@ -10,8 +10,8 @@ flowchart TD
     
     B --> C{Executive Detection<br/>C-Level or VP Role?}
     
-    C -->|"Yes"| D[AI Research<br/>Intelligent Prospect Profiling]
-    C -->|"No"| E[Data Management<br/>Google Sheets Logging]
+    C -->|Executive| D[AI Research<br/>Intelligent Prospect Profiling]
+    C -->|Standard| E[Data Management<br/>Google Sheets Logging]
     
     D --> F[CRM Enhancement<br/>Research Insights Added]
     F --> E
