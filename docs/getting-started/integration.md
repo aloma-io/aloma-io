@@ -1,6 +1,8 @@
 # Integration
 
-For automating pipelines you need to integrate aloma with other systems.
+For automating pipelines you need to integrate ALOMA with other systems.
+
+**See [step documentation](https://github.com/aloma-io/aloma-io/blob/main/docs/getting-started/steps.md#integration) for documentation on writing api calls**
 
 ---
 
