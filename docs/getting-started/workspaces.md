@@ -20,7 +20,7 @@ A workspace can be configured.
 
 ### Integrations
 
-See <a href="integration">integrations</a>.
+See [Integrations](https://github.com/aloma-io/aloma-io/blob/main/docs/getting-started/integration)).
 
 ### Environment
 
