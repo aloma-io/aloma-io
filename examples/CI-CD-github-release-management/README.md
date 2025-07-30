@@ -25,7 +25,7 @@ Transforms Git commits into automated releases with semantic versioning, connect
 
 ## Prerequisites
 
-- Aloma [CLI installed](../../CLI/)
+- Aloma [CLI installed](../../CLI/README.md)
 - Access to GitHub (with repository admin rights)
 - Slack workspace and channel for notifications
 - Kubernetes cluster (for pod monitoring features)
