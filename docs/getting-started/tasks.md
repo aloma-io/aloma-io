@@ -34,7 +34,7 @@ task.name(`${task.name()} new name`);
 
 ### Tags - Classification
 
-A task can be classified with tags. The tags of a task are the basis von running automated checks on tasks.
+Assign tags to each task; those tags form the foundation for any automated checks the system performs on it.
 
 ```js
 // get an set the tags of a task
