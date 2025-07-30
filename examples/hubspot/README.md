@@ -140,9 +140,9 @@ Use **Add New Step** to create each step with the condition and content from the
 6. Monitor execution in the task timeline
 7. Check the console logs for retrieved company and contact data
 
-**Web UI Documentation:** [Complete Web UI Guide](https://github.com/aloma-io/aloma-io/blob/main/docs/web-UI)
+**Web UI Documentation:** [Complete Web UI Guide](https://github.com/aloma-io/aloma-io/tree/main/docs/getting-started)
 
-## Workflow Features
+//## Workflow Features
 
 ### Company Data Retrieval
 1. **HubSpot Search Integration**: Uses HubSpot's search API to retrieve companies
