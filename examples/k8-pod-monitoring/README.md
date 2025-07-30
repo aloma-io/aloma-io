@@ -16,7 +16,7 @@ Transforms Kubernetes cluster events into organized monitoring data with automat
 
 ## Prerequisites
 
-- Aloma [CLI installed](../../CLI/)
+- Aloma [CLI installed](https://github.com/aloma-io/aloma-io/tree/main/docs/CLI)
 - Access to Kubernetes cluster with appropriate RBAC permissions
 - Kubernetes connector configuration
 
