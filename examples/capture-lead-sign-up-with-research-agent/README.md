@@ -17,7 +17,7 @@ Transforms raw lead signups into enriched contacts with automated team notificat
 
 ## Prerequisites
 
-- Aloma [CLI installed](../../CLI/)
+- Aloma [CLI installed](https://github.com/aloma-io/aloma-io/tree/main/docs/CLI)
 - Access to HubSpot, Google Sheets, Slack, and Perplexity AI accounts
 - SMTP email service (Gmail, Outlook, etc.)
 
