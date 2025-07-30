@@ -116,7 +116,7 @@ On-premise connectors need to be added to the workspace and can then be run on-p
 ### Developing Connectors
 
 :::note
-Take a look at a [connector example](https://github.com/aloma-io/integration/tree/main/nodejs/examples/hello-world) or our [sql connector](https://github.com/aloma-io/connector-sql/).
+Take a look at a [connector example](https://github.com/aloma-io/integration/tree/main/integration-sdk/examples/hello-world) or our [sql connector](https://github.com/aloma-io/integration/tree/main/integration-sdk/examples/hello-world).
 :::
 
 <br />
