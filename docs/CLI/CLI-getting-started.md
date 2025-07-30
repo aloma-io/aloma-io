@@ -40,7 +40,7 @@ Note, there are other example workflows you can choose from here [**examples**](
 
 ### Step 5: Update API Token
 
-Replace the in the deply file the placeholder with your actual HubSpot token:
+Replace the in the deploy file the placeholder with your actual HubSpot token:
 
 ```yaml
 connectors:
