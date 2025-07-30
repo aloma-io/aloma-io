@@ -27,7 +27,7 @@ Transforms company data from Google Sheets into comprehensive research reports a
 
 ## Prerequisites
 
-- Aloma [CLI installed](../../CLI/)
+- Aloma [CLI installed](https://github.com/aloma-io/aloma-io/tree/main/docs/CLI)
 - Access to Google Sheets, Google Drive, and email (SMTP OAuth) accounts
 - Perplexity AI and Claude AI API keys
 
