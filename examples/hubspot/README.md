@@ -15,7 +15,7 @@ Transforms HubSpot CRM data into organized contact lists by automatically retrie
 
 ## Prerequisites
 
-- Aloma [CLI installed](../../CLI/)
+- Aloma [CLI installed](https://github.com/aloma-io/aloma-io/tree/main/docs/CLI)
 - Access to HubSpot CRM with appropriate permissions
 - HubSpot Private App or API token with CRM permissions
 
