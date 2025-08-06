@@ -100,5 +100,6 @@ Walk through our [ship offloading example](toy-example.md) to build your first a
 - **[Integration Setup](integration.md)** - Connect external services
 - **[Task Management](tasks.md)** - Advanced task handling
 - **[Step Development](steps.md)** - JavaScript step programming
+- **[Libraries](library.md)** - Reusable code modules and functions
 
 **Ready to start building?** Begin with the [toy example](toy-example.md) for a practical introduction to ALOMA's workflow automation.
