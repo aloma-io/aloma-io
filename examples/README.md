@@ -4,15 +4,17 @@ Real-world automation examples that demonstrate Aloma's capabilities for busines
 
 ## Available Examples
 
-### [HubSpot Integration](hubspot/): **Company and Contact Management Automation**
-### [Capture lead sign up with research agent](capture-lead-sign-up-with-research-agent/): **Complete Lead Processing Workflow**
+### [HubSpot Integration](hubspot.md): **Company and Contact Management Automation**
+
+### [Capture lead sign up with research agent](capture-lead-sign-up-with-research-agent.md): **Complete Lead Processing Workflow**
 
 ## Getting Started with Examples
 
 ### Prerequisites
-- Aloma account ([sign up here](https://home.aloma.io/))
-- [Basic understanding](../getting-started/) of Aloma concepts
-- [Install CLI](CLI/README.md)
+
+* Aloma account ([sign up here](https://home.aloma.io/))
+* [Basic understanding](../getting-started/) of Aloma concepts
+* [Install CLI](CLI/)
 
 ### 1. Clone the Repository
 
@@ -62,23 +64,24 @@ aloma deploy deploy.yaml
 After deployment, you'll need to configure OAuth for the required connectors (see examples for specifics and requirements):
 
 #### Slack Example
+
 1. Run `aloma connector list` to find the "slack.com" connector id
 2. Run `aloma connector oauth <id>` (replace `<id>` with the actual connector id)
 3. Follow the OAuth flow to authorize Slack access
 
 ### 6. Test the Workflow
 
-Create the test task provided in the example to verify everything is working. 
+Create the test task provided in the example to verify everything is working.
 
 ## Support
 
-- [Toy Example Tutorial](https://github.com/aloma-io/aloma-io/blob/main/docs/getting-started/toy-example.md)
-- [CLI Documentation](https://github.com/aloma-io/aloma-io/blob/main/docs/CLI)
-- [Create an issue](../../issues) in the repository
-- Email connector-request@aloma.io for new connector requests
-- Check [ALOMA documentation](https://github.com/aloma-io/aloma-io/tree/main/docs) for detailed guides
-- Review [Getting Started Guide](../../docs/getting-started) for fundamentals
+* [Toy Example Tutorial](../docs/getting-started/toy-example.md)
+* [CLI Documentation](../docs/cli/)
+* [Create an issue](../issues/) in the repository
+* Email connector-request@aloma.io for new connector requests
+* Check [ALOMA documentation](https://github.com/aloma-io/aloma-io/tree/main/docs) for detailed guides
+* Review [Getting Started Guide](../docs/getting-started/) for fundamentals
 
----
+***
 
 **Ready to start?** Pick an example and start building your first workflow.

@@ -2,22 +2,18 @@
 
 ## Overview
 
-A step consists of a `match` and `code`.
-The match specifies in which state of the task the step may be applied.
-The code specifies what to execute if applied.
+A step consists of a `match` and `code`. The match specifies in which state of the task the step may be applied. The code specifies what to execute if applied.
 
 **Open the outline view for easier navigation**
 
 ### Match
 
-Given a task, a match can match any subset of the data of the task.
-One can match for type or for value.
-One should exactly match the data that is needed for the do part, not more and not less.
+Given a task, a match can match any subset of the data of the task. One can match for type or for value. One should exactly match the data that is needed for the do part, not more and not less.
 
-  - Use JSON format to define match conditions
-  - Match against specific fields using dot notation (e.g. contact.name)
-  - Use operators like $eq, $ne, $gt, $lt, $in, $nin
-  - Combine conditions with $and, $or, $not
+* Use JSON format to define match conditions
+* Match against specific fields using dot notation (e.g. contact.name)
+* Use operators like $eq, $ne, $gt, $lt, $in, $nin
+* Combine conditions with $and, $or, $not
 
 ```js
 {
@@ -53,8 +49,6 @@ One should exactly match the data that is needed for the do part, not more and n
   "contact.country": { "$in": ["US", "UK", "CA"] }
 }
 ```
-
-
 
 ### Code
 
@@ -108,6 +102,7 @@ A workspace can have static configuration.
 ```js
 let endpoint = task.config('SERVER_ENDPOINT');
 ```
+
 These are set as Environment variables in the Workspace configuration.
 
 ### Graph
@@ -137,6 +132,7 @@ graph.edges().filter((edge) => vertex.type === 'leaving')
 ```
 
 Match on the graph:
+
 ```js
 // The step applies if the graph does contain at least one vertex of type Ship
 {
@@ -174,7 +170,7 @@ task.completeOnExpire(taskResult);
 
 ### Ignore
 
-A task can be explicitly ignored. 
+A task can be explicitly ignored.
 
 ```js
 task.ignore();
@@ -182,8 +178,7 @@ task.ignore();
 
 ### Redo
 
-A step will not be run consecutively. In order to achieve that, one can redo the step.
-Make sure that you have a working ending condition, otherwise the step will be repeated indefinitely.
+A step will not be run consecutively. In order to achieve that, one can redo the step. Make sure that you have a working ending condition, otherwise the step will be repeated indefinitely.
 
 ```js
 if (data.items.length)
@@ -202,7 +197,7 @@ if (data.items.length)
 
 Mapping data can be done with a mapper:
 
-```js title="Data Mapping"
+```js
 const data = {
   ship:
   {
@@ -224,12 +219,11 @@ console.log(transform.execute(data));
 
 [Learn more](https://github.com/midknight41/map-factory#getting-started).
 
-
 ### Visualize
 
 In order to inspect data one can visualize it, it will be displayed in the task view:
 
-```js title="visualization types"
+```js
 // visualize a chart
 task.visualize({
   type: 'chart', name: 'chart', data: {
@@ -296,9 +290,9 @@ task.visualize({
 
 ### Connectors
 
-A step can interface with deployed integrations in a workspace. 
+A step can interface with deployed integrations in a workspace.
 
-```js title="generic call"
+```js
 connectors.$nameOfTheConnector.$method
 ({
     ... // $parameters
@@ -309,7 +303,7 @@ There are two ways to process the result.
 
 1.) One can directly `await` the call (recommended)
 
-```js title="await to process result"
+```js
 const sent = await connectors.eMailSmtp.send
 ({
     from: 'hello@example.com',
@@ -328,7 +322,7 @@ console.log(sent)
 
 Every connector call supports the `into` parameter.
 
-```js title="process result in other steps"
+```js
 data.some ||= {};
 data.some.result ||= {};
 data.some.result.key ||= {};
@@ -362,7 +356,7 @@ In order to aquire missing data, approval, ..., human interaction in general, on
 
 Forms are useful for asking for structured data. Use the nocode form builder by creating a new step of type `Form`.
 
-![Nocode Form Step](../static/asset/img/nocode.png)
+![Nocode Form Step](../../.gitbook/assets/nocode.png)
 
 ### Presentation
 
@@ -374,12 +368,11 @@ user.conversation({ kind: 'data', title: `Results`, name: `Results`, data: data 
 
 ## Audit
 
-In order to highlight meaninful data from an audit or compliance perspective, on can use the audit facility.
-These are available in the task `Audit` view.
+In order to highlight meaninful data from an audit or compliance perspective, on can use the audit facility. These are available in the task `Audit` view.
 
 ### Log
 
-One can log a generic audit message. 
+One can log a generic audit message.
 
 ```js
 audit.log(`Ticket closed`)

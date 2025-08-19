@@ -2,11 +2,11 @@
 
 For automating pipelines you need to integrate ALOMA with other systems.
 
-**See [step documentation](https://github.com/aloma-io/aloma-io/blob/main/docs/getting-started/steps.md#integration) for documentation on writing api calls**
+**See** [**step documentation**](steps.md#integration) **for documentation on writing api calls**
 
----
+***
 
-## Webhooks  
+## Webhooks
 
 [Webhooks](https://en.wikipedia.org/wiki/Webhook) are an easy means to get data into or out of aloma.
 
@@ -18,15 +18,15 @@ Incoming webhooks create tasks in aloma. In the integration configuration one ca
 
 First, in your workspace navigate to the integration menu.
 
-![integration menu](../static/asset/img/integration-menu.png)
+![integration menu](../../.gitbook/assets/integration-menu.png)
 
-Then select the webhooks tab 
+Then select the webhooks tab
 
-![webhooks tab](../static/asset/img/webhooks-integration.png)
+![webhooks tab](../../.gitbook/assets/webhooks-integration.png)
 
 Then add a webhook by giving it a names and clicking create.
 
-![Webhooks](../static/asset/img/webhooks.png)
+![Webhooks](../../.gitbook/assets/webhooks.png)
 
 Clicking on the webhook copies it to the clipboard. These can then be used in the external system.
 
@@ -40,15 +40,15 @@ curl -v -X POST -H'Content-type: application/json' --data-binary '{"a": "hello",
 
 **Using the Web UI**
 
-Outgoing webhooks can be used by making a [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) request to them. 
+Outgoing webhooks can be used by making a [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) request to them.
 
 If you need access tokens, these can be configured in the workspace configuration accessible here:
 
-![Configuration access](../static/asset/img/secret-configuration.png) 
+![Configuration access](../../.gitbook/assets/secret-configuration.png)
 
-Simply enter you secret 
+Simply enter you secret
 
-![Enter secret](../static/asset/img/set-secret1.png)
+![Enter secret](../../.gitbook/assets/set-secret1.png)
 
 and it will be accessible in the workspace by referring to it as a variable
 
@@ -84,53 +84,46 @@ Connectors are managed in a Workspace and need to be setup in each individual wo
 
 Navigate to the integration menu.
 
-![integration menu](../static/asset/img/integration-menu.png)
+![integration menu](../../.gitbook/assets/integration-menu.png)
 
 This provides you a list of installed connectors. By clicking on the manage button you can add connectors.
 
-![Manage](../static/asset/img/manage-connectors.png)
+![Manage](../../.gitbook/assets/manage-connectors.png)
 
 You will see a list of available connectors, and can add them by clicking on the "add" button. On prem and cloud connectors are shown on the list and differentiated by their icons. You can also create on prem "local" connectors by clicking on the "create" button. This is done using the [SDK](https://github.com/aloma-io/connectors)
 
-![Add](../static/asset/img/connecter-list.png)
+![Add](../../.gitbook/assets/connecter-list.png)
 
 If you add a connector to a workspace and the connector needs configuration - generally to add access credentials, you can see that in the connector list:
 
-![Add](../static/asset/img/configure-connector.png)
+![Add](../../.gitbook/assets/configure-connector.png)
 
-Just navigate to the connector in the list of installed connectors to configure it. 
+Just navigate to the connector in the list of installed connectors to configure it.
 
-To add an API Key:
-![Add](../static/asset/img/configure-connector-details.png)
+To add an API Key: ![Add](../../.gitbook/assets/configure-connector-details.png)
 
-To authourise via OAuth (this will open the oauth permissions window):
-![Add](../static/asset/img/configure-connector-details-oauth.png)
+To authourise via OAuth (this will open the oauth permissions window): ![Add](../../.gitbook/assets/configure-connector-details-oauth.png)
 
-Username/Password (these are set as secrets in the UI):
-![Add](../static/asset/img/configure-connector-details-username-password.png)
+Username/Password (these are set as secrets in the UI): ![Add](../../.gitbook/assets/configure-connector-details-username-password.png)
 
-
-Cloud connectors can simply be added to the workspace and run inside of aloma.
-On-premise connectors need to be added to the workspace and can then be run on-premise. The registration key is needed to connect said connector to your workspace.
+Cloud connectors can simply be added to the workspace and run inside of aloma. On-premise connectors need to be added to the workspace and can then be run on-premise. The registration key is needed to connect said connector to your workspace.
 
 ### Developing Connectors
 
-:::note
-Take a look at a [connector example](https://github.com/aloma-io/integration/tree/main/integration-sdk/examples/hello-world) or our [sql connector](https://github.com/aloma-io/integration/tree/main/integration-sdk/examples/hello-world).
-:::
+:::note Take a look at a [connector example](https://github.com/aloma-io/integration/tree/main/integration-sdk/examples/hello-world) or our [sql connector](https://github.com/aloma-io/integration/tree/main/integration-sdk/examples/hello-world). :::
 
-<br />
-1. Register your connector (after creation navigate to my connectors and take note of the connector ID, e.g. 1234)
-![Add](../static/asset/img/create-connector-registration.png)
+\
+1\. Register your connector (after creation navigate to my connectors and take note of the connector ID, e.g. 1234) !\[Add]\(../static/asset/img/create-connector-registration.png)
 
 2. Create a new connector with our [SDK](https://github.com/aloma-io/integration) by running
+
 ```bash
 npx @aloma.io/integration-sdk@latest create my-connector --connector-id 1234`
 ```
 
 3. Add the connector to a workspace.
-
 4. Start the connector by running
+
 ```bash
 yarn build; yarn start.
 ```
