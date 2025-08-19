@@ -1,3 +1,33 @@
 # Table of contents
 
 * [Developer Platform](README.md)
+* [🚀 Getting Started](getting-started/README.md)
+  * [What is ALOMA](getting-started/what-is-aloma.md)
+  * [5-minute Quickstart](getting-started/5-minute-quickstart.md)
+  * [Understanding Conditional Steps](getting-started/understanding-conditional-steps.md)
+* [💡 Core Concepts](core-concepts/README.md)
+  * [Data-Triggered Automation](core-concepts/data-triggered-automation.md)
+  * [Tasks & JSON Processing](core-concepts/tasks-and-json-processing.md)
+  * [Conditional Step Matching](core-concepts/conditional-step-matching.md)
+  * [Workspace and Isolation](core-concepts/workspace-and-isolation.md)
+* [🛠️ Development Guide](development-guide/README.md)
+  * [CLI Setup and Workflow](development-guide/cli-setup-and-workflow.md)
+  * [Web IDE Development](development-guide/web-ide-development.md)
+  * [Step Development Patterns](development-guide/step-development-patterns.md)
+  * [Libraries and Code Reuse](development-guide/libraries-and-code-reuse.md)
+* [🔌 Integration](integration/README.md)
+  * [Using Cloud Connectors](integration/using-cloud-connectors.md)
+  * [Building Custom Connectors](integration/building-custom-connectors.md)
+  * [Webhook Configuration](integration/webhook-configuration.md)
+* [📚 Examples & Tutorials](examples-and-tutorials/README.md)
+  * [Complete Workflow Examples](examples-and-tutorials/complete-workflow-examples/README.md)
+    * [Customer on-boarding Pipeline](examples-and-tutorials/complete-workflow-examples/customer-on-boarding-pipeline.md)
+    * [E-commerce Order Processing](examples-and-tutorials/complete-workflow-examples/e-commerce-order-processing.md)
+  * [Step writing best practices](examples-and-tutorials/step-writing-best-practices/README.md)
+    * [Squadify rewritten with best practices](examples-and-tutorials/step-writing-best-practices/squadify-rewritten-with-best-practices.md)
+
+## Group 1
+
+* [🤖 AI Agents & Intelligent Automation](group-1/ai-agents-and-intelligent-automation/README.md)
+  * [What Are AI Agents in ALOMA](group-1/ai-agents-and-intelligent-automation/what-are-ai-agents-in-aloma.md)
+  * [Agent Architecture Patterns - Technical Foundation](group-1/ai-agents-and-intelligent-automation/agent-architecture-patterns-technical-foundation.md)
