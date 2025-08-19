@@ -19,6 +19,14 @@
   * [Using Cloud Connectors](integration/using-cloud-connectors.md)
   * [Building Custom Connectors](integration/building-custom-connectors.md)
   * [Webhook Configuration](integration/webhook-configuration.md)
+* [🤖 AI Agents & Intelligent Automation](ai-agents-and-intelligent-automation/README.md)
+  * [What Are AI Agents in ALOMA](ai-agents-and-intelligent-automation/what-are-ai-agents-in-aloma.md)
+  * [Agent Architecture Patterns - Technical Foundation](ai-agents-and-intelligent-automation/agent-architecture-patterns-technical-foundation.md)
+  * [Building Your First AI Agent (Hands-on Tutorial):](ai-agents-and-intelligent-automation/building-your-first-ai-agent-hands-on-tutorial.md)
+  * [Multi-Step AI Workflows (Advanced Implementation)](ai-agents-and-intelligent-automation/multi-step-ai-workflows-advanced-implementation.md)
+  * [Agent Memory & Context Management (Critical Technical Topic)](ai-agents-and-intelligent-automation/agent-memory-and-context-management-critical-technical-topic.md)
+  * [Human-in-the-Loop Patterns (Business Critical)](ai-agents-and-intelligent-automation/human-in-the-loop-patterns-business-critical.md)
+  * [Advanced Agent Examples (Real-world Implementation)](ai-agents-and-intelligent-automation/advanced-agent-examples-real-world-implementation.md)
 * [📚 Examples & Tutorials](examples-and-tutorials/README.md)
   * [Complete Workflow Examples](examples-and-tutorials/complete-workflow-examples/README.md)
     * [Customer on-boarding Pipeline](examples-and-tutorials/complete-workflow-examples/customer-on-boarding-pipeline.md)
@@ -27,7 +35,3 @@
     * [Squadify rewritten with best practices](examples-and-tutorials/step-writing-best-practices/squadify-rewritten-with-best-practices.md)
 
 ## Group 1
-
-* [🤖 AI Agents & Intelligent Automation](group-1/ai-agents-and-intelligent-automation/README.md)
-  * [What Are AI Agents in ALOMA](group-1/ai-agents-and-intelligent-automation/what-are-ai-agents-in-aloma.md)
-  * [Agent Architecture Patterns - Technical Foundation](group-1/ai-agents-and-intelligent-automation/agent-architecture-patterns-technical-foundation.md)

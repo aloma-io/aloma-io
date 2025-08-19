@@ -949,10 +949,6 @@ export const content = async () => {
 
 ***
 
-## Agent Architecture Patterns - Technical Foundation
-
-**Proven architectural patterns for building intelligent agents with ALOMA's conditional execution model. Master these patterns to create robust, scalable AI agents that solve real business problems.**
-
 ### Research Agents: Information Gathering and Synthesis
 
 Research agents are among the most powerful AI agent patterns in ALOMA. They systematically gather information from multiple sources, synthesize findings, and build comprehensive knowledge bases—all through coordinated conditional steps.
