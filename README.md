@@ -80,8 +80,3 @@ This documentation will help you get started quickly, explore core concepts, and
 - [Step Writing Best Practices](examples-and-tutorials/step-writing-best-practices.md)
 
 ---
-
-## 📖 Next Steps
-- Explore the [API Reference](../api-reference/)  
-- Track product updates in the [Changelog](../changelog/)  
-- Visit our [Help Center](../help-center/) for FAQs and troubleshooting
