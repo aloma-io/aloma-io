@@ -84,7 +84,6 @@ export const content = async () => {
 **Benefits of conditional execution:**
 
 * ✅ Steps run automatically when conditions are met
-* ✅ Parallel execution where possible (payment + inventory)
 * ✅ Self-healing: errors in one step don't stop others
 * ✅ Easy to add new steps without modifying existing ones
 * ✅ Workflows adapt to different data scenarios
@@ -477,6 +476,10 @@ export const condition = {
     fraudApproved: true  // Add new requirement
   } 
 };
+
+export const content = async () => {
+  //Notify the fraud
+};
 ```
 
 #### 5. **Dynamic Workflows**
@@ -595,7 +598,7 @@ export const content = async () => {
     data.apiCall.attempts = (data.apiCall.attempts || 0) + 1;
     data.apiCall.lastError = error.message;
     console.log(`Attempt ${data.apiCall.attempts} failed, will retry`);
-  }
+    step.redo();
 };
 ```
 

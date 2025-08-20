@@ -49,23 +49,9 @@ Data State Changes → Eligible Steps Activate → Data State Updates → New St
 
 Let's trace how data triggers different automation paths. First, deploy the automation:
 
-```bash
-# Create steps using CLI
-aloma step add "validate_customer" -c '{"customer":{"email":"String","status":"new"}}'
-aloma step add "create_crm_contact" -c '{"customer":{"validated":true}}'
-aloma step add "send_welcome_email" -c '{"customer":{"validated":true}}'
-aloma step add "complete_onboarding" -c '{"customer":{"crmCreated":true,"welcomeEmailSent":true}}'
+Create the step js files
 
-# Create test task to see the flow
-aloma task new "customer onboarding test" -d '{"customer":{"email":"john@company.com","firstName":"John","lastName":"Smith","status":"new"}}'
-
-# Monitor execution
-aloma task list --state running
-aloma task log <task-id> --logs --changes
-```
-
-Now let's examine the step logic:
-
+validate_customer.js
 ```javascript
 // Step 1: New customer validation
 export const condition = {
@@ -90,6 +76,7 @@ export const content = async () => {
 };
 ```
 
+create_crm_contact.js
 ```javascript
 // Step 2: Create CRM record (only for validated customers)
 export const condition = {
@@ -123,6 +110,7 @@ export const content = async () => {
 };
 ```
 
+send_welcome_email.js
 ```javascript
 // Step 3: Send welcome email (runs in parallel with CRM creation)
 export const condition = {
@@ -149,6 +137,7 @@ export const content = async () => {
 };
 ```
 
+complete_onboarding.js
 ```javascript
 // Step 4: Complete onboarding (waits for all prerequisites)
 export const condition = {
@@ -178,6 +167,18 @@ export const content = async () => {
   
   task.complete();
 };
+```
+
+```bash
+# Create steps using CLI
+aloma step sync
+
+# Create test task to see the flow
+aloma task new "customer onboarding test" -d '{"customer":{"email":"john@company.com","firstName":"John","lastName":"Smith","status":"new"}}'
+
+# Monitor execution
+aloma task list --state running
+aloma task log <task-id> --logs --changes
 ```
 
 #### Data Flow Analysis

@@ -67,12 +67,10 @@ Now we'll create conditional steps that respond to data patterns:
 4. Add the **Code** (what happens when condition matches):
 
 ```javascript
-export const content = async () => {
   console.log('Offboarding crew...');
   data.ship.crew = 0;
   data.ship.crewOffboarded = true;
   console.log('Crew offboarded successfully');
-};
 ```
 
 5. Save the step
@@ -97,12 +95,10 @@ This step runs independently of crew offboarding:
 4. **Code**:
 
 ```javascript
-export const content = async () => {
   console.log('Unloading cargo:', data.ship.cargo);
   data.ship.cargo = [];
   data.ship.cargoUnloaded = true;
   console.log('Cargo unloaded successfully');
-};
 ```
 
 5. Save the step
@@ -128,7 +124,6 @@ This step only runs after both previous steps complete:
 4. **Code**:
 
 ```javascript
-export const content = async () => {
   console.log('All prerequisites met. Retiring ship...');
   data.ship.floating = false;
   data.ship.status = "retired";
@@ -137,7 +132,6 @@ export const content = async () => {
   
   // Complete the task
   task.complete();
-};
 ```
 
 5. Save the step
@@ -153,7 +147,6 @@ Now let's see ALOMA's conditional execution in action:
 You'll see:
 
 * **Step matching**: ALOMA finds steps with conditions that match current data
-* **Parallel execution**: Crew and cargo steps run simultaneously
 * **Data transformation**: Each step modifies the task data
 * **Conditional progression**: Final step waits for prerequisites
 * **Automatic completion**: Process stops when `task.complete()` is called
@@ -185,10 +178,9 @@ function retireShip(ship) {
 #### Key Benefits You Just Saw:
 
 1. **Automatic orchestration**: ALOMA determined execution order based on data
-2. **Parallel processing**: Crew and cargo steps ran simultaneously
-3. **Self-organizing logic**: Each step knew when it could run
-4. **Fault tolerance**: If one step failed, others could still proceed
-5. **Incremental complexity**: Easy to add new steps without breaking existing logic
+2. **Self-organizing logic**: Each step knew when it could run
+3. **Fault tolerance**: If one step failed, others could still proceed
+4. **Incremental complexity**: Easy to add new steps without breaking existing logic
 
 ### Step 7: Add Email Notification (Optional)
 
@@ -213,7 +205,6 @@ Let's add a connector to send notifications:
 **Code:**
 
 ```javascript
-export const content = async () => {
   await connectors.eMailSmtpOAuth.sendEmail({
     to: 'your-email@example.com',
     subject: 'Ship Retirement Complete',
@@ -225,7 +216,6 @@ export const content = async () => {
   });
   
   console.log('Notification sent successfully');
-};
 ```
 
 ### Understanding the Data Flow
