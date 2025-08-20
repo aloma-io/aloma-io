@@ -38,7 +38,5 @@
 
 ## Group 1
 
-***
-
 * [Customer Support Escalation Agent breakdown](customer-support-escalation-agent-breakdown/README.md)
   * [Overview & Architecture](customer-support-escalation-agent-breakdown/overview-and-architecture.md)

@@ -1,5 +1,6 @@
 ---
 description: Welcome to your team’s developer platform
+icon: hand-wave
 layout:
   width: wide
   title:
@@ -18,60 +19,80 @@ layout:
 
 # Developer Platform
 
-<h2 align="center">Developer platform template</h2>
+## Welcome to ALOMA Documentation
 
-<p align="center">Welcome to your team’s new developer platform</p>
+ALOMA is a **code-first workflow automation platform** designed for developers who want the flexibility of code without the overhead of managing infrastructure.
 
-<p align="center"><a href="http://app.gitbook.com/join" class="button primary">Sign up</a> <a href="http://app.gitbook.com/join" class="button secondary">Log in</a></p>
+Unlike visual tools that require dragging blocks together, ALOMA lets you:
 
-<table data-view="cards"><thead><tr><th></th><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-card-cover data-type="files"></th></tr></thead><tbody><tr><td><h4><i class="fa-leaf">:leaf:</i></h4></td><td><strong>No code</strong></td><td>Get started with the developer platform in 5 minutes.</td><td><a href="https://app.gitbook.com/o/JUBQDmNAQoKrqSQU7VDf/s/U8iUfwcS52VHSR41zBu2/">Documentation</a></td><td><a href=".gitbook/assets/no-code.jpg">no-code.jpg</a></td></tr><tr><td><h4><i class="fa-server">:server:</i></h4></td><td><strong>Hosted</strong></td><td>Learn more about hosting the developer platform.</td><td><a href="https://app.gitbook.com/o/JUBQDmNAQoKrqSQU7VDf/s/U8iUfwcS52VHSR41zBu2/">Documentation</a></td><td><a href=".gitbook/assets/hosted.jpg">hosted.jpg</a></td></tr><tr><td><h4><i class="fa-terminal">:terminal:</i></h4></td><td><strong>API reference</strong></td><td>Browse, test, and implement APIs.</td><td><a href="https://app.gitbook.com/o/JUBQDmNAQoKrqSQU7VDf/s/IL3zGiPLBNiddUOYatE0/">API Reference</a></td><td><a href=".gitbook/assets/api-reference.jpg">api-reference.jpg</a></td></tr></tbody></table>
+* Trigger automations with JSON
+* Write logic in JavaScript
+* Scale workflows dynamically with minimal setup
 
-{% columns %}
-{% column %}
-### Get started in 5 minutes
+This documentation will help you get started quickly, explore core concepts, and build advanced automations with ALOMA.
 
-Setting up your first API call should be the easiest part of getting started. With clear endpoints, copy-paste-ready examples, and quick authentication, you’ll be up and running in minutes—not hours.
+***
 
-No guesswork, no complexity—just your first successful call, fast.
+### 🚀 Getting Started
 
-<a href="https://app.gitbook.com/o/JUBQDmNAQoKrqSQU7VDf/s/U8iUfwcS52VHSR41zBu2/" class="button primary" data-icon="rocket-launch">Get started</a> <a href="https://app.gitbook.com/o/JUBQDmNAQoKrqSQU7VDf/s/IL3zGiPLBNiddUOYatE0/" class="button secondary" data-icon="terminal">API reference</a>
-{% endcolumn %}
+* What is ALOMA
+* 5-minute Quickstart
+* Understanding Conditional Steps
 
-{% column %}
-{% code title="index.js" overflow="wrap" %}
-```javascript
-// Import the SDK
-import ExampleAPI from "example-api";
+***
 
-// Initialize the client
-const client = new ExampleAPI({ apiKey: "YOUR_API_KEY" });
+### 💡 Core Concepts
 
-// Send your first message
-const response = await client.messages.send({
-  message: "Hello, world!"
-});
+* Data-Triggered Automation
+* Tasks & JSON Processing
+* Conditional Step Matching
+* Workspace and Isolation
 
-```
-{% endcode %}
-{% endcolumn %}
-{% endcolumns %}
+***
 
-{% columns %}
-{% column %}
-<figure><img src="https://gitbookio.github.io/onboarding-template-images/placeholder.png" alt=""><figcaption></figcaption></figure>
-{% endcolumn %}
+### 🛠 Development Guide
 
-{% column %}
-### Learn more about the developer platform
+* CLI Setup and Workflow
+* Web IDE Development
+* Step Development Patterns
+* Libraries and Code Reuse
 
-Read guides, watch tutorials, and learn more about working with the developer platform and integrating it with your own stack.
+***
 
-<a href="https://app.gitbook.com/o/JUBQDmNAQoKrqSQU7VDf/s/CKfLVidEqoYeUFMHrh0F/" class="button primary" data-icon="book-open">Guides</a> <a href="https://app.gitbook.com/o/JUBQDmNAQoKrqSQU7VDf/s/U8iUfwcS52VHSR41zBu2/" class="button secondary" data-icon="book">Documentation</a>
-{% endcolumn %}
-{% endcolumns %}
+### 🔌 Integration
 
-<h2 align="center">Join a community of over 3,000 developers</h2>
+* Using Cloud Connectors
+* Building Custom Connectors
+* Webhook Configuration
 
-<p align="center">Join our Discord community or create your first PR in just a few steps.</p>
+***
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th></th><th></th><th data-hidden data-card-cover data-type="files"></th></tr></thead><tbody><tr><td><h4><i class="fa-discord">:discord:</i></h4></td><td><strong>Discord community</strong></td><td>Join our Discord community to post questions, get help, and share resources with over 3,000 like-minded developers.</td><td><a href="https://www.gitbook.com/" class="button secondary">Join Discord</a></td><td></td></tr><tr><td><h4><i class="fa-github">:github:</i></h4></td><td><strong>GitHub</strong></td><td>Our product is 100% open source and built by developers just like you. Head to our GitHub repository to learn how to submit your first PR.</td><td><a href="https://www.gitbook.com/" class="button secondary">Submit a PR</a></td><td></td></tr></tbody></table>
+### 🤖 AI Agents & Intelligent Automation
+
+* What Are AI Agents in ALOMA
+* Agent Architecture Patterns
+* Building Your First AI Agent
+* Multi-Step AI Workflows
+* Agent Memory & Context Management
+* Human-in-the-Loop Patterns
+
+**Advanced Agent Examples**
+
+* Sales Research and Qualification Agent
+* Customer Support Escalation Agent
+
+***
+
+### 📚 Examples & Tutorials
+
+* Customer On-boarding Pipeline
+* E-commerce Order Processing
+* Step Writing Best Practices
+
+***
+
+### 📖 Next Steps
+
+* Explore the API Reference
+* Track product updates in the Changelog
+* Visit our Help Center for FAQs and troubleshooting
