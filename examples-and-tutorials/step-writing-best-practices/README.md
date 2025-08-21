@@ -67,7 +67,7 @@ export const content = async () => {
 // Next step waits for data state
 export const condition = {
   paymentProcessed: true,
-  fulfillmentReady: { $exists: false }
+  fulfillmentReady: null
 };
 ```
 
@@ -90,7 +90,7 @@ Structure conditions to naturally evolve with your data:
 export const condition = {
   customer: {
     email: String,
-    validated: { $exists: false }
+    validated: null
   }
 };
 
@@ -99,7 +99,7 @@ export const condition = {
   customer: {
     validated: true,
     tier: String,
-    accountCreated: { $exists: false }
+    accountCreated: null
   }
 };
 
@@ -107,7 +107,7 @@ export const condition = {
 export const condition = {
   customer: {
     accountCreated: true,
-    welcomeEmailSent: { $exists: false }
+    welcomeEmailSent: null
   }
 };
 ```
@@ -127,7 +127,7 @@ Each step should handle one specific business concern:
 export const condition = {
   user: {
     email: String,
-    emailValidated: { $exists: false }
+    emailValidated: null
   }
 };
 
@@ -171,19 +171,19 @@ Design steps to run in parallel whenever possible:
 // Customer validation
 export const condition = {
   order: { customer: Object },
-  customerValidated: { $exists: false }
+  customerValidated: null
 };
 
 // Inventory check
 export const condition = {
   order: { items: Array },
-  inventoryChecked: { $exists: false }
+  inventoryChecked: null
 };
 
 // Fraud detection
 export const condition = {
   order: { total: { $gt: 500 } },
-  fraudChecked: { $exists: false }
+  fraudChecked: null
 };
 
 // Coordination step waits for all three
@@ -191,7 +191,7 @@ export const condition = {
   customerValidated: true,
   inventoryChecked: true,
   fraudChecked: true,
-  readyToProcess: { $exists: false }
+  readyToProcess: null
 };
 ```
 
@@ -204,7 +204,7 @@ Design steps so errors don't cascade:
 export const condition = {
   order: {
     validated: true,
-    paymentProcessed: { $exists: false }
+    paymentProcessed: null
   }
 };
 
@@ -226,7 +226,7 @@ export const content = async () => {
 export const condition = {
   order: {
     paymentError: String,
-    errorHandled: { $exists: false }
+    errorHandled: null
   }
 };
 
@@ -359,7 +359,7 @@ Design for graceful failure that doesn't stop other processes:
 export const condition = {
   customer: {
     validated: true,
-    notificationSent: { $exists: false }
+    notificationSent: null
   }
 };
 
@@ -436,9 +436,9 @@ Implement intelligent retry patterns:
 export const condition = {
   apiCall: {
     url: String,
-    maxRetries: { $exists: true },
+    maxRetries: { $ne: null },
     attempts: { $lt: data.apiCall?.maxRetries || 3 },
-    lastFailure: { $exists: true }
+    lastFailure: { $ne: null }
   }
 };
 
@@ -578,7 +578,7 @@ const enrichContactData = async (contact) => {
 export const condition = {
   contact: {
     email: String,
-    enriched: { $exists: false }
+    enriched: null
   }
 };
 
@@ -612,7 +612,7 @@ export const condition = {
 
 // ❌ Avoid: Expensive operations in conditions
 export const condition = {
-  complexCalculation: { $exists: true },  // Better to calculate in previous step
+  complexCalculation: { $ne: null },  // Better to calculate in previous step
   order: Object                           // Too broad, matches everything
 };
 ```
@@ -624,7 +624,7 @@ Handle multiple items efficiently:
 ```javascript
 export const condition = {
   orders: Array,
-  batchProcessed: { $exists: false }
+  batchProcessed: null
 };
 
 export const content = async () => {
@@ -829,7 +829,7 @@ Design steps that gracefully handle data evolution:
 export const condition = {
   customer: {
     email: String,
-    processed: { $exists: false }
+    processed: null
   }
 };
 
@@ -1015,7 +1015,7 @@ Create steps that adapt to data structure:
 export const condition = {
   dynamicProcessing: {
     workflows: Array,
-    currentIndex: { $exists: true, $lt: data.dynamicProcessing?.workflows?.length || 0 }
+    currentIndex: { $ne: null, $lt: data.dynamicProcessing?.workflows?.length || 0 }
   }
 };
 
@@ -1056,7 +1056,7 @@ Implement complex state transitions:
 export const condition = {
   order: {
     state: String,
-    stateTransition: { $exists: false }
+    stateTransition: null
   }
 };
 

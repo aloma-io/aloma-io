@@ -240,7 +240,7 @@ Handle failures with exponential backoff:
 export const condition = {
   apiCall: { 
     url: String,
-    attempts: { $lt: 3 }
+    failed: null
   }
 };
 
@@ -271,6 +271,8 @@ export const content = async () => {
     // Mark for retry if under limit
     if (data.apiCall.attempts < 3) {
       console.log(`Will retry in ${delayMs}ms`);
+      task.park(delayMs)
+      step.redo()
     } else {
       console.log('Max attempts reached - marking as failed');
       data.apiCall.failed = true;
@@ -282,7 +284,6 @@ export const content = async () => {
 export const condition = {
   apiCall: {
     failed: true,
-    attempts: { $gte: 3 }
   }
 };
 
@@ -309,7 +310,7 @@ Route tasks to different workflows based on data characteristics:
 export const condition = {
   order: {
     type: "B2B",
-    total: { $gt: 10000 },
+    highValue: true, // eg total > 10000 
     customer: { verified: true }
   }
 };
@@ -338,7 +339,7 @@ export const content = async () => {
 export const condition = {
   order: {
     type: "B2C",
-    total: { $lt: 1000 },
+    highValue: false, // eg total < 10000 
     customer: { verified: true }
   }
 };
@@ -650,7 +651,7 @@ Optimize performance by running steps only when necessary:
 // Only process high-value orders
 export const condition = {
   order: {
-    total: { $gt: 1000 },
+    highValue: true, // eg total > 10000
     status: "new"
   }
 };
@@ -664,7 +665,7 @@ export const content = async () => {
 // Skip processing for small orders
 export const condition = {
   order: {
-    total: { $lte: 100 },
+    highValue: false, // eg total <= 100 
     status: "new"
   }
 };
@@ -685,7 +686,7 @@ Respect external API limits:
 // Process with rate limiting
 export const condition = {
   apiCalls: Array,
-  rateLimited: { $ne: true }
+  rateLimited: false
 };
 
 export const content = async () => {
@@ -700,17 +701,18 @@ export const content = async () => {
     console.log('Rate limit reached, throttling...');
     data.rateLimited = true;
     data.nextAllowedCall = new Date(Date.now() + 60000).toISOString();
-    return;
+  } else {
+    // Make API call
+    const result = await connectors.externalApi.call(data.apiRequest);
+    
+    // Track the call
+    data.apiCalls.push({
+      timestamp: new Date().toISOString(),
+      result: result
+    });
+
+    step.redo()
   }
-  
-  // Make API call
-  const result = await connectors.externalApi.call(data.apiRequest);
-  
-  // Track the call
-  data.apiCalls.push({
-    timestamp: new Date().toISOString(),
-    result: result
-  });
 };
 ```
 
@@ -786,7 +788,7 @@ export const condition = {
   order: {
     status: "paid",
     customer: { tier: "premium" },
-    total: { $gt: 1000 }
+    total: { $ne: null }
   }
 };
 

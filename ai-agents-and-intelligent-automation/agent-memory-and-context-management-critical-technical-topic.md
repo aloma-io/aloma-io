@@ -40,7 +40,7 @@ ALOMA's data evolution naturally provides agent memory through **structured stat
 // Memory Architecture Foundation
 export const condition = {
   agent: {
-    memorySystem: { $exists: false }
+    memorySystem: null
   }
 };
 
@@ -342,7 +342,7 @@ export const condition = {
     memorySystem: 'initialized',
     performanceMonitoringEnabled: true
   },
-  memoryPerformanceCheck: { $exists: false }
+  memoryPerformanceCheck: null
 };
 
 export const content = async () => {
@@ -816,7 +816,7 @@ export const condition = {
   conversation: {
     participantId: String,
     initialMessage: String,
-    conversationMemory: { $exists: false }
+    conversationMemory: null
   }
 };
 
@@ -942,7 +942,7 @@ export const condition = {
     conversationMemory: Object,
     newMessage: String
   },
-  messageMemoryUpdate: { $exists: false }
+  messageMemoryUpdate: null
 };
 
 export const content = async () => {
@@ -1080,7 +1080,7 @@ export const condition = {
     workingMemory: Object,
     currentInteraction: Object
   },
-  shortTermUpdate: { $exists: false }
+  shortTermUpdate: null
 };
 
 export const content = async () => {
@@ -1185,7 +1185,7 @@ export const condition = {
     longTermMemoryUpdates: Array,
     longTermMemory: Object
   },
-  longTermConsolidation: { $exists: false }
+  longTermConsolidation: null
 };
 
 export const content = async () => {

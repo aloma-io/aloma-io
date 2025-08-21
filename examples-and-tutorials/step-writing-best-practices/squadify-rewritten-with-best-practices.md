@@ -169,7 +169,7 @@ export const condition = {
     propertyValue: String,
     propertyName: "dealstage"
   }],
-  dealFetch: { $exists: false }
+  dealFetch: null
 };
 
 export const content = async () => {
@@ -397,7 +397,7 @@ export const condition = {
     successful: true
   },
   dealData: Object,
-  validation: { $exists: false }
+  validation: null
 };
 
 export const content = async () => {
@@ -544,7 +544,7 @@ export const condition = {
     isValid: true
   },
   dealData: Object,
-  accountingContact: { $exists: false }
+  accountingContact: null
 };
 
 export const content = async () => {
@@ -713,7 +713,7 @@ export const condition = {
     contactID: String
   },
   dealData: Object,
-  invoiceCreation: { $exists: false }
+  invoiceCreation: null
 };
 
 export const content = async () => {
@@ -889,7 +889,7 @@ export const condition = {
     }
   },
   dealData: Object,
-  crmUpdate: { $exists: false }
+  crmUpdate: null
 };
 
 export const content = async () => {
@@ -1011,7 +1011,7 @@ export const condition = {
     successful: true
   },
   dealData: Object,
-  stageProgression: { $exists: false }
+  stageProgression: null
 };
 
 export const content = async () => {
@@ -1116,7 +1116,7 @@ export const condition = {
   stageProgression: {
     successful: true
   },
-  processCompletion: { $exists: false }
+  processCompletion: null
 };
 
 export const content = async () => {

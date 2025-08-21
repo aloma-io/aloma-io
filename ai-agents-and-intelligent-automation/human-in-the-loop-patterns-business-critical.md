@@ -20,7 +20,7 @@ setupAt: new Date().toISOString()
 
 console.log(`Collaboration strategy designed: ${strategy.collaborationApproach} with ${strategy.recommendedExpert}`); };
 
-// AI Analysis Phase: Comprehensive Data Analysis for Human Expert export const condition = { complexDecision: { collaborationSetup: { setupComplete: true, aiRole: Array } }, aiAnalysisPhase: { $exists: false } };
+// AI Analysis Phase: Comprehensive Data Analysis for Human Expert export const condition = { complexDecision: { collaborationSetup: { setupComplete: true, aiRole: Array } }, aiAnalysisPhase: null };
 
 export const content = async () => { const collaboration = data.complexDecision.collaborationSetup; console.log('AI conducting comprehensive analysis for human collaboration...');
 
@@ -103,7 +103,7 @@ analyzedAt: new Date().toISOString()
 
 console.log(`AI analysis complete: ${analysis.analysisConfidence}% confidence, ${analysis.dataGaps.length} areas identified for human expertise`); };
 
-// Human Expert Invitation: Structured Collaboration Request export const condition = { aiAnalysisPhase: { analysisComplete: true, humanExpertiseNeeded: Object }, humanExpertInvited: { $exists: false } };
+// Human Expert Invitation: Structured Collaboration Request export const condition = { aiAnalysisPhase: { analysisComplete: true, humanExpertiseNeeded: Object }, humanExpertInvited: null };
 
 export const content = async () => { const aiAnalysis = data.aiAnalysisPhase; const collaboration = data.complexDecision.collaborationSetup;
 
@@ -175,7 +175,7 @@ data.humanExpertInvited = {
 
 } };
 
-// Collaborative Synthesis: Integrate Human and AI Insights export const condition = { humanExpertResponse: { received: true, insights: Object, recommendations: Object }, aiAnalysisPhase: { analysisComplete: true }, collaborativeSynthesis: { $exists: false } };
+// Collaborative Synthesis: Integrate Human and AI Insights export const condition = { humanExpertResponse: { received: true, insights: Object, recommendations: Object }, aiAnalysisPhase: { analysisComplete: true }, collaborativeSynthesis: null };
 
 export const content = async () => { const humanInsights = data.humanExpertResponse.insights; const humanRecommendations = data.humanExpertResponse.recommendations; const aiAnalysis = data.aiAnalysisPhase;
 
@@ -1007,7 +1007,7 @@ export const condition = {
     responses: Object,
     satisfaction: Number
   },
-  feedbackAnalysis: { $exists: false }
+  feedbackAnalysis: null
 };
 
 export const content = async () => {
@@ -1116,7 +1116,7 @@ export const condition = {
     improvementPriorities: Object,
     behavioralAdjustments: Object
   },
-  learningImplementation: { $exists: false }
+  learningImplementation: null
 };
 
 export const content = async () => {
@@ -1242,7 +1242,7 @@ export const condition = {
     successful: true,
     changesImplemented: { $gt: 0 }
   },
-  performanceMonitoring: { $exists: false }
+  performanceMonitoring: null
 };
 
 export const content = async () => {
@@ -1344,7 +1344,7 @@ AI agents must make sophisticated decisions about when human intervention is nec
 export const condition = {
   escalationAssessment: {
     required: true,
-    analysisComplete: { $exists: false }
+    analysisComplete: null
   }
 };
 
@@ -1434,7 +1434,7 @@ export const condition = {
     recommendation: true,
     recommendedEscalationPath: String
   },
-  escalationExecuted: { $exists: false }
+  escalationExecuted: null
 };
 
 export const content = async () => {
@@ -1715,7 +1715,7 @@ Generate comprehensive approval recommendation with supporting analysis.`
 export const condition = {
   approvalRequest: {
     aiRecommendation: Object,
-    humanNotificationSent: { $exists: false }
+    humanNotificationSent: null
   }
 };
 
@@ -1808,7 +1808,7 @@ export const condition = {
     humanDecision: String,
     humanFeedback: Object
   },
-  approvalProcessingComplete: { $exists: false }
+  approvalProcessingComplete: null
 };
 
 export const content = async () => {
@@ -2020,7 +2020,7 @@ The most sophisticated human-in-the-loop systems enable true collaboration betwe
 export const condition = {
   complexDecision: {
     requiresCollaboration: true,
-    collaborationSetup: { $exists: false }
+    collaborationSetup: null
   }
 };
 

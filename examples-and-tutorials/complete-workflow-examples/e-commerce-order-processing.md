@@ -122,7 +122,7 @@ export const condition = {
       tier: String,
       totalSpent: Number
     },
-    tierAnalyzed: { $exists: false }
+    tierAnalyzed: null
   }
 };
 
@@ -174,7 +174,7 @@ export const condition = {
       method: String,
       token: String
     },
-    fraudChecked: { $exists: false }
+    fraudChecked: null
   }
 };
 
@@ -273,7 +273,7 @@ export const content = async () => {
 export const condition = {
   order: {
     items: Array,
-    inventoryChecked: { $exists: false }
+    inventoryChecked: null
   }
 };
 
@@ -379,7 +379,7 @@ export const condition = {
       method: String,
       token: String
     },
-    paymentProcessed: { $exists: false }
+    paymentProcessed: null
   }
 };
 
@@ -472,7 +472,7 @@ export const condition = {
     customer: {
       effectiveTier: String
     },
-    fulfillmentRouted: { $exists: false }
+    fulfillmentRouted: null
   }
 };
 
@@ -575,7 +575,7 @@ export const condition = {
       email: String,
       effectiveTier: String
     },
-    customerNotified: { $exists: false }
+    customerNotified: null
   }
 };
 
@@ -656,7 +656,7 @@ export const condition = {
       effectiveTier: String
     },
     priority: String,
-    internalTeamNotified: { $exists: false }
+    internalTeamNotified: null
   }
 };
 
@@ -760,7 +760,7 @@ export const condition = {
     fulfillmentRouted: true,
     customerNotified: true,
     internalTeamNotified: true,
-    orderProcessingComplete: { $exists: false }
+    orderProcessingComplete: null
   }
 };
 
@@ -832,7 +832,7 @@ export const condition = {
   order: {
     paymentFailed: true,
     paymentRetryAttempts: { $lt: 3 },
-    retryRequested: { $exists: false }
+    retryRequested: null
   }
 };
 
@@ -872,7 +872,7 @@ export const content = async () => {
 export const condition = {
   order: {
     hasBackorders: true,
-    inventoryShortageHandled: { $exists: false }
+    inventoryShortageHandled: null
   }
 };
 
@@ -1136,7 +1136,7 @@ export const condition = {
     customer: {
       totalSpent: { $gt: 100000 }
     },
-    vipProcessingTriggered: { $exists: false }
+    vipProcessingTriggered: null
   }
 };
 
@@ -1153,7 +1153,7 @@ export const condition = {
     payment: {
       method: "bitcoin"
     },
-    cryptoPaymentProcessed: { $exists: false }
+    cryptoPaymentProcessed: null
   }
 };
 

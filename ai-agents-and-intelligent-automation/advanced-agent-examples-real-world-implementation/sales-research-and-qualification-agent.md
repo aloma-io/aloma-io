@@ -93,7 +93,7 @@ export const condition = {
   prospect: {
     company: String,
     industry: String,
-    researchComplete: { $exists: false }
+    researchComplete: null
   }
 };
 
@@ -219,7 +219,7 @@ export const condition = {
       status: "research_initiated"
     }
   },
-  companyIntelligence: { $exists: false }
+  companyIntelligence: null
 };
 
 export const content = async () => {
@@ -401,7 +401,7 @@ aloma step add "competitive_intelligence_agent" \
 // Competitive Intelligence Agent: Analyzes competitive landscape and positioning
 export const condition = {
   companyIntelligence: Object,
-  competitiveIntelligence: { $exists: false }
+  competitiveIntelligence: null
 };
 
 export const content = async () => {
@@ -596,7 +596,7 @@ aloma step add "sales_outreach_agent" \
 export const condition = {
   companyIntelligence: Object,
   competitiveIntelligence: Object,
-  salesOutreach: { $exists: false }
+  salesOutreach: null
 };
 
 export const content = async () => {
@@ -838,7 +838,7 @@ aloma step add "research_documentation_agent" \
 // Research Documentation Agent: Creates comprehensive sales package and CRM integration
 export const condition = {
   salesOutreach: Object,
-  researchDocumentation: { $exists: false }
+  researchDocumentation: null
 };
 
 export const content = async () => {
@@ -1038,7 +1038,7 @@ aloma step add "email_delivery_agent" \
 // Email Delivery Agent: Sends personalized outreach with tracking and follow-up scheduling
 export const condition = {
   researchDocumentation: Object,
-  emailDelivery: { $exists: false }
+  emailDelivery: null
 };
 
 export const content = async () => {

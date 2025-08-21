@@ -63,7 +63,7 @@ When a new user registers through CloudCorp's signup form:
 export const condition = {
   user: {
     email: String,
-    validated: { $exists: false }
+    validated: null
   }
 };
 
@@ -126,7 +126,7 @@ export const condition = {
     emailValid: true,
     email: String,
     company: String,
-    customerType: { $exists: false }
+    customerType: null
   }
 };
 
@@ -208,7 +208,7 @@ export const condition = {
   user: {
     customerType: String,
     features: Array,
-    accountProvisioned: { $exists: false }
+    accountProvisioned: null
   }
 };
 
@@ -258,7 +258,7 @@ export const condition = {
   user: {
     customerType: String,
     priority: String,
-    crmCreated: { $exists: false }
+    crmCreated: null
   }
 };
 
@@ -319,7 +319,7 @@ export const condition = {
     accountProvisioned: true,
     crmCreated: true,
     customerType: String,
-    welcomeEmailSent: { $exists: false }
+    welcomeEmailSent: null
   }
 };
 
@@ -395,7 +395,7 @@ export const condition = {
   user: {
     welcomeEmailSent: true,
     customerType: String,
-    teamNotified: { $exists: false }
+    teamNotified: null
   }
 };
 
@@ -458,7 +458,7 @@ export const condition = {
     crmCreated: true,
     welcomeEmailSent: true,
     teamNotified: true,
-    onboardingComplete: { $exists: false }
+    onboardingComplete: null
   }
 };
 
@@ -567,7 +567,7 @@ export const condition = {
   user: {
     emailValid: false,
     validationError: String,
-    errorHandled: { $exists: false }
+    errorHandled: null
   }
 };
 
@@ -645,7 +645,7 @@ Adding a new customer type requires only:
 export const condition = {
   user: {
     emailValid: true,
-    customerType: { $exists: false },
+    customerType: null,
     company: String,
     fundingStage: "seed" // New field
   }

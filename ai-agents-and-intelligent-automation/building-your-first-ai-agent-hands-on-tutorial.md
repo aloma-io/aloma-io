@@ -70,7 +70,7 @@ export const condition = {
     supportTicketId: String
   },
   agent: {
-    memoryInitialized: { $exists: false }
+    memoryInitialized: null
   }
 };
 
@@ -156,7 +156,7 @@ aloma step add "analyze_customer_inquiry" \
 export const condition = {
   agent: {
     memoryInitialized: true,
-    analysis: { $exists: false }
+    analysis: null
   },
   customer: {
     inquiry: String
@@ -273,7 +273,7 @@ aloma step add "select_strategy" \
 export const condition = {
   agent: {
     analysis: Object,
-    strategy: { $exists: false }
+    strategy: null
   },
   conversation: {
     phase: "strategy_selection"
@@ -406,7 +406,7 @@ export const condition = {
   conversation: {
     phase: "response_generation"
   },
-  response: { $exists: false }
+  response: null
 };
 
 export const content = async () => {
@@ -547,7 +547,7 @@ export const condition = {
   conversation: {
     phase: { $in: ["escalation", "monitoring"] }
   },
-  learning: { $exists: false }
+  learning: null
 };
 
 export const content = async () => {

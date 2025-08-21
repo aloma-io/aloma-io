@@ -28,7 +28,7 @@ export const condition = {
   workflow: {
     objective: String,
     scope: Object,
-    masterPlan: { $exists: false }
+    masterPlan: null
   }
 };
 
@@ -435,7 +435,7 @@ ALOMA's conditional execution naturally enables parallel AI processing, allowing
 export const condition = {
   researchProject: {
     domains: Array,
-    parallelResearchInitiated: { $exists: false }
+    parallelResearchInitiated: null
   }
 };
 
@@ -582,7 +582,7 @@ export const condition = {
   level1Coordination: {
     level2Results: Object
   },
-  hierarchicalSynthesis: { $exists: false }
+  hierarchicalSynthesis: null
 };
 
 export const content = async () => {
@@ -777,7 +777,7 @@ export const condition = {
   workflowError: {
     failureDetected: true,
     errorDetails: Object,
-    recoveryAttempted: { $exists: false }
+    recoveryAttempted: null
   }
 };
 
@@ -1126,7 +1126,7 @@ task.complete();
 
 } };
 
-// Parallel Synthesis Agent: Combines results from parallel agents export const condition = { researchProject: { parallelExecution: { findings: Object, synthesisComplete: { $exists: false } } } };
+// Parallel Synthesis Agent: Combines results from parallel agents export const condition = { researchProject: { parallelExecution: { findings: Object, synthesisComplete: null } } };
 
 export const content = async () => { const execution = data.researchProject.parallelExecution; console.log('Parallel synthesis agent evaluating completion status...');
 
@@ -1193,7 +1193,7 @@ Complex AI workflows require sophisticated orchestration patterns that coordinat
 export const condition = {
   orchestration: {
     workflowType: "hierarchical_multi_agent",
-    masterControl: { $exists: false }
+    masterControl: null
   }
 };
 
@@ -1263,7 +1263,7 @@ export const condition = {
       phaseStatus: "ready"
     }
   },
-  level1Coordination: { $exists: false }
+  level1Coordination: null
 };
 
 export const content = async () => {

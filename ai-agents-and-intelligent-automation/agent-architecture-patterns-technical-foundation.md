@@ -23,8 +23,8 @@ The key insight is that **agent intelligence emerges from the interaction betwee
 export const condition = {
   monitoringTarget: {
     metrics: Array,
-    lastCheck: { $exists: true },
-    recentAnalysis: { $exists: false }
+    lastCheck: { $ne: null },
+    recentAnalysis: null
   }
 };
 
@@ -56,7 +56,7 @@ export const condition = {
     analysisReason: String,
     metrics: Array
   },
-  reactiveAnalysis: { $exists: false }
+  reactiveAnalysis: null
 };
 
 export const content = async () => {
@@ -178,7 +178,7 @@ export const condition = {
   infrastructure: {
     cpuUsage: { $gt: 80 },
     memoryUsage: { $gt: 85 },
-    alertSent: { $exists: false }
+    alertSent: null
   }
 };
 
@@ -221,7 +221,7 @@ export const condition = {
   objective: {
     goal: String,
     context: Object,
-    plan: { $exists: false }
+    plan: null
   }
 };
 
@@ -503,7 +503,7 @@ export const condition = {
   research: {
     target: "emerging AI startups",
     scope: "competitive landscape",
-    plan: { $exists: false }
+    plan: null
   }
 };
 
@@ -539,7 +539,7 @@ export const condition = {
   conversation: {
     participantId: String,
     initialMessage: String,
-    context: { $exists: false }
+    context: null
   }
 };
 
@@ -618,7 +618,7 @@ export const condition = {
   conversation: {
     context: Object,
     memory: Object,
-    pendingResponse: { $exists: false }
+    pendingResponse: null
   }
 };
 
@@ -704,7 +704,7 @@ export const condition = {
     memory: Object,
     context: Object
   },
-  messageProcessing: { $exists: false }
+  messageProcessing: null
 };
 
 export const content = async () => {
@@ -795,7 +795,7 @@ export const condition = {
     },
     context: Object
   },
-  strategyReview: { $exists: false }
+  strategyReview: null
 };
 
 export const content = async () => {
@@ -879,7 +879,7 @@ export const condition = {
   support: {
     ticketId: String,
     customerMessage: String,
-    conversationContext: { $exists: false }
+    conversationContext: null
   }
 };
 
@@ -962,7 +962,7 @@ Research agents follow a **pipeline pattern** where each phase builds upon previ
 export const condition = {
   research: {
     target: String,
-    researchPlan: { $exists: false }
+    researchPlan: null
   }
 };
 
@@ -1006,7 +1006,7 @@ export const condition = {
   research: {
     researchPlan: true,
     currentPhase: Number,
-    gatheringComplete: { $exists: false }
+    gatheringComplete: null
   }
 };
 
@@ -1041,7 +1041,7 @@ export const condition = {
   research: {
     gatheringComplete: true,
     findings: Object,
-    synthesis: { $exists: false }
+    synthesis: null
   }
 };
 
@@ -1097,7 +1097,7 @@ Provide structured JSON response.`;
 export const condition = {
   research: {
     allPhasesComplete: true,
-    finalReport: { $exists: false }
+    finalReport: null
   }
 };
 
@@ -1262,7 +1262,7 @@ Decision agents combine traditional business rules with AI reasoning to make sop
 export const condition = {
   decision: {
     request: Object,
-    contextAnalysis: { $exists: false }
+    contextAnalysis: null
   }
 };
 
@@ -1319,7 +1319,7 @@ export const content = async () => {
 export const condition = {
   decision: {
     contextAnalysis: Object,
-    decisionMatrix: { $exists: false }
+    decisionMatrix: null
   }
 };
 
@@ -1387,7 +1387,7 @@ export const content = async () => {
 export const condition = {
   decision: {
     decisionMatrix: Object,
-    edgeCaseAnalysis: { $exists: false }
+    edgeCaseAnalysis: null
   }
 };
 
@@ -1446,7 +1446,7 @@ export const condition = {
   decision: {
     decisionMatrix: Object,
     edgeCaseAnalysis: Object,
-    finalDecision: { $exists: false }
+    finalDecision: null
   }
 };
 

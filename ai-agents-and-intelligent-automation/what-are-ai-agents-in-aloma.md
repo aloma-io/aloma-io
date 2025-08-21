@@ -41,7 +41,7 @@ function processCustomerInquiry(inquiry) {
 export const condition = {
   customer: {
     inquiry: String,
-    agentMemory: { $exists: false }
+    agentMemory: null
   }
 };
 
@@ -66,7 +66,7 @@ export const content = async () => {
 export const condition = {
   agent: {
     memoryInitialized: true,
-    reasoning: { $exists: false }
+    reasoning: null
   },
   customer: {
     inquiry: String
@@ -125,7 +125,7 @@ export const condition = {
   agent: {
     reasoningComplete: true,
     customerProfile: Object,
-    decision: { $exists: false }
+    decision: null
   }
 };
 
@@ -218,7 +218,7 @@ export const condition = {
   research: {
     target: String,
     goal: "comprehensive_analysis",
-    currentPhase: { $exists: false }
+    currentPhase: null
   }
 };
 
@@ -279,7 +279,7 @@ export const condition = {
     engagementScore: Number
   },
   salesAgent: {
-    strategyAdaptation: { $exists: false }
+    strategyAdaptation: null
   }
 };
 
@@ -340,7 +340,7 @@ export const content = async () => {
 export const condition = {
   conversation: {
     messages: Array,
-    customerSatisfactionPredicted: { $exists: false }
+    customerSatisfactionPredicted: null
   }
 };
 
@@ -380,7 +380,7 @@ export const content = async () => {
 export const condition = {
   prospect: {
     company: String,
-    researchComplete: { $exists: false }
+    researchComplete: null
   }
 };
 
@@ -427,7 +427,7 @@ export const condition = {
     type: String
   },
   analysis: {
-    stage: { $exists: false }
+    stage: null
   }
 };
 

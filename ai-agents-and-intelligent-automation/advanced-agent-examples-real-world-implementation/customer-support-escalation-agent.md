@@ -106,7 +106,7 @@ aloma step add "ticket_intake_classification" \
 export const condition = {
   support: {
     ticket: Object,
-    classification: { $exists: false }
+    classification: null
   }
 };
 
@@ -294,7 +294,7 @@ export const condition = {
     classification: Object
   },
   escalationAgent: Object,
-  sentimentAnalysis: { $exists: false }
+  sentimentAnalysis: null
 };
 
 export const content = async () => {
@@ -514,7 +514,7 @@ aloma step add "escalation_decision_engine" \
 export const condition = {
   sentimentAnalysis: Object,
   escalationRisk: Object,
-  escalationDecision: { $exists: false }
+  escalationDecision: null
 };
 
 export const content = async () => {
@@ -730,7 +730,7 @@ aloma step add "conversation_management" \
 // Step 4: Intelligent Conversation Management
 export const condition = {
   escalationDecision: Object,
-  conversationResponse: { $exists: false }
+  conversationResponse: null
 };
 
 export const content = async () => {
@@ -921,7 +921,7 @@ export const condition = {
     escalationRecommended: true
   },
   escalationPreparation: Object,
-  handoffComplete: { $exists: false }
+  handoffComplete: null
 };
 
 export const content = async () => {
@@ -1295,7 +1295,7 @@ aloma step add "context_preservation" \
 // Step 6: Comprehensive Context Preservation and Knowledge Transfer
 export const condition = {
   handoffComplete: Object,
-  contextPreservation: { $exists: false }
+  contextPreservation: null
 };
 
 export const content = async () => {
@@ -1579,7 +1579,7 @@ aloma step add "outcome_tracking_feedback" \
 // Step 7: Comprehensive Outcome Tracking and Continuous Learning
 export const condition = {
   contextPreservation: Object,
-  outcomeTracking: { $exists: false }
+  outcomeTracking: null
 };
 
 export const content = async () => {
@@ -1741,7 +1741,7 @@ aloma step add "performance_analytics_improvement" \
 // Step 8: Performance Analytics and Continuous Improvement Engine
 export const condition = {
   outcomeTracking: Object,
-  performanceAnalysis: { $exists: false }
+  performanceAnalysis: null
 };
 
 export const content = async () => {
