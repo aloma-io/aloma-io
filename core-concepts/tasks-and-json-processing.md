@@ -440,7 +440,7 @@ export const condition = {
 export const content = async () => {
   // Log current task state for debugging
   console.log('=== TASK DEBUG ===');
-  console.log('Task ID:', task.id);
+  console.log('Task ID:', task.id());
   console.log('Current data:', JSON.stringify(data, null, 2));
   console.log('Task created at:', task.createdAt);
   console.log('==================');

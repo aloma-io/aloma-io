@@ -108,7 +108,7 @@ aloma workspace switch "My Automation Dev"
 aloma step pull
 
 # Create your first step
-aloma step add "process_customer" -c '{"customer":{"email":"String","status":"new"}}'
+aloma step add "process_customer"
 
 # View created step
 aloma step list
@@ -381,7 +381,7 @@ Follow consistent patterns for maintainable steps:
 export const condition = {
   customer: {
     email: String,
-    validated: { $exists: false }  // Only run if not already validated
+    validated: null  // Only run if not already validated
   }
 };
 
@@ -493,96 +493,17 @@ aloma connector logs <connector-id>
 aloma workspace show
 ```
 
-### Advanced Workflows
-
-#### Continuous Integration
-
-Integrate ALOMA with CI/CD pipelines:
-
-```yaml
-# .github/workflows/aloma-deploy.yml
-name: Deploy ALOMA Automation
-
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    
-    steps:
-    - uses: actions/checkout@v2
-    
-    - name: Setup Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '18'
-    
-    - name: Install ALOMA CLI
-      run: npm install -g @aloma.io/aloma
-    
-    - name: Authenticate with ALOMA
-      run: echo "${{ secrets.ALOMA_API_KEY }}" | aloma auth --token
-    
-    - name: Deploy to staging
-      if: github.event_name == 'pull_request'
-      run: aloma deploy deploy-staging.yaml
-      env:
-        HUBSPOT_API_TOKEN: ${{ secrets.HUBSPOT_STAGING_TOKEN }}
-    
-    - name: Deploy to production
-      if: github.ref == 'refs/heads/main'
-      run: aloma deploy deploy-prod.yaml
-      env:
-        HUBSPOT_API_TOKEN: ${{ secrets.HUBSPOT_PROD_TOKEN }}
-```
-
-#### Team Collaboration
-
-Enable multiple developers to work on the same automation:
-
-```bash
-# Project configuration file
-cat > .aloma.yaml << EOF
-project:
-  name: "customer-processing"
-  description: "Customer onboarding and validation automation"
-  
-pull:
-  workspaces:
-    - "workspace-dev-123"  # Development workspace ID
-  
-deploy:
-  environments:
-    development: "deploy-dev.yaml"
-    staging: "deploy-staging.yaml"
-    production: "deploy-prod.yaml"
-EOF
-
-# Team members can sync from shared workspace
-npx @aloma.io/workspace-sdk@latest pull
-
-# Or pull from specific workspace
-npx @aloma.io/workspace-sdk@latest pull workspace-dev-123
-```
-
 #### Library Management
 
 Create reusable code libraries:
 
 ```bash
 # Pull existing libraries from workspace
-aloma step pull -p ./libraries --type library
 
 # Directory structure for libraries:
 # ./libraries/
-#   ├── validation/
-#   │   └── email_validator.js
-#   └── utilities/
-#       └── date_formatter.js
+#   ├── validation.js
+#   └── utilities.js
 ```
 
 Use libraries in your steps:
