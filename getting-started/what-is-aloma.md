@@ -210,7 +210,7 @@ export const condition = { customer: { validated: true } };
 export const condition = { order: { processed: true } };
 
 // When high-value order → Notify sales team
-export const condition = { order: { total: { $gt: 1000 } } };
+export const condition = { order: { highValueOrder: true } } };// eg for total > 1000
 ```
 
 _Flexible conditions that adapt to different scenarios_

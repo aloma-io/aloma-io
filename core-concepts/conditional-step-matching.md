@@ -165,93 +165,12 @@ export const content = async () => {
 
 ### Advanced Matching Operators
 
-#### Comparison Operators
-
-Perform numeric and value comparisons:
-
-```javascript
-export const condition = {
-  user: {
-    age: { $gt: 18 },           // Greater than 18
-    score: { $gte: 100 },       // Greater than or equal to 100
-    credits: { $lt: 50 },       // Less than 50
-    attempts: { $lte: 3 },      // Less than or equal to 3
-    points: { $ne: 0 }          // Not equal to 0
-  }
-};
-
-export const content = async () => {
-  console.log('Processing eligible user with valid criteria');
-  data.user.eligible = true;
-  data.user.checkedAt = new Date().toISOString();
-};
-```
-
-#### String Comparison
-
-```javascript
-export const condition = {
-  product: {
-    price: { $gt: 100.00 },
-    category: { $ne: "restricted" },
-    name: { $regex: "^Premium" }  // Starts with "Premium"
-  }
-};
-
-export const content = async () => {
-  console.log('Processing premium product');
-  data.product.tier = "premium";
-  data.product.specialHandling = true;
-};
-```
-
-#### Inclusion and Exclusion
-
-Check if values are in or not in specific lists:
-
-```javascript
-export const condition = {
-  user: {
-    role: { $in: ["admin", "moderator", "editor"] },      // User has one of these roles
-    status: { $nin: ["banned", "suspended", "deleted"] }, // User doesn't have these statuses
-    permissions: { $in: ["write", "publish"] }            // Has write OR publish permission
-  }
-};
-
-export const content = async () => {
-  console.log('Processing authorized user');
-  data.user.authorizedFor = "content-management";
-  data.user.accessGranted = true;
-};
-```
-
-#### Existence Checks
-
-Test whether fields exist or don't exist:
-
-```javascript
-export const condition = {
-  order: {
-    paymentMethod: { $exists: true },    // Payment method field must exist
-    discountCode: { $exists: false },    // Discount code field must not exist
-    shippingAddress: { $exists: true }   // Shipping address must be present
-  }
-};
-
-export const content = async () => {
-  console.log('Processing standard order without discounts');
-  data.order.discountApplied = false;
-  data.order.fullPrice = true;
-};
-```
-
 #### Null and Undefined Handling
 
 ```javascript
 export const condition = {
   user: {
     lastLogin: null,              // Field exists but is null
-    resetToken: { $exists: false }, // Field doesn't exist at all
     email: { $ne: null }          // Field exists and is not null
   }
 };
@@ -263,8 +182,6 @@ export const content = async () => {
 };
 ```
 
-### Logical Operators
-
 #### Complex AND Conditions
 
 All conditions must be true (implicit AND):
@@ -272,13 +189,13 @@ All conditions must be true (implicit AND):
 ```javascript
 export const condition = {
   order: {
-    total: { $gt: 1000 },
+    total: { $ne: null },
     customer: {
       tier: "premium",
       verified: true
     },
     items: {
-      $size: { $gt: 1 }  // More than 1 item
+      $size: { $ne: null }
     }
   }
 };
@@ -287,47 +204,6 @@ export const content = async () => {
   console.log('Processing high-value premium customer order');
   data.order.whiteGloveService = true;
   data.order.expeditedShipping = true;
-};
-```
-
-#### Explicit OR Conditions
-
-Any of the conditions can be true:
-
-```javascript
-export const condition = {
-  $or: [
-    { priority: "urgent" },
-    { customer: { tier: "enterprise" } },
-    { order: { total: { $gt: 5000 } } }
-  ]
-};
-
-export const content = async () => {
-  console.log('Processing high-priority order');
-  data.order.escalated = true;
-  data.order.reviewRequired = false;
-};
-```
-
-#### NOT Conditions
-
-Exclude specific patterns:
-
-```javascript
-export const condition = {
-  user: {
-    $not: {
-      status: { $in: ["banned", "suspended"] }
-    },
-    permissions: { $exists: true }
-  }
-};
-
-export const content = async () => {
-  console.log('Processing active user');
-  data.user.canAccess = true;
-  data.user.accessCheckedAt = new Date().toISOString();
 };
 ```
 
@@ -443,43 +319,6 @@ export const content = async () => {
 };
 ```
 
-#### Parallel Processing
-
-Independent steps run simultaneously:
-
-```javascript
-// Both steps run in parallel when order arrives
-// Email notification step
-export const condition = { 
-  order: { status: "confirmed" },
-  customer: { email: String }
-};
-
-export const content = async () => {
-  await connectors.eMailSmtpOAuth.sendEmail({
-    to: data.customer.email,
-    subject: 'Order Confirmed',
-    html: `Your order ${data.order.id} has been confirmed.`
-  });
-  
-  data.order.emailSent = true;
-};
-
-// Inventory update step (runs independently)
-export const condition = { 
-  order: { status: "confirmed" },
-  inventory: { updateRequired: true }
-};
-
-export const content = async () => {
-  await connectors.inventorySystem.updateStock({
-    items: data.order.items
-  });
-  
-  data.inventory.updated = true;
-};
-```
-
 #### Conditional Branching
 
 Different paths based on data:
@@ -542,7 +381,7 @@ Handle failures gracefully:
 export const condition = {
   apiCall: { 
     url: String, 
-    attempts: { $lt: 3 }  // Try up to 3 times
+    failed: null
   }
 };
 
@@ -561,12 +400,14 @@ export const content = async () => {
     data.apiCall.attempts = (data.apiCall.attempts || 0) + 1;
     data.apiCall.lastError = error.message;
     data.apiCall.lastAttempt = new Date().toISOString();
-    
+
     console.log(`API call failed, attempt ${data.apiCall.attempts}/3: ${error.message}`);
     
     if (data.apiCall.attempts >= 3) {
-      data.apiCall.failed = true;
+      data.apiCall.failed = true; //to stop processing this step
       data.apiCall.maxAttemptsReached = true;
+    } else {
+      step.redo(); // to re process the step
     }
   }
 };
@@ -605,7 +446,7 @@ export const condition = {
   order: {
     status: "paid",
     customer: { tier: "premium" },
-    total: { $gt: 1000 },
+    total: { $ne: null },
     shippingMethod: "expedited"
   }
 };
@@ -728,7 +569,6 @@ Debug step matching in your code:
 export const content = async () => {
   // Debug current data structure
   console.log('=== STEP DEBUG INFO ===');
-  console.log('Step ID:', step.id);
   console.log('Full data structure:', JSON.stringify(data, null, 2));
   
   // Check specific fields your conditions depend on

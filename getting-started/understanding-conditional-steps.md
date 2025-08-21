@@ -148,46 +148,7 @@ export const condition = {
 // Matches if items array contains at least one object with these fields
 ```
 
-#### 2. Advanced Operators
-
-ALOMA supports sophisticated matching operators for complex conditions:
-
-**Comparison Operators**
-
-```javascript
-export const condition = {
-  user: {
-    age: { $gt: 18 },           // Greater than 18
-    score: { $gte: 100 },       // Greater than or equal to 100
-    credits: { $lt: 50 },       // Less than 50
-    attempts: { $lte: 3 }       // Less than or equal to 3
-  }
-};
-```
-
-**Inclusion/Exclusion**
-
-```javascript
-export const condition = {
-  user: {
-    role: { $in: ["admin", "moderator"] },      // Role is admin OR moderator
-    status: { $nin: ["banned", "suspended"] }   // Status is NOT banned or suspended
-  }
-};
-```
-
-**Existence Checks**
-
-```javascript
-export const condition = {
-  order: {
-    paymentMethod: { $exists: true },    // Payment method field exists
-    discountCode: { $exists: false }     // Discount code field doesn't exist
-  }
-};
-```
-
-#### 3. Best Match Selection
+#### 2. Best Match Selection
 
 When multiple steps match the same task, ALOMA selects the **most specific** match:
 
@@ -383,7 +344,7 @@ export const condition = {
   user: { tier: "standard" },
   order: { 
     status: "pending",
-    total: { $gt: 1000 }
+    highValueOrder: true // eg for total > 1000
   }
 };
 
@@ -459,7 +420,7 @@ Add new steps without modifying existing ones:
 export const condition = {
   order: {
     payment: { processed: true },
-    total: { $gt: 500 }  // Only for high-value orders
+    highValueOrder: true // eg for total > 500
   }
 };
 
@@ -509,7 +470,7 @@ The same set of steps handles different scenarios based on input data:
 export const condition = {
   order: {
     type: "B2B",
-    total: { $gt: 1000 }
+    total: { $ne: null }
   }
 };
 
@@ -586,7 +547,7 @@ export const content = async () => {
 ```javascript
 // Initial attempt
 export const condition = {
-  apiCall: { url: String, attempts: { $lt: 3 } }
+  apiCall: { url: String, failed: { $ne: null } }
 };
 
 export const content = async () => {
@@ -598,7 +559,13 @@ export const content = async () => {
     data.apiCall.attempts = (data.apiCall.attempts || 0) + 1;
     data.apiCall.lastError = error.message;
     console.log(`Attempt ${data.apiCall.attempts} failed, will retry`);
-    step.redo();
+    if (data.apiCall.attempts >= 3) {
+      data.apiCall.failed = true; //to stop processing this step
+      data.apiCall.maxAttemptsReached = true;
+    } else {
+      step.redo(); // to re process the step
+    }
+  }
 };
 ```
 
@@ -612,7 +579,7 @@ export const condition = {
   order: {
     status: "paid",
     customer: { tier: "premium" },
-    total: { $gt: 1000 }
+    total: { $ne: null }
   }
 };
 
