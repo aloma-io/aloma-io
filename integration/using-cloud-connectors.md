@@ -92,10 +92,7 @@ aloma connector oauth <google-sheets-connector-id>
 aloma connector oauth <slack-connector-id>
 
 # View connector status
-aloma connector show <connector-id>
-
-# Test connectivity
-aloma connector test <connector-id>
+aloma connector show <connector-id>s
 ```
 
 ### Using Connectors in Steps
@@ -394,64 +391,6 @@ export const content = async () => {
   
   data.alert.slackSent = true;
   data.alert.channel = channel;
-};
-```
-
-#### Google Sheets Data Management
-
-Automated spreadsheet operations:
-
-```javascript
-export const condition = {
-  report: {
-    data: Array,
-    type: "monthly_sales"
-  }
-};
-
-export const content = async () => {
-  console.log('Updating Google Sheets with sales report...');
-  
-  const spreadsheetId = task.config('SALES_REPORT_SHEET_ID');
-  const sheetName = 'Monthly Sales';
-  
-  // Prepare data for sheets
-  const headers = ['Date', 'Salesperson', 'Amount', 'Customer', 'Product'];
-  const rows = data.report.data.map(sale => [
-    sale.date,
-    sale.salesperson,
-    sale.amount,
-    sale.customer,
-    sale.product
-  ]);
-  
-  // Clear existing data (except headers)
-  await connectors.googleSheets.clearRange({
-    spreadsheetId: spreadsheetId,
-    range: `${sheetName}!A2:E1000`
-  });
-  
-  // Add new data
-  await connectors.googleSheets.appendRows({
-    spreadsheetId: spreadsheetId,
-    range: `${sheetName}!A1:E1`,
-    values: [headers, ...rows]
-  });
-  
-  // Format the data
-  await connectors.googleSheets.formatRange({
-    spreadsheetId: spreadsheetId,
-    range: `${sheetName}!A1:E1`,
-    format: {
-      backgroundColor: { red: 0.2, green: 0.4, blue: 0.8 },
-      textFormat: { foregroundColor: { red: 1, green: 1, blue: 1 }, bold: true }
-    }
-  });
-  
-  data.report.sheetsUpdated = true;
-  data.report.sheetsUrl = `https://docs.google.com/spreadsheets/d/${spreadsheetId}`;
-  
-  console.log(`Google Sheets updated: ${rows.length} rows added`);
 };
 ```
 
@@ -811,9 +750,6 @@ aloma connector show <instance-id>
 
 # Configure OAuth authentication
 aloma connector oauth <instance-id>
-
-# Test connector connectivity
-aloma connector test <instance-id>
 
 # View connector logs
 aloma connector logs <instance-id>

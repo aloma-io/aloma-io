@@ -485,7 +485,6 @@ While libraries are typically created through the web interface, you can manage 
 
 ```bash
 # List all libraries in workspace
-aloma workspace info
 
 # Deploy workspace configuration including libraries
 aloma deploy workspace-config.yaml
