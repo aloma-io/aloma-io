@@ -37,19 +37,9 @@ aloma auth
 
 ### Creating Your First Custom Connector
 
-#### Step 1: Register Your Connector
-
-Create a connector registration in ALOMA to get your connector ID:
-
-```bash
-# Login to ALOMA and navigate to connector registration
-# Register new connector and note the connector ID (e.g., 1234)
-aloma connector list-available --private
-```
-
 The registration process provides you with a unique connector ID that links your custom connector to ALOMA workspaces.
 
-#### Step 2: Initialize Connector Project
+#### Step 1: Initialize Connector Project
 
 Create a new connector project using the ALOMA Integration SDK:
 
@@ -62,227 +52,221 @@ cd my-custom-connector
 
 # Install dependencies
 yarn install
+
+# If yarn  fail try
+yarn install --ignore-engines
 ```
 
 This generates a complete connector project with TypeScript configuration, development tools, and example code.
 
-#### Step 3: Basic Connector Structure
+#### Step 2: Basic Connector Structure
 
 Understand the generated project structure:
 
 ```
 my-custom-connector/
 ├── src/
-│   ├── connector.ts      # Main connector logic
-│   ├── types.ts         # TypeScript type definitions
-│   └── handlers/        # Request handlers
-├── package.json         # Project configuration
-├── tsconfig.json       # TypeScript configuration
-├── .env.example        # Environment variables template
-└── README.md           # Connector documentation
+│   ├── index.mts           # Main entry point with Builder and runtime
+│   └── controller/
+│       └── index.mts       # Controller class extending AbstractController
+├── package.json             # Project configuration with integration-sdk dependency
+├── tsconfig.json           # TypeScript configuration
+├── Containerfile            # Docker container configuration
+├── entrypoint.sh           # Container entrypoint script
+├── .gitignore              # Git ignore patterns
+└── yarn.lock               # Yarn dependency lock file
 ```
+
+The generated structure uses the modern `@aloma.io/integration-sdk` v3 with:
+- **ESM modules** (`.mts` files) for modern Node.js compatibility
+- **Builder pattern** for runtime construction
+- **Controller-based architecture** extending `AbstractController`
+- **Built-in TypeScript compilation** and development tools
 
 #### Step 4: Implement Connector Logic
 
-Edit `src/connector.ts` to implement your integration:
+Edit `src/controller/index.mts` to implement your integration methods:
 
 ```typescript
-import { AlomaConnector, RequestHandler } from '@aloma.io/integration-sdk';
+import { AbstractController } from '@aloma.io/integration-sdk';
 
-export class CustomAPIConnector extends AlomaConnector {
-  private apiKey: string;
-  private baseUrl: string;
-
-  constructor() {
-    super();
-    this.apiKey = this.getConfig('API_KEY');
-    this.baseUrl = this.getConfig('BASE_URL', 'https://api.example.com');
-  }
-
-  // Handle authentication
-  protected async authenticate(): Promise<boolean> {
+export default class Controller extends AbstractController {
+  
+  /**
+   * Example: Create a new user
+   */
+  async createUser(args: { email: string; firstName: string; lastName: string; role?: string }) {
     try {
-      const response = await this.makeRequest('/auth/validate', {
-        method: 'GET',
+      // Your API integration logic here
+      const response = await fetch('https://api.example.com/users', {
+        method: 'POST',
         headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
-          'Content-Type': 'application/json'
-        }
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.getConfig('API_KEY')}`
+        },
+        body: JSON.stringify({
+          email: args.email,
+          firstName: args.firstName,
+          lastName: args.lastName,
+          role: args.role || 'user'
+        })
       });
-      
-      return response.status === 200;
-    } catch (error) {
-      this.log.error('Authentication failed:', error);
-      return false;
-    }
-  }
 
-  // Define connector methods
-  @RequestHandler('createUser')
-  async createUser(params: CreateUserParams): Promise<UserResponse> {
-    this.log.info('Creating user:', params.email);
-    
-    const response = await this.makeRequest('/users', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${this.apiKey}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        email: params.email,
-        firstName: params.firstName,
-        lastName: params.lastName,
-        role: params.role || 'user'
-      })
-    });
-
-    if (!response.ok) {
-      throw new Error(`User creation failed: ${response.statusText}`);
-    }
-
-    const userData = await response.json();
-    
-    return {
-      id: userData.id,
-      email: userData.email,
-      created: userData.created_at,
-      status: 'active'
-    };
-  }
-
-  @RequestHandler('getUser')
-  async getUser(params: GetUserParams): Promise<UserResponse> {
-    this.log.info('Fetching user:', params.userId);
-    
-    const response = await this.makeRequest(`/users/${params.userId}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${this.apiKey}`,
-        'Content-Type': 'application/json'
+      if (!response.ok) {
+        throw new Error(`User creation failed: ${response.statusText}`);
       }
-    });
 
-    if (response.status === 404) {
-      throw new Error(`User not found: ${params.userId}`);
-    }
-
-    if (!response.ok) {
-      throw new Error(`Failed to fetch user: ${response.statusText}`);
-    }
-
-    const userData = await response.json();
-    
-    return {
-      id: userData.id,
-      email: userData.email,
-      firstName: userData.first_name,
-      lastName: userData.last_name,
-      role: userData.role,
-      status: userData.status
-    };
-  }
-
-  @RequestHandler('updateUser')
-  async updateUser(params: UpdateUserParams): Promise<UserResponse> {
-    this.log.info('Updating user:', params.userId);
-    
-    const updateData: any = {};
-    if (params.firstName) updateData.first_name = params.firstName;
-    if (params.lastName) updateData.last_name = params.lastName;
-    if (params.role) updateData.role = params.role;
-    if (params.status) updateData.status = params.status;
-
-    const response = await this.makeRequest(`/users/${params.userId}`, {
-      method: 'PATCH',
-      headers: {
-        'Authorization': `Bearer ${this.apiKey}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(updateData)
-    });
-
-    if (!response.ok) {
-      throw new Error(`User update failed: ${response.statusText}`);
-    }
-
-    const userData = await response.json();
-    
-    return {
-      id: userData.id,
-      email: userData.email,
-      firstName: userData.first_name,
-      lastName: userData.last_name,
-      role: userData.role,
-      status: userData.status
-    };
-  }
-
-  @RequestHandler('listUsers')
-  async listUsers(params: ListUsersParams = {}): Promise<UsersListResponse> {
-    this.log.info('Listing users with filters:', params);
-    
-    const queryParams = new URLSearchParams();
-    if (params.role) queryParams.append('role', params.role);
-    if (params.status) queryParams.append('status', params.status);
-    if (params.limit) queryParams.append('limit', params.limit.toString());
-    if (params.offset) queryParams.append('offset', params.offset.toString());
-
-    const url = `/users${queryParams.toString() ? '?' + queryParams.toString() : ''}`;
-    
-    const response = await this.makeRequest(url, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${this.apiKey}`,
-        'Content-Type': 'application/json'
-      }
-    });
-
-    if (!response.ok) {
-      throw new Error(`Failed to list users: ${response.statusText}`);
-    }
-
-    const data = await response.json();
-    
-    return {
-      users: data.users.map((user: any) => ({
-        id: user.id,
-        email: user.email,
-        firstName: user.first_name,
-        lastName: user.last_name,
-        role: user.role,
-        status: user.status
-      })),
-      total: data.total,
-      limit: data.limit,
-      offset: data.offset
-    };
-  }
-
-  // Helper method for API requests
-  private async makeRequest(endpoint: string, options: RequestInit): Promise<Response> {
-    const url = `${this.baseUrl}${endpoint}`;
-    
-    try {
-      const response = await fetch(url, {
-        ...options,
-        timeout: 30000, // 30 second timeout
-      });
+      const userData = await response.json();
       
-      // Log request details for debugging
-      this.log.debug(`${options.method || 'GET'} ${url} -> ${response.status}`);
-      
-      return response;
+      return {
+        id: userData.id,
+        email: userData.email,
+        created: userData.created_at,
+        status: 'active'
+      };
     } catch (error) {
-      this.log.error(`Request failed: ${options.method || 'GET'} ${url}`, error);
+      this.log.error('Error creating user:', error);
       throw error;
     }
+  }
+
+  /**
+   * Example: Get user by ID
+   */
+  async getUser(args: { userId: string }) {
+    try {
+      const response = await fetch(`https://api.example.com/users/${args.userId}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${this.getConfig('API_KEY')}`
+        }
+      });
+
+      if (response.status === 404) {
+        throw new Error(`User not found: ${args.userId}`);
+      }
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch user: ${response.statusText}`);
+      }
+
+      const userData = await response.json();
+      return userData;
+    } catch (error) {
+      this.log.error('Error fetching user:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Example: Update user
+   */
+  async updateUser(args: { userId: string; firstName?: string; lastName?: string; role?: string; status?: string }) {
+    try {
+      const updateData: any = {};
+      if (args.firstName) updateData.first_name = args.firstName;
+      if (args.lastName) updateData.last_name = args.lastName;
+      if (args.role) updateData.role = args.role;
+      if (args.status) updateData.status = args.status;
+
+      const response = await fetch(`https://api.example.com/users/${args.userId}`, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${this.getConfig('API_KEY')}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updateData)
+      });
+
+      if (!response.ok) {
+        throw new Error(`User update failed: ${response.statusText}`);
+      }
+
+      const userData = await response.json();
+      return userData;
+    } catch (error) {
+      this.log.error('Error updating user:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Example: List users with filters
+   */
+  async listUsers(args: { role?: string; status?: string; limit?: number; offset?: number } = {}) {
+    try {
+      const queryParams = new URLSearchParams();
+      if (args.role) queryParams.append('role', args.role);
+      if (args.status) queryParams.append('status', args.status);
+      if (args.limit) queryParams.append('limit', args.limit.toString());
+      if (args.offset) queryParams.append('offset', args.offset.toString());
+
+      const url = `https://api.example.com/users${queryParams.toString() ? '?' + queryParams.toString() : ''}`;
+      
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${this.getConfig('API_KEY')}`
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to list users: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      this.log.error('Error listing users:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Example: Simple hello method
+   */
+  async hello(args: any) {
+    return { hi: 'world' };
   }
 }
 ```
 
+**Key differences from the old SDK version:**
+- **Controller-based**: Extend `AbstractController` instead of `AlomaConnector`
+- **Method-based**: Define methods directly on the controller class
+- **No decorators**: Methods are automatically exposed as connector actions
+- **Simplified structure**: No need for separate authentication handling
+- **Modern fetch API**: Use native fetch instead of custom request methods
+- **Configuration access**: Use `this.getConfig('KEY')` to access environment variables
+
 #### Step 5: Define TypeScript Types
 
-Create type definitions in `src/types.ts`:
+With the new SDK structure, you can define types inline in your controller methods or create a separate types file. Here are the recommended approaches:
+
+**Option 1: Inline Types (Recommended for simple connectors)**
+
+```typescript
+// In src/controller/index.mts
+export default class Controller extends AbstractController {
+  
+  async createUser(args: { 
+    email: string; 
+    firstName: string; 
+    lastName: string; 
+    role?: string 
+  }) {
+    // Implementation...
+  }
+
+  async getUser(args: { userId: string }) {
+    // Implementation...
+  }
+}
+```
+
+**Option 2: Separate Types File**
+
+Create `src/types.ts` for complex type definitions:
 
 ```typescript
 // Request parameter types
@@ -305,13 +289,6 @@ export interface UpdateUserParams {
   status?: string;
 }
 
-export interface ListUsersParams {
-  role?: string;
-  status?: string;
-  limit?: number;
-  offset?: number;
-}
-
 // Response types
 export interface UserResponse {
   id: string;
@@ -323,69 +300,74 @@ export interface UserResponse {
   created?: string;
 }
 
-export interface UsersListResponse {
-  users: UserResponse[];
-  total: number;
-  limit: number;
-  offset: number;
-}
-
-// Configuration types
-export interface ConnectorConfig {
-  API_KEY: string;
-  BASE_URL?: string;
-  TIMEOUT?: number;
-  RETRY_ATTEMPTS?: number;
-}
+// Import and use in your controller
+import type { CreateUserParams, UserResponse } from '../types.js';
 ```
 
 ### Advanced Connector Patterns
 
 #### Authentication Handling
 
-Implement different authentication strategies:
+With the new SDK structure, authentication is handled differently. Here are the recommended approaches:
+
+**Option 1: Simple API Key Authentication**
 
 ```typescript
-export class AdvancedAPIConnector extends AlomaConnector {
+export default class Controller extends AbstractController {
+  
+  async createUser(args: { email: string; firstName: string; lastName: string }) {
+    try {
+      const apiKey = this.getConfig('API_KEY');
+      
+      const response = await fetch('https://api.example.com/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify(args)
+      });
+      
+      // Handle response...
+    } catch (error) {
+      this.log.error('Error creating user:', error);
+      throw error;
+    }
+  }
+}
+```
+
+**Option 2: OAuth 2.0 with Token Management**
+
+```typescript
+export default class Controller extends AbstractController {
   private accessToken: string | null = null;
   private refreshToken: string | null = null;
   private tokenExpiry: Date | null = null;
 
-  // OAuth 2.0 authentication flow
-  protected async authenticate(): Promise<boolean> {
-    const authType = this.getConfig('AUTH_TYPE', 'api_key');
-    
-    switch (authType) {
-      case 'oauth2':
-        return await this.authenticateOAuth2();
-      case 'jwt':
-        return await this.authenticateJWT();
-      case 'api_key':
-        return await this.authenticateAPIKey();
-      default:
-        throw new Error(`Unsupported authentication type: ${authType}`);
+  private async getValidToken(): Promise<string> {
+    // Check if we have a valid access token
+    if (this.accessToken && this.tokenExpiry && new Date() < this.tokenExpiry) {
+      return this.accessToken;
     }
+
+    // Try to refresh token if available
+    if (this.refreshToken) {
+      const refreshed = await this.refreshAccessToken();
+      if (refreshed) return this.accessToken!;
+    }
+
+    // Perform initial OAuth flow
+    return await this.performOAuthFlow();
   }
 
-  private async authenticateOAuth2(): Promise<boolean> {
+  private async performOAuthFlow(): Promise<string> {
     try {
-      // Check if we have a valid access token
-      if (this.accessToken && this.tokenExpiry && new Date() < this.tokenExpiry) {
-        return true;
-      }
-
-      // Try to refresh token if available
-      if (this.refreshToken) {
-        const refreshed = await this.refreshAccessToken();
-        if (refreshed) return true;
-      }
-
-      // Perform initial OAuth flow
       const clientId = this.getConfig('OAUTH_CLIENT_ID');
       const clientSecret = this.getConfig('OAUTH_CLIENT_SECRET');
       const scope = this.getConfig('OAUTH_SCOPE', 'read write');
 
-      const response = await this.makeRequest('/oauth/token', {
+      const response = await fetch('https://api.example.com/oauth/token', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -408,11 +390,11 @@ export class AdvancedAPIConnector extends AlomaConnector {
       this.tokenExpiry = new Date(Date.now() + (tokenData.expires_in * 1000));
 
       this.log.info('OAuth authentication successful');
-      return true;
+      return this.accessToken;
 
     } catch (error) {
       this.log.error('OAuth authentication failed:', error);
-      return false;
+      throw error;
     }
   }
 
@@ -421,7 +403,7 @@ export class AdvancedAPIConnector extends AlomaConnector {
       const clientId = this.getConfig('OAUTH_CLIENT_ID');
       const clientSecret = this.getConfig('OAUTH_CLIENT_SECRET');
 
-      const response = await this.makeRequest('/oauth/token', {
+      const response = await fetch('https://api.example.com/oauth/token', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -451,60 +433,64 @@ export class AdvancedAPIConnector extends AlomaConnector {
 
     } catch (error) {
       this.log.error('Token refresh failed:', error);
-      return false;
+      throw error;
     }
   }
 
-  // Override makeRequest to include authentication
-  protected async makeAuthenticatedRequest(endpoint: string, options: RequestInit): Promise<Response> {
-    // Ensure we're authenticated
-    const isAuthenticated = await this.authenticate();
-    if (!isAuthenticated) {
-      throw new Error('Authentication failed');
-    }
-
-    // Add authorization header
-    const headers = {
-      ...options.headers,
-      'Authorization': `Bearer ${this.accessToken}`,
-    };
-
-    const response = await this.makeRequest(endpoint, {
-      ...options,
-      headers
-    });
-
-    // Handle token expiration
-    if (response.status === 401) {
-      this.log.warn('Received 401, attempting to re-authenticate');
-      this.accessToken = null; // Force re-authentication
+  // Use the token in your methods
+  async getAuthenticatedData(args: { endpoint: string }) {
+    try {
+      const token = await this.getValidToken();
       
-      const retryAuth = await this.authenticate();
-      if (retryAuth) {
-        // Retry the request with new token
-        headers['Authorization'] = `Bearer ${this.accessToken}`;
-        return await this.makeRequest(endpoint, { ...options, headers });
-      }
-    }
+      const response = await fetch(`https://api.example.com${args.endpoint}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
 
-    return response;
+      if (response.status === 401) {
+        // Token expired, clear it and retry
+        this.accessToken = null;
+        const newToken = await this.getValidToken();
+        
+        const retryResponse = await fetch(`https://api.example.com${args.endpoint}`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${newToken}`
+          }
+        });
+        
+        return await retryResponse.json();
+      }
+
+      return await response.json();
+    } catch (error) {
+      this.log.error('Error fetching authenticated data:', error);
+      throw error;
+    }
   }
 }
 ```
+
+**Key differences from the old SDK:**
+- **No base class authentication**: Handle auth logic directly in your controller methods
+- **Token management**: Store tokens as private properties in your controller
+- **Direct fetch calls**: Use native fetch instead of custom request methods
+- **Error handling**: Handle 401 responses and token refresh in your methods
 
 #### Error Handling and Retry Logic
 
 Implement robust error handling:
 
 ```typescript
-export class ResilientAPIConnector extends AlomaConnector {
+export default class Controller extends AbstractController {
   private readonly maxRetries = 3;
   private readonly retryDelay = 1000; // Base delay in milliseconds
 
-  @RequestHandler('reliableRequest')
-  async reliableRequest(params: any): Promise<any> {
+  async reliableRequest(args: any): Promise<any> {
     return await this.executeWithRetry(
-      () => this.performAPICall(params),
+      () => this.performAPICall(args),
       {
         maxRetries: this.maxRetries,
         retryDelay: this.retryDelay,
@@ -572,6 +558,24 @@ export class ResilientAPIConnector extends AlomaConnector {
   private sleep(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
+
+  private async performAPICall(args: any): Promise<any> {
+    // Implement your API call logic here
+    const response = await fetch('https://api.example.com/endpoint', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.getConfig('API_KEY')}`
+      },
+      body: JSON.stringify(args)
+    });
+
+    if (!response.ok) {
+      throw new Error(`API call failed: ${response.statusText}`);
+    }
+
+    return await response.json();
+  }
 }
 
 interface RetryOptions {
@@ -586,10 +590,10 @@ interface RetryOptions {
 Handle complex data transformations:
 
 ```typescript
-export class DataProcessingConnector extends AlomaConnector {
-  @RequestHandler('processDataBatch')
-  async processDataBatch(params: BatchProcessParams): Promise<BatchProcessResult> {
-    this.log.info(`Processing batch of ${params.records.length} records`);
+export default class Controller extends AbstractController {
+  
+  async processDataBatch(args: BatchProcessParams): Promise<BatchProcessResult> {
+    this.log.info(`Processing batch of ${args.records.length} records`);
     
     const results = {
       processed: 0,
@@ -600,8 +604,8 @@ export class DataProcessingConnector extends AlomaConnector {
 
     // Process records in chunks to avoid memory issues
     const chunkSize = 50;
-    for (let i = 0; i < params.records.length; i += chunkSize) {
-      const chunk = params.records.slice(i, i + chunkSize);
+    for (let i = 0; i < args.records.length; i += chunkSize) {
+      const chunk = args.records.slice(i, i + chunkSize);
       const chunkResults = await this.processChunk(chunk);
       
       results.processed += chunkResults.successful.length;
@@ -610,8 +614,8 @@ export class DataProcessingConnector extends AlomaConnector {
       results.processedRecords.push(...chunkResults.successful);
       
       // Progress reporting
-      const progress = Math.round(((i + chunk.length) / params.records.length) * 100);
-      this.log.info(`Progress: ${progress}% (${i + chunk.length}/${params.records.length})`);
+      const progress = Math.round(((i + chunk.length) / args.records.length) * 100);
+      this.log.info(`Progress: ${progress}% (${i + chunk.length}/${args.records.length})`);
     }
 
     this.log.info(`Batch processing complete: ${results.processed} successful, ${results.failed} failed`);
@@ -803,7 +807,7 @@ yarn build
 
 # Start with PM2 (recommended for production)
 npm install -g pm2
-pm2 start dist/index.js --name "my-custom-connector"
+pm2 start build/index.mjs --name "my-custom-connector"
 
 # Or use Docker
 docker build -t my-custom-connector .
@@ -831,8 +835,8 @@ export const content = async () => {
   console.log('Creating user with custom connector...');
   
   try {
-    // Use your custom connector (replace 'myCustomAPI' with your connector namespace)
-    const newUser = await connectors.myCustomAPI.createUser({
+    // Use your custom connector (replace 'myCustomConnector' with your connector name)
+    const newUser = await connectors.myCustomConnector.createUser({
       email: data.user.email,
       firstName: data.user.firstName,
       lastName: data.user.lastName,
@@ -872,7 +876,7 @@ export const content = async () => {
   console.log(`Processing batch update for ${data.users.length} users`);
   
   // Use custom connector for batch processing
-  const batchResult = await connectors.myCustomAPI.processDataBatch({
+  const batchResult = await connectors.myCustomConnector.processDataBatch({
     records: data.users,
     options: {
       skipErrors: true,
@@ -901,7 +905,7 @@ export const content = async () => {
 
 ### Management and Monitoring
 
-#### Connector CLI Management
+#### Connector Management
 
 Monitor and manage your custom connectors:
 
@@ -930,28 +934,28 @@ aloma connector delete <connector-instance-id>
 Implement health checks in your connector:
 
 ```typescript
-export class MonitoredConnector extends AlomaConnector {
-  @RequestHandler('healthCheck')
-  async healthCheck(): Promise<HealthStatus> {
+export default class Controller extends AbstractController {
+  
+  async healthCheck(args: any): Promise<HealthStatus> {
     const checks = {
       authentication: false,
       apiConnectivity: false,
-      database: false,
       externalServices: false
     };
 
     try {
-      // Check authentication
-      checks.authentication = await this.authenticate();
+      // Check authentication by testing API key
+      const apiKey = this.getConfig('API_KEY');
+      checks.authentication = !!apiKey;
       
       // Check API connectivity
-      const apiResponse = await this.makeRequest('/health', { method: 'GET' });
+      const apiResponse = await fetch('https://api.example.com/health', { 
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`
+        }
+      });
       checks.apiConnectivity = apiResponse.ok;
-      
-      // Check database connectivity (if applicable)
-      if (this.database) {
-        checks.database = await this.database.ping();
-      }
       
       // Check external services
       checks.externalServices = await this.checkExternalServices();
@@ -998,6 +1002,7 @@ interface HealthStatus {
 
 #### Code Organization
 
-**Modular Design** - Separate concerns into different modules **Type Safety** - Use TypeScript for better development experience **Testing** - Write comprehensive unit and integration tests **Documentation** - Document all public methods and configuration options **Version Control** - Use semantic versioning for connector releases
+**Modular Design** - Separate concerns into different modules **Type Safety** - Use TypeScript for better development experience **Testing** - Write comprehensive unit and integration tests **Documentation** - Document all public methods and configuration options **Version Control** - Use semantic versioning for connector releases **ESM Modules** - Use modern ES modules with `.mts` files
 
 Custom connectors provide unlimited flexibility for integrating ALOMA with any system or service. By following these patterns and best practices, you can build robust, maintainable connectors that seamlessly integrate with your ALOMA automations while running on your own infrastructure.
+
