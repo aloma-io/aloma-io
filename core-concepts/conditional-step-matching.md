@@ -121,15 +121,16 @@ export const content = async () => {
 
 #### Array Content Matching
 
-Match arrays and their contents:
+ALOMA supports two types of array matching:
+
+**1. Array Structure Matching** - Match arrays containing objects with specific structure:
 
 ```javascript
-// Match arrays containing objects with specific structure
 export const condition = {
   order: {
     items: [
       {
-        sku: String,
+        sku: String,        // Must be an array of objects with sku, quantity, price
         quantity: Number,
         price: Number
       }
@@ -148,11 +149,24 @@ export const content = async () => {
 };
 ```
 
+**This would match:**
 ```javascript
-// Match specific array contents
+{
+  order: {
+    items: [
+      { sku: "ABC123", quantity: 2, price: 29.99 },
+      { sku: "XYZ789", quantity: 1, price: 15.50 }
+    ]
+  }
+}
+```
+
+**2. Array Value Matching** - Match arrays containing specific values:
+
+```javascript
 export const condition = {
   notification: {
-    channels: ["email", "sms"],  // Must contain both email and sms
+    channels: ["email", "sms"],  // Array must contain BOTH "email" AND "sms"
     priority: "high"
   }
 };
@@ -163,49 +177,164 @@ export const content = async () => {
 };
 ```
 
-### Advanced Matching Operators
+**This would match:**
+```javascript
+{
+  notification: {
+    channels: ["email", "sms", "push"],  // Contains both required values
+    priority: "high"
+  }
+}
+```
 
-#### Null and Undefined Handling
+**This would NOT match:**
+```javascript
+{
+  notification: {
+    channels: ["email", "push"],  // Missing "sms"
+    priority: "high"
+  }
+}
+```
+
+**Important Array Matching Notes:**
+- **Order doesn't matter** - values can be in any order
+- **Additional values are allowed** - array can contain extra items
+- **All specified values must be present** - it's an AND operation, not OR
+- **For object arrays** - each object must match the specified structure
+
+#### RegExp Matching
+
+Match text patterns using regular expressions:
+
+```javascript
+export const condition = {
+  email: {
+    subject: /testString/,  // Matches if subject contains "testString"
+    from: String
+  }
+};
+
+export const content = async () => {
+  console.log('Processing email with testString in subject');
+  data.email.processed = true;
+};
+```
+
+**This would match:**
+```javascript
+{
+  email: {
+    subject: "This is a testString for validation",
+    from: "user@example.com"
+  }
+}
+```
+
+**This would also match:**
+```javascript
+{
+  email: {
+    subject: "testString is important",
+    from: "admin@company.com"
+  }
+}
+```
+
+**This would NOT match:**
+```javascript
+{
+  email: {
+    subject: "Regular email without the keyword",
+    from: "user@example.com"
+  }
+}
+```
+
+### Supported Operators
+
+Based on testing, ALOMA supports the following comparison operators:
+
+#### Not Equal Operator ($ne) - Limited to null only
 
 ```javascript
 export const condition = {
   user: {
-    lastLogin: null,              // Field exists but is null
-    email: { $ne: null }          // Field exists and is not null
+    lastLogin: { $ne: null },       // ✅ WORKS - Field exists and is not null
   }
-};
-
-export const content = async () => {
-  console.log('Processing user who needs password reset');
-  data.user.passwordResetRequired = true;
-  data.user.resetInitiated = new Date().toISOString();
 };
 ```
 
-#### Complex AND Conditions
+**This would match:**
+```javascript
+{
+  user: {
+    lastLogin: "2024-01-15T10:30:00Z",  // Not null, so matches $ne: null
+    status: "active",
+    email: "user@company.com"
+  }
+}
+```
 
-All conditions must be true (implicit AND):
+**This would NOT match:**
+```javascript
+{
+  user: {
+       // Is null, so doesn't match $ne: null
+    status: "active",
+    email: "user@company.com"
+  }
+}
+```
+
+**Important Limitation:** The `$ne` operator in ALOMA only works with `null` values. It cannot be used to check if a field is not equal to other values like strings, numbers, or booleans.
+
+#### Null Matching
 
 ```javascript
 export const condition = {
-  order: {
-    total: { $ne: null },
-    customer: {
-      tier: "premium",
-      verified: true
-    },
-    items: {
-      $size: { $ne: null }
-    }
+  user: {
+    lastLogin: null,              // ✅ Matches if field exists AND is null
+    age: null                     // ✅ Matches if field exists AND is null
   }
 };
-
-export const content = async () => {
-  console.log('Processing high-value premium customer order');
-  data.order.whiteGloveService = true;
-  data.order.expeditedShipping = true;
-};
 ```
+
+**Important Behavior:** `{age: null}` matches in TWO scenarios:
+1. **Field exists and is null**: `{age: null}` ✅ **MATCHES**
+2. **Field doesn't exist**: `{}` ✅ **MATCHES** (age is undefined, which matches null)
+
+**This would match:**
+```javascript
+{
+  user: {
+    lastLogin: null,              // Field exists and is null
+    age: null                     // Field exists and is null
+  }
+}
+```
+
+**This would ALSO match:**
+```javascript
+{
+  user: {
+    lastLogin: null               // Field exists and is null
+    // age field doesn't exist (undefined, which matches null)
+  }
+}
+```
+
+**This would NOT match:**
+```javascript
+{
+  user: {
+    lastLogin: null,              // Field exists and is null
+    age: 25                       // Field exists but is NOT null
+  }
+}
+```
+
+**Key Point:** In ALOMA, `null` matching is actually "null or undefined" matching. This means you can use it to check if a field either doesn't exist OR exists but is null.
 
 ### Best Match Selection
 
@@ -627,3 +756,83 @@ export const content = async () => {
 ```
 
 Conditional step matching is ALOMA's superpower - enabling intelligent, adaptive automations that respond to data patterns rather than rigid sequences. Master these patterns to build workflows that scale elegantly and adapt automatically to changing requirements.
+
+### What is NOT Supported
+
+**Important:** ALOMA does NOT support the following advanced operators that are commonly found in other systems:
+
+```javascript
+// ❌ These operators are NOT supported:
+export const condition = {
+  infrastructure: {
+    cpuUsage: { $gt: 80 },        // No $gt (greater than)
+    memoryUsage: { $lt: 90 },     // No $lt (less than)
+    status: { $in: ["running", "starting"] },  // No $in
+    priority: { $gte: "medium" }  // No $gte (greater than or equal)
+  }
+};
+```
+
+**Workaround for comparison logic (when operators aren't available):**
+```javascript
+export const condition = {
+  infrastructure: {
+    cpuUsage: Number,        // Must be a number
+    memoryUsage: Number,     // Must be a number
+    status: String           // Must be a string
+  }
+};
+
+export const content = async () => {
+  // Do the comparison logic here
+  if (data.infrastructure.cpuUsage > 80 && 
+      data.infrastructure.memoryUsage < 90) {
+    
+    // Send alert
+    data.infrastructure.alertSent = true;
+    data.infrastructure.alertSentAt = new Date().toISOString();
+    
+    // Trigger next step
+    data.highResourceUsage = true;
+  }
+};
+```
+
+### Summary
+
+ALOMA's conditional step matching system provides:
+
+**✅ Supported:**
+- Exact value matching
+- Type-based matching (String, Number, Boolean, Array, Object)
+- Nested object structure matching
+- Array content and structure matching
+- RegExp pattern matching
+- Null/undefined handling
+- Not equal operator ($ne) - **ONLY with null values**
+- Sequential step execution
+
+**❌ Not Supported:**
+- Comparison operators ($gt, $lt, $gte, $lte)
+- Logical operators ($or, $and, $not)
+- Set operators ($in, $nin)
+- Greater/less than comparisons
+- $ne with non-null values (strings, numbers, booleans)
+
+**Current Behavior:**
+- All matching steps execute (not just the "best" match)
+- Execution order is sequential based on array order
+- Data changes from one step are available to subsequent steps
+
+**Testing Results:**
+Based on actual testing with task data `{Test: 3}`:
+- `{Test: {$ne: null}}` ✅ **WORKS** - matches when Test field exists and is not null
+- `{age: null}` ✅ **WORKS** - matches when age field exists AND is null, OR when age field doesn't exist
+- `{status: {$ne: 'created'}}` ❌ **DOES NOT WORK** - $ne only works with null values
+
+**Important Discovery:** `{age: null}` is actually "null or undefined" matching - it will match both cases where the field is missing and where it exists but is null.
+
+**Key Limitation Discovered:**
+The `$ne` operator in ALOMA has a significant limitation - it only works with `null` values. It cannot be used to check if a field is not equal to other values like strings, numbers, or booleans.
+
+Conditional step matching is ALOMA's core strength - enabling intelligent, adaptive automations that respond to data patterns rather than rigid sequences. While the current system prioritizes completeness over precision, it provides a solid foundation for building dynamic workflows that can be extended with custom logic in step content.

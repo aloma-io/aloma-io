@@ -281,6 +281,9 @@ workspaces:
     steps:
       - syncPath: "steps/"
     
+    libraries:
+      - syncPath: "libraries/"
+
     connectors:
       - connectorName: "hubspot.com (private)"
         config:
@@ -325,6 +328,7 @@ aloma workspace list
 aloma step list
 aloma connector list
 aloma webhook list
+aloma library list
 ```
 
 #### Environment Variables and Secrets
@@ -365,6 +369,9 @@ my-automation/
 ├── tasks/                # Test task data
 │   ├── test_customer.json
 │   └── test_order.json
+├── libraries/                # Library implementation files
+│   ├── validation.js
+│   ├── utilities.js
 ├── docs/                 # Documentation
 │   └── README.md
 ├── .gitignore
@@ -499,6 +506,7 @@ Create reusable code libraries:
 
 ```bash
 # Pull existing libraries from workspace
+aloma library pull -p ./libraries
 
 # Directory structure for libraries:
 # ./libraries/
