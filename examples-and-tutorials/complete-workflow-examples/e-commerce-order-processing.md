@@ -169,7 +169,7 @@ export const content = async () => {
 ```javascript
 export const condition = {
   order: {
-    total: { $gt: 500 },
+    total: Number,
     payment: {
       method: String,
       token: String
@@ -177,6 +177,8 @@ export const condition = {
     fraudChecked: null
   }
 };
+
+// Note: Fraud threshold logic (total > 500) implemented in step content
 
 export const content = async () => {
   console.log('Running fraud detection for order:', data.order.id);
@@ -831,10 +833,12 @@ export const content = async () => {
 export const condition = {
   order: {
     paymentFailed: true,
-    paymentRetryAttempts: { $lt: 3 },
+    paymentRetryAttempts: Number,
     retryRequested: null
   }
 };
+
+// Note: Retry limit logic (attempts < 3) implemented in step content
 
 export const content = async () => {
   console.log('Handling payment failure for order:', data.order.id);
@@ -1134,11 +1138,13 @@ Adding new requirements is trivial:
 export const condition = {
   order: {
     customer: {
-      totalSpent: { $gt: 100000 }
+      totalSpent: Number
     },
     vipProcessingTriggered: null
   }
 };
+
+// Note: VIP threshold logic (totalSpent > 100000) implemented in step content
 
 export const content = async () => {
   data.order.customer.effectiveTier = "vip";

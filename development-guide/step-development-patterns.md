@@ -357,24 +357,34 @@ export const content = async () => {
 // Suspicious order security workflow
 export const condition = {
   order: {
-    customer: { riskScore: { $gt: 70 } }
+    customer: { riskScore: Number }
   }
 };
 
+// Note: Risk threshold logic (riskScore > 70) implemented in step content
+
 export const content = async () => {
-  console.log('High-risk order detected - security review');
-  
-  data.order.workflow = "security_review";
-  data.order.requiresSecurityReview = true;
-  data.order.reviewer = "security-team";
-  data.order.priority = "urgent";
-  data.order.frozen = true;
-  
-  // Immediate security notification
-  await connectors.slackCom.send({
-    channel: "#security",
-    text: `🚨 High-risk order flagged for review\nRisk Score: ${data.order.customer.riskScore}\nOrder: ${data.order.id}\nAction required immediately`
-  });
+  // Implement risk assessment logic in step content
+  if (data.order.customer.riskScore > 70) {
+    console.log('High-risk order detected - security review');
+    
+    data.order.workflow = "security_review";
+    data.order.requiresSecurityReview = true;
+    data.order.reviewer = "security-team";
+    data.order.priority = "urgent";
+    data.order.frozen = true;
+    
+    // Immediate security notification
+    await connectors.slackCom.send({
+      channel: "#security",
+      text: `🚨 High-risk order flagged for review\nRisk Score: ${data.order.customer.riskScore}\nOrder: ${data.order.id}\nAction required immediately`
+    });
+  } else {
+    data.order.workflow = "standard";
+    data.order.requiresSecurityReview = false;
+    data.order.priority = "normal";
+    data.order.frozen = false;
+  }
 };
 ```
 
@@ -508,11 +518,21 @@ export const content = async () => {
 // Process batch
 export const condition = {
   processing: { stage: "batch_ready" },
-  batch: { index: { $lt: data.companies?.length || 0 } }
+  batch: { index: Number }
 };
+
+// Note: Bounds checking logic (index < companies.length) implemented in step content
 
 export const content = async () => {
   const { index, size } = data.batch;
+  
+  // Implement bounds checking logic in step content
+  if (index >= data.companies.length) {
+    data.processing.stage = "batch_complete";
+    console.log('All batches processed');
+    return;
+  }
+  
   const batch = data.companies.slice(index, index + size);
   
   console.log(`Processing batch ${Math.floor(index / size) + 1}: companies ${index + 1}-${index + batch.length}`);
@@ -788,9 +808,11 @@ export const condition = {
   order: {
     status: "paid",
     customer: { tier: "premium" },
-    total: { $ne: null }
+    total: Number
   }
 };
+
+// Note: Total validation logic implemented in step content
 
 // ❌ Avoid: Overly broad conditions
 export const condition = {

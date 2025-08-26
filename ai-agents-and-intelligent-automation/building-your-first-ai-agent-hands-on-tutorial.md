@@ -545,14 +545,22 @@ aloma step add "handle_escalation_and_learning" \
 export const condition = {
   response: Object,
   conversation: {
-    phase: { $in: ["escalation", "monitoring"] }
+    phase: String
   },
   learning: null
 };
 
+// Note: Phase validation logic (phase in ["escalation", "monitoring"]) implemented in step content
+
 export const content = async () => {
   const response = data.response;
   const phase = data.conversation.phase;
+  
+  // Implement phase validation logic in step content
+  if (!['escalation', 'monitoring'].includes(phase)) {
+    console.log(`Skipping processing for phase: ${phase}`);
+    return;
+  }
   
   console.log(`Processing ${phase} phase with learning integration`);
   

@@ -10,6 +10,23 @@ _Based on analysis of production ALOMA implementations and optimization patterns
 
 ALOMA's fundamental strength lies in conditional execution driven by data state rather than predefined sequences. Successful ALOMA architectures embrace this paradigm shift completely.
 
+**Important:** ALOMA's conditional step matching has specific limitations. It supports:
+- Exact value matching
+- Type-based matching (String, Number, Boolean, Array, Object)
+- Nested object structure matching
+- Array content and structure matching
+- RegExp pattern matching
+- Null/undefined handling
+- Not equal operator ($ne) - **ONLY with null values**
+
+**Not supported:**
+- Comparison operators ($gt, $lt, $gte, $lte)
+- Logical operators ($or, $and, $not)
+- Set operators ($in, $nin)
+- $ne with non-null values
+
+When you need comparison logic, implement it in the step content rather than in the condition.
+
 **Traditional Mindset:**
 
 ```
@@ -38,7 +55,7 @@ export const condition = {
   order: {
     status: "payment_confirmed",
     customer: { tier: "enterprise" },
-    total: { $gt: 10000 },
+    total: Number,
     items: Array
   }
 };
@@ -182,7 +199,7 @@ export const condition = {
 
 // Fraud detection
 export const condition = {
-  order: { total: { $gt: 500 } },
+  order: { total: Number },
   fraudChecked: null
 };
 
@@ -436,9 +453,9 @@ Implement intelligent retry patterns:
 export const condition = {
   apiCall: {
     url: String,
-    maxRetries: { $ne: null },
-    attempts: { $lt: data.apiCall?.maxRetries || 3 },
-    lastFailure: { $ne: null }
+    maxRetries: Number,
+    maxRetriesReached: null,
+    lastFailure: String
   }
 };
 
@@ -601,7 +618,7 @@ Structure conditions for optimal matching performance:
 export const condition = {
   order: {
     status: "pending",           // Specific value match
-    total: { $gt: 1000 },       // Numeric comparison
+    total: Number,              // Numeric type check
     customer: {                 // Nested object check
       tier: "enterprise",
       verified: true
@@ -1015,35 +1032,43 @@ Create steps that adapt to data structure:
 export const condition = {
   dynamicProcessing: {
     workflows: Array,
-    currentIndex: { $ne: null, $lt: data.dynamicProcessing?.workflows?.length || 0 }
+    currentIndex: Number
   }
 };
 
+// Note: Index validation logic should be implemented in step content
+
 export const content = async () => {
-  const currentIndex = data.dynamicProcessing.currentIndex;
-  const workflow = data.dynamicProcessing.workflows[currentIndex];
-  
-  console.log(`Processing workflow ${currentIndex + 1}/${data.dynamicProcessing.workflows.length}: ${workflow.name}`);
-  
-  // Execute workflow-specific logic
-  switch (workflow.type) {
-    case 'email':
-      await connectors.email.send(workflow.config);
-      break;
-    case 'api_call':
-      await connectors.api.call(workflow.config);
-      break;
-    case 'data_transform':
-      data[workflow.outputField] = transformData(data[workflow.inputField], workflow.rules);
-      break;
-  }
-  
-  // Move to next workflow
-  data.dynamicProcessing.currentIndex = currentIndex + 1;
-  
-  // Check if all workflows completed
+  // Validate current index is within bounds
   if (data.dynamicProcessing.currentIndex >= data.dynamicProcessing.workflows.length) {
     data.dynamicProcessing.completed = true;
+  } else {
+    // Continue with processing logic
+    const currentIndex = data.dynamicProcessing.currentIndex;
+    const workflow = data.dynamicProcessing.workflows[currentIndex];
+    
+    console.log(`Processing workflow ${currentIndex + 1}/${data.dynamicProcessing.workflows.length}: ${workflow.name}`);
+    
+    // Execute workflow-specific logic
+    switch (workflow.type) {
+      case 'email':
+        await connectors.email.send(workflow.config);
+        break;
+      case 'api_call':
+        await connectors.api.call(workflow.config);
+        break;
+      case 'data_transform':
+        data[workflow.outputField] = transformData(data[workflow.inputField], workflow.rules);
+        break;
+    }
+    
+    // Move to next workflow
+    data.dynamicProcessing.currentIndex = currentIndex + 1;
+    
+    // Check if all workflows completed
+    if (data.dynamicProcessing.currentIndex >= data.dynamicProcessing.workflows.length) {
+      data.dynamicProcessing.completed = true;
+    }
   }
 };
 ```
@@ -1119,6 +1144,41 @@ Following these best practices transforms your ALOMA automations from simple scr
 The key insight is that ALOMA's conditional execution model isn't just a different way to build workflows—it's a fundamentally superior architecture for business process automation that embraces the chaotic, evolving nature of real business requirements.
 
 **Remember:** Great ALOMA automations are designed around data state evolution, not sequential task execution. Master this principle, and you'll build automations that are not just functional, but truly exceptional.
+
+### Working Around ALOMA's Operator Limitations
+
+Since ALOMA doesn't support comparison operators in conditions, implement the logic in your step content:
+
+```javascript
+// ❌ This won't work in ALOMA conditions:
+export const condition = {
+  order: { total: { $gt: 1000 } }  // $gt not supported
+};
+
+// ✅ Instead, do this:
+export const condition = {
+  order: { total: Number }  // Match any number
+};
+
+export const content = async () => {
+  // Implement comparison logic here
+  if (data.order.total > 1000) {
+    data.order.priority = "high";
+    data.order.requiresApproval = true;
+  } else {
+    data.order.priority = "normal";
+    data.order.requiresApproval = false;
+  }
+  
+  data.order.processed = true;
+};
+```
+
+**Common Patterns:**
+- Use type matching in conditions (Number, String, Boolean, Array, Object)
+- Implement comparison logic in step content
+- Set boolean flags to control subsequent step execution
+- Use null/undefined matching for optional fields
 
 ***
 

@@ -470,9 +470,11 @@ The same set of steps handles different scenarios based on input data:
 export const condition = {
   order: {
     type: "B2B",
-    total: { $ne: null }
+    total: Number
   }
 };
+
+// Note: Total validation logic implemented in step content
 
 export const content = async () => {
   data.order.requiresApproval = true;
@@ -547,8 +549,10 @@ export const content = async () => {
 ```javascript
 // Initial attempt
 export const condition = {
-  apiCall: { url: String, failed: { $ne: null } }
+  apiCall: { url: String, failed: String }
 };
+
+// Note: Retry logic implemented in step content
 
 export const content = async () => {
   try {
@@ -579,9 +583,11 @@ export const condition = {
   order: {
     status: "paid",
     customer: { tier: "premium" },
-    total: { $ne: null }
+    total: Number
   }
 };
+
+// Note: Total validation logic implemented in step content
 
 // ❌ Avoid: Overly broad conditions
 export const condition = {

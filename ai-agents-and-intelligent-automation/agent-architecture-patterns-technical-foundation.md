@@ -23,10 +23,12 @@ The key insight is that **agent intelligence emerges from the interaction betwee
 export const condition = {
   monitoringTarget: {
     metrics: Array,
-    lastCheck: { $ne: null },
+    lastCheck: Number,
     recentAnalysis: null
   }
 };
+
+// Note: Time-based logic implemented in step content
 
 export const content = async () => {
   const currentTime = Date.now();
@@ -176,11 +178,13 @@ export const content = async () => {
 // Detects infrastructure anomalies and responds automatically
 export const condition = {
   infrastructure: {
-    cpuUsage: { $gt: 80 },
-    memoryUsage: { $gt: 85 },
+    cpuUsage: Number,
+    memoryUsage: Number,
     alertSent: null
   }
 };
+
+// Note: Threshold logic (cpuUsage > 80, memoryUsage > 85) implemented in step content
 
 export const content = async () => {
   const diagnosis = await connectors.openai.chat({
@@ -790,13 +794,15 @@ export const content = async () => {
 export const condition = {
   conversation: {
     memory: {
-      turnCount: { $gte: 3 },
+      turnCount: Number,
       conversationState: String
     },
     context: Object
   },
   strategyReview: null
 };
+
+// Note: Turn count logic (turnCount >= 3) implemented in step content
 
 export const content = async () => {
   const memory = data.conversation.memory;

@@ -534,8 +534,10 @@ Implement robust retry logic for outgoing webhooks:
 ```javascript
 export const condition = {
   webhookData: Object,
-  retryAttempt: { $lt: 3 }
+  retryAttempt: Number
 };
+
+// Note: Retry limit logic (attempts < 3) implemented in step content
 
 export const content = async () => {
   const attempt = (data.retryAttempt || 0) + 1;

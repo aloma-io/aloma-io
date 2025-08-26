@@ -1240,10 +1240,12 @@ export const content = async () => {
 export const condition = {
   learningImplementation: {
     successful: true,
-    changesImplemented: { $gt: 0 }
+    changesImplemented: Number
   },
   performanceMonitoring: null
 };
+
+// Note: Success threshold logic (changesImplemented > 0) implemented in step content
 
 export const content = async () => {
   console.log('Monitoring agent performance improvements from feedback integration...');

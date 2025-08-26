@@ -403,34 +403,50 @@ Different data patterns trigger completely different workflow paths:
 export const condition = {
   order: {
     type: "B2B",
-    total: { $gt: 10000 }
+    total: Number
   }
 };
 
+// Note: High-value logic (total > 10000) implemented in step content
+
 export const content = async () => {
-  data.order.requiresApproval = true;
-  data.order.approver = "sales-director";
-  data.order.priority = "high";
-  
-  // Notify approver
-  await connectors.slackCom.send({
-    channel: "#approvals",
-    text: `High-value B2B order requires approval: $${data.order.total}`
-  });
+  // Implement high-value logic in step content
+  if (data.order.total > 10000) {
+    data.order.requiresApproval = true;
+    data.order.approver = "sales-director";
+    data.order.priority = "high";
+    
+    // Notify approver
+    await connectors.slackCom.send({
+      channel: "#approvals",
+      text: `High-value B2B order requires approval: $${data.order.total}`
+    });
+  } else {
+    data.order.requiresApproval = false;
+    data.order.priority = "normal";
+  }
 };
 
 // Standard B2C orders auto-approve
 export const condition = {
   order: {
     type: "B2C",
-    total: { $lt: 1000 }
+    total: Number
   }
 };
 
+// Note: Low-value logic (total < 1000) implemented in step content
+
 export const content = async () => {
-  data.order.approved = true;
-  data.order.approvedBy = "system";
-  data.order.approvedAt = new Date().toISOString();
+  // Implement low-value logic in step content
+  if (data.order.total < 1000) {
+    data.order.approved = true;
+    data.order.approvedBy = "system";
+    data.order.approvedAt = new Date().toISOString();
+  } else {
+    data.order.requiresApproval = true;
+    data.order.approver = "manager";
+  }
 };
 ```
 
@@ -519,15 +535,24 @@ Changes are isolated to individual steps:
 // Adding fraud detection doesn't break existing flow
 export const condition = {
   order: {
-    total: { $gt: 500 },
+    total: Number,
     customer: { newCustomer: true }
   }
 };
 
+// Note: Fraud threshold logic (total > 500) implemented in step content
+
 export const content = async () => {
-  const fraudCheck = await connectors.fraudDetection.analyze(data.order);
-  data.order.fraudScore = fraudCheck.score;
-  data.order.fraudApproved = fraudCheck.score < 0.3;
+  // Implement fraud detection logic in step content
+  if (data.order.total > 500) {
+    const fraudCheck = await connectors.fraudDetection.analyze(data.order);
+    data.order.fraudScore = fraudCheck.score;
+    data.order.fraudApproved = fraudCheck.score < 0.3;
+  } else {
+    // Low-value orders don't need fraud check
+    data.order.fraudScore = 0;
+    data.order.fraudApproved = true;
+  }
 };
 
 // Existing fulfillment step just adds fraud check to its condition
