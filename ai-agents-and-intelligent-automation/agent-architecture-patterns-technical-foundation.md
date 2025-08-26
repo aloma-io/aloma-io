@@ -23,12 +23,10 @@ The key insight is that **agent intelligence emerges from the interaction betwee
 export const condition = {
   monitoringTarget: {
     metrics: Array,
-    lastCheck: Number,
+    lastCheck: { $ne: null },
     recentAnalysis: null
   }
 };
-
-// Note: Time-based logic implemented in step content
 
 export const content = async () => {
   const currentTime = Date.now();
