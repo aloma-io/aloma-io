@@ -230,8 +230,8 @@ ALOMA is built for experienced developers who:
 
 Ready to move from visual tools to code-first automation?
 
-1. [**5-Minute Quickstart**](https://claude.ai/chat/5-minute-quickstart.md) - Build your first automation
-2. [**Understanding Conditional Steps**](https://claude.ai/chat/understanding-conditional-steps.md) - Learn the paradigm
-3. [**Examples & Tutorials**](https://claude.ai/chat/examples-tutorials.md) - See real implementations
+1. [**5-Minute Quickstart**](https://aloma-developer-documentation.gitbook.io/aloma-developer-documentation/getting-started/5-minute-quickstart) - Build your first automation
+2. [**Understanding Conditional Steps**](https://aloma-developer-documentation.gitbook.io/aloma-developer-documentation/getting-started/understanding-conditional-steps) - Learn the paradigm
+3. [**Examples & Tutorials**](https://aloma-developer-documentation.gitbook.io/aloma-developer-documentation/examples-and-tutorials) - See real implementations
 
 **Move Fast and Automate Quickly with ALOMA's Rapid Iteration Approach**
