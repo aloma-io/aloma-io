@@ -24,7 +24,6 @@
   * [Agent Architecture Patterns - Technical Foundation](ai-agents-and-intelligent-automation/agent-architecture-patterns-technical-foundation.md)
   * [Building Your First AI Agent (Hands-on Tutorial):](ai-agents-and-intelligent-automation/building-your-first-ai-agent-hands-on-tutorial.md)
   * [Multi-Step AI Workflows (Advanced Implementation)](ai-agents-and-intelligent-automation/multi-step-ai-workflows-advanced-implementation.md)
-  * [Agent Memory & Context Management (Critical Technical Topic)](ai-agents-and-intelligent-automation/agent-memory-and-context-management-critical-technical-topic.md)
   * [Human-in-the-Loop Patterns (Business Critical)](ai-agents-and-intelligent-automation/human-in-the-loop-patterns-business-critical.md)
   * [Advanced Agent Examples (Real-world Implementation)](ai-agents-and-intelligent-automation/advanced-agent-examples-real-world-implementation/README.md)
     * [Sales Research and Qualification Agent](ai-agents-and-intelligent-automation/advanced-agent-examples-real-world-implementation/sales-research-and-qualification-agent.md)
@@ -40,3 +39,4 @@
 
 * [Customer Support Escalation Agent breakdown](customer-support-escalation-agent-breakdown/README.md)
   * [Overview & Architecture](customer-support-escalation-agent-breakdown/overview-and-architecture.md)
+* [Agent Memory & Context Management (Critical Technical Topic)](group-1/agent-memory-and-context-management-critical-technical-topic.md)
