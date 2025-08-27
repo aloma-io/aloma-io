@@ -83,8 +83,8 @@ This documentation will help you get started quickly, explore core concepts, and
 
 ## 📚 Examples & Tutorials
 
-* [Customer On-boarding Pipeline](examples-and-tutorials/complete-workflow-examples/customer-on-boarding-pipeline.md)
-* [E-commerce Order Processing](examples-and-tutorials/complete-workflow-examples/e-commerce-order-processing.md)
-* [Step Writing Best Practices](examples-and-tutorials/step-writing-best-practices)
+* [Customer On-boarding Pipeline](examples-and-tutorials/customer-on-boarding-pipeline.md)
+* [E-commerce Order Processing](examples-and-tutorials/e-commerce-order-processing.md)
+* [Step Writing Best Practices](development-guide/step-writing-best-practices/)
 
 ***

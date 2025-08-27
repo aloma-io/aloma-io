@@ -15,6 +15,8 @@
   * [Web IDE Development](development-guide/web-ide-development.md)
   * [Step Development Patterns](development-guide/step-development-patterns.md)
   * [Libraries and Code Reuse](development-guide/libraries-and-code-reuse.md)
+  * [Step writing best practices](development-guide/step-writing-best-practices/README.md)
+    * [Squadify rewritten with best practices](development-guide/step-writing-best-practices/squadify-rewritten-with-best-practices.md)
 * [🔌 Integration](integration/README.md)
   * [Using Cloud Connectors](integration/using-cloud-connectors.md)
   * [Building Custom Connectors](integration/building-custom-connectors.md)
@@ -29,11 +31,8 @@
     * [Sales Research and Qualification Agent](ai-agents-and-intelligent-automation/advanced-agent-examples-real-world-implementation/sales-research-and-qualification-agent.md)
     * [Customer Support Escalation Agent](ai-agents-and-intelligent-automation/advanced-agent-examples-real-world-implementation/customer-support-escalation-agent.md)
 * [📚 Examples & Tutorials](examples-and-tutorials/README.md)
-  * [Complete Workflow Examples](examples-and-tutorials/complete-workflow-examples/README.md)
-    * [Customer on-boarding Pipeline](examples-and-tutorials/complete-workflow-examples/customer-on-boarding-pipeline.md)
-    * [E-commerce Order Processing](examples-and-tutorials/complete-workflow-examples/e-commerce-order-processing.md)
-  * [Step writing best practices](examples-and-tutorials/step-writing-best-practices/README.md)
-    * [Squadify rewritten with best practices](examples-and-tutorials/step-writing-best-practices/squadify-rewritten-with-best-practices.md)
+  * [Customer on-boarding Pipeline](examples-and-tutorials/customer-on-boarding-pipeline.md)
+  * [E-commerce Order Processing](examples-and-tutorials/e-commerce-order-processing.md)
 
 ## Group 1
 
