@@ -11,19 +11,21 @@ _Based on analysis of production ALOMA implementations and optimization patterns
 ALOMA's fundamental strength lies in conditional execution driven by data state rather than predefined sequences. Successful ALOMA architectures embrace this paradigm shift completely.
 
 **Important:** ALOMA's conditional step matching has specific limitations. It supports:
-- Exact value matching
-- Type-based matching (String, Number, Boolean, Array, Object)
-- Nested object structure matching
-- Array content and structure matching
-- RegExp pattern matching
-- Null/undefined handling
-- Not equal operator ($ne) - **ONLY with null values**
+
+* Exact value matching
+* Type-based matching (String, Number, Boolean, Array, Object)
+* Nested object structure matching
+* Array content and structure matching
+* RegExp pattern matching
+* Null/undefined handling
+* Not equal operator ($ne) - **ONLY with null values**
 
 **Not supported:**
-- Comparison operators ($gt, $lt, $gte, $lte)
-- Logical operators ($or, $and, $not)
-- Set operators ($in, $nin)
-- $ne with non-null values
+
+* Comparison operators ($gt, $lt, $gte, $lte)
+* Logical operators ($or, $and, $not)
+* Set operators ($in, $nin)
+* $ne with non-null values
 
 When you need comparison logic, implement it in the step content rather than in the condition.
 
@@ -1175,10 +1177,11 @@ export const content = async () => {
 ```
 
 **Common Patterns:**
-- Use type matching in conditions (Number, String, Boolean, Array, Object)
-- Implement comparison logic in step content
-- Set boolean flags to control subsequent step execution
-- Use null/undefined matching for optional fields
+
+* Use type matching in conditions (Number, String, Boolean, Array, Object)
+* Implement comparison logic in step content
+* Set boolean flags to control subsequent step execution
+* Use null/undefined matching for optional fields
 
 ***
 
