@@ -314,7 +314,9 @@ const makeHubSpotRequest = async (url, options, retryCount = 0) => {
   } catch (error) {
     if (error.status === 429 && retryCount < 3) {
       const delay = Math.pow(2, retryCount) * 1000; // Exponential backoff
-      await new Promise(resolve => setTimeout(resolve, delay));
+      await connectors.utils.sleep({
+          milliseconds: delay
+        });
       return makeHubSpotRequest(url, options, retryCount + 1);
     }
     throw error;

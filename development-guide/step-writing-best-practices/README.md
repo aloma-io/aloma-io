@@ -468,7 +468,9 @@ export const content = async () => {
   // Wait before retry
   if (attempt > 1) {
     console.log(`Retrying API call (attempt ${attempt}) after ${backoffMs}ms backoff`);
-    await new Promise(resolve => setTimeout(resolve, backoffMs));
+    await connectors.utils.sleep({
+        milliseconds: backoffMs
+      });
   }
   
   try {

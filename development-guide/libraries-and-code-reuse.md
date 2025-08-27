@@ -145,7 +145,9 @@ const makeRequest = async (client, endpoint, options = {}) => {
   
   if (timeSinceLastRequest < minInterval) {
     const delay = minInterval - timeSinceLastRequest;
-    await new Promise(resolve => setTimeout(resolve, delay));
+    await connectors.utils.sleep({
+      milliseconds: delay
+    });
   }
   
   const url = `${client.baseUrl}${endpoint}`;
@@ -182,7 +184,9 @@ const makeRequest = async (client, endpoint, options = {}) => {
       
       if (attempt < client.retries) {
         const backoffDelay = Math.pow(2, attempt) * 1000; // Exponential backoff
-        await new Promise(resolve => setTimeout(resolve, backoffDelay));
+        await connectors.utils.sleep({
+          milliseconds: backoffDelay
+        });
       }
     }
   }
@@ -195,7 +199,9 @@ const handleRateLimit = async (response) => {
   const delay = retryAfter ? parseInt(retryAfter) * 1000 : 60000; // Default 1 minute
   
   console.log(`Rate limited. Waiting ${delay}ms before retry...`);
-  await new Promise(resolve => setTimeout(resolve, delay));
+  await connectors.utils.sleep({
+    milliseconds: delay
+  });
 };
 
 module.exports = { createApiClient, makeRequest, handleRateLimit };

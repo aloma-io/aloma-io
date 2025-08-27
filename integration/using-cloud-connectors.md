@@ -523,7 +523,9 @@ export const content = async () => {
       
       // Rate limiting delay
       if (i + batchSize < data.contacts.length) {
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await connectors.utils.sleep({
+        milliseconds: 1000
+      });
       }
       
     } catch (error) {
@@ -602,12 +604,16 @@ export const content = async () => {
         // Rate limited - wait longer
         const delay = Math.pow(2, attempt) * 2000; // Exponential backoff
         console.log(`Rate limited. Waiting ${delay}ms before retry...`);
-        await new Promise(resolve => setTimeout(resolve, delay));
+        await connectors.utils.sleep({
+          milliseconds: delay
+        });
       } else if (error.status >= 500) {
         // Server error - short delay and retry
         const delay = 1000 * attempt;
         console.log(`Server error. Waiting ${delay}ms before retry...`);
-        await new Promise(resolve => setTimeout(resolve, delay));
+        await connectors.utils.sleep({
+          milliseconds: delay
+        });
       } else {
         // Client error - don't retry
         console.log('Client error - not retrying');
