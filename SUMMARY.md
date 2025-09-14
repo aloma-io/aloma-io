@@ -4,6 +4,7 @@
 * [🚀 Getting Started](getting-started/README.md)
   * [What is ALOMA](getting-started/what-is-aloma.md)
   * [5-minute Quickstart](getting-started/5-minute-quickstart.md)
+  * [Email Newsletter Automation Example](getting-started/email-newsletter-automation-example.md)
   * [Understanding Conditional Steps](getting-started/understanding-conditional-steps.md)
 * [💡 Core Concepts](core-concepts/README.md)
   * [Data-Triggered Automation](core-concepts/data-triggered-automation.md)
@@ -39,7 +40,3 @@
 * [Customer Support Escalation Agent breakdown](customer-support-escalation-agent-breakdown/README.md)
   * [Overview & Architecture](customer-support-escalation-agent-breakdown/overview-and-architecture.md)
 * [Agent Memory & Context Management (Critical Technical Topic)](group-1/agent-memory-and-context-management-critical-technical-topic.md)
-
-***
-
-* [Email Newsletter Automation Example](email-newsletter-automation-example.md)
