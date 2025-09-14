@@ -72,7 +72,7 @@ This documentation will help you get started quickly, explore core concepts, and
 * [Agent Architecture Patterns](ai-agents-and-intelligent-automation/agent-architecture-patterns-technical-foundation.md)
 * [Building Your First AI Agent](ai-agents-and-intelligent-automation/building-your-first-ai-agent-hands-on-tutorial.md)
 * [Multi-Step AI Workflows](ai-agents-and-intelligent-automation/multi-step-ai-workflows-advanced-implementation.md)
-* [Agent Memory & Context Management](group-1/agent-memory-and-context-management-critical-technical-topic.md)
+* [Agent Memory & Context Management](ai-agents-and-intelligent-automation/agent-memory-and-context-management-critical-technical-topic.md)
 * [Human-in-the-Loop Patterns](ai-agents-and-intelligent-automation/human-in-the-loop-patterns-business-critical.md)
 
 **Advanced Agent Examples**
