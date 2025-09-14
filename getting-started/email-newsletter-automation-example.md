@@ -24,8 +24,6 @@ You'll need access to:
 
 ### Step 1: Project Setup
 
-bash
-
 ```bash
 # Create new workspace for newsletter automation
 aloma workspace add "Newsletter Automation" --tags "newsletter,email,production"
@@ -38,8 +36,6 @@ mkdir newsletter-automation && cd newsletter-automation
 ### Step 2: Configure Connectors
 
 Create a deployment file to set up integrations:
-
-yaml
 
 ```yaml
 # deploy.yaml
@@ -64,16 +60,12 @@ workspaces:
         encrypted: false
 ```
 
-bash
-
 ```bash
 # Deploy the workspace configuration
 aloma deploy deploy.yaml
 ```
 
 ### Step 3: Complete OAuth Setup
-
-bash
 
 ```bash
 # List available connectors
@@ -92,8 +84,6 @@ Follow the OAuth flows to authorize ALOMA access to your Google account.
 
 Create the steps directory and add your automation logic:
 
-bash
-
 ```bash
 mkdir steps
 ```
@@ -101,8 +91,6 @@ mkdir steps
 #### Step 1: Email Validation
 
 **steps/validate\_email.js**
-
-javascript
 
 ```javascript
 export const condition = {
@@ -135,8 +123,6 @@ export const content = async () => {
 #### Step 2: Add to Spreadsheet
 
 **steps/add\_to\_spreadsheet.js**
-
-javascript
 
 ```javascript
 export const condition = {
@@ -178,8 +164,6 @@ export const content = async () => {
 #### Step 3: Send Welcome Email
 
 **steps/send\_welcome\_email.js**
-
-javascript
 
 ```javascript
 export const condition = {
@@ -233,8 +217,6 @@ export const content = async () => {
 
 **steps/complete\_onboarding.js**
 
-javascript
-
 ```javascript
 export const condition = {
   subscriber: {
@@ -264,8 +246,6 @@ export const content = async () => {
 
 ### Step 5: Deploy and Test
 
-bash
-
 ```bash
 # Sync your steps to ALOMA
 aloma step sync
@@ -289,8 +269,6 @@ aloma task log <task-id> --logs --changes
 
 To connect this to a real form, you'll need a webhook:
 
-bash
-
 ```bash
 # Create a webhook to receive form submissions
 aloma webhook add "Newsletter Form Submissions"
@@ -300,8 +278,6 @@ aloma webhook list
 Use the webhook URL in your form to automatically create tasks when people subscribe.
 
 #### HTML Form Example
-
-html
 
 ```html
 <form action="https://connect.aloma.io/event/your-webhook-id" method="POST">
@@ -347,8 +323,6 @@ Notice how this automation naturally handles parallel processing:
 
 To enable parallel processing, modify the email step condition:
 
-javascript
-
 ```javascript
 // Allow email sending as soon as validation passes
 export const condition = {
@@ -380,5 +354,3 @@ You've now built a real automation with external integrations. This demonstrates
 **Want to see enterprise examples?** Check out our [Examples & Tutorials](https://claude.ai/examples-tutorials/) for complex real-world implementations.
 
 **Ready for production deployment?** Explore our [Development Guide](https://claude.ai/development-guide/) for CLI workflows, version control, and deployment strategies.
-
-\
