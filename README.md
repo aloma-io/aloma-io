@@ -37,7 +37,6 @@ This documentation will help you get started quickly, explore core concepts, and
 * [5-minute Quickstart](getting-started/5-minute-quickstart.md)
 * [Email Newsletter Automation Example](getting-started/email-newsletter-automation-example.md)
 * [Understanding Conditional Steps](getting-started/understanding-conditional-steps.md)
-* [CLI Setup and Reference Guide](development-guide/cli-setup-and-workflow.md)
 
 ***
 
@@ -52,9 +51,11 @@ This documentation will help you get started quickly, explore core concepts, and
 
 ## 🛠 Development Guide
 
-* [Web IDE Development](development-guide/web-ide-development.md)
+* [CLI Setup and Reference Guide](development-guide/cli-setup-and-workflow.md)
+* [Testing and Debugging Guide](development-guide/testing-and-debugging-guide.md)
 * [Step Development Patterns](development-guide/step-development-patterns.md)
-* [Libraries and Code Reuse](development-guide/libraries-and-code-reuse.md)
+* [Libraries and Code Reuse](development-guide/step-writing-best-practices.md)
+* [Step Writing Best Practice](development-guide/cli-setup-and-workflow.md)
 
 ***
 
@@ -86,6 +87,5 @@ This documentation will help you get started quickly, explore core concepts, and
 
 * [Customer On-boarding Pipeline](examples-and-tutorials/customer-on-boarding-pipeline.md)
 * [E-commerce Order Processing](examples-and-tutorials/e-commerce-order-processing.md)
-* [Step Writing Best Practices](development-guide/step-writing-best-practices/)
 
 ***
