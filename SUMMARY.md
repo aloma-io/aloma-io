@@ -12,7 +12,7 @@
   * [Conditional Step Matching](core-concepts/conditional-step-matching.md)
   * [Workspace and Isolation](core-concepts/workspace-and-isolation.md)
 * [🛠️ Development Guide](development-guide/README.md)
-  * [CLI Setup and Workflow](development-guide/cli-setup-and-workflow.md)
+  * [CLI Setup and Reference Guide](development-guide/cli-setup-and-workflow.md)
   * [Web IDE Development](development-guide/web-ide-development.md)
   * [Step Development Patterns](development-guide/step-development-patterns.md)
   * [Libraries and Code Reuse](development-guide/libraries-and-code-reuse.md)

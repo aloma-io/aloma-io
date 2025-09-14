@@ -1,10 +1,12 @@
-# CLI Setup and Workflow
+# CLI Setup and Reference Guide
 
-## CLI Setup & Workflow
+## CLI Setup and Reference Guide
 
-**The ALOMA CLI is the developer's primary interface for building, deploying, and managing automations. It provides full workspace control, version control integration, and enables professional development workflows with your preferred IDE.**
+### CLI Setup & Reference Guide
 
-Unlike visual drag-and-drop tools, the CLI enables code-first automation development with proper version control, team collaboration, and deployment pipelines. This approach scales from individual developers to enterprise teams while maintaining the flexibility and power that experienced developers expect.
+**The ALOMA CLI is your primary interface for building, deploying, and managing automations. This guide covers installation, configuration, and provides a complete command reference for professional development workflows.**
+
+***
 
 ### Installation and Setup
 
@@ -24,8 +26,6 @@ If Node.js isn't installed, download it from [nodejs.org](https://nodejs.org/).
 
 #### Install the ALOMA CLI
 
-Install the CLI globally to access it from anywhere:
-
 ```bash
 # Install ALOMA CLI globally
 npm install -g @aloma.io/aloma
@@ -37,49 +37,496 @@ aloma --help
 
 #### Initial Configuration
 
-Set up your development environment:
-
 ```bash
 # Configure CLI environment
 aloma setup
 
 # Authenticate with your ALOMA account
 aloma auth
+
+# Verify setup
+aloma workspace list
 ```
 
-The `aloma auth` command opens your browser to authenticate with your ALOMA account. Once authenticated, your session token is stored locally for future CLI operations.
+The `aloma auth` command opens your browser to authenticate. Once authenticated, your session token is stored locally.
 
-#### Verify Setup
+***
 
-Confirm everything is working:
+### Complete Command Reference
+
+#### Global Commands
+
+**`aloma --help`**
+
+Display global help and available commands
+
+**`aloma --version`**
+
+Show CLI version information
+
+**`aloma setup`**
+
+Configure CLI environment and defaults
+
+**`aloma auth`**
+
+Authenticate with your ALOMA account (opens browser)
+
+***
+
+#### Workspace Management
+
+**`aloma workspace list`**
+
+List all available workspaces
 
 ```bash
-# List available workspaces
 aloma workspace list
-
-# Show current workspace
-aloma workspace show
-
-# Test CLI connectivity
-aloma workspace list --help
 ```
 
-### Development Workflows
+**`aloma workspace show`**
+
+Display current workspace details
+
+```bash
+aloma workspace show
+aloma workspace show <workspace-name>
+```
+
+**`aloma workspace add <name>`**
+
+Create a new workspace
+
+```bash
+aloma workspace add "My Project" --tags "dev,api"
+aloma workspace add "Production" --tags "prod"
+```
+
+**Options:**
+
+* `--tags <tags>` - Comma-separated tags for organization
+
+**`aloma workspace switch <name>`**
+
+Switch to a different workspace
+
+```bash
+aloma workspace switch "Development"
+aloma workspace switch "My Project"
+```
+
+**`aloma workspace update`**
+
+Update workspace configuration
+
+```bash
+aloma workspace update --env-var "API_ENDPOINT=https://api.dev.company.com"
+aloma workspace update --notification-groups "dev@company.com,alerts@company.com"
+aloma workspace update --health-enabled true
+```
+
+**Options:**
+
+* `--env-var <key=value>` - Set environment variable
+* `--notification-groups <emails>` - Configure notification recipients
+* `--health-enabled <true|false>` - Enable health monitoring
+
+***
+
+#### Step Management
+
+**`aloma step list`**
+
+List all steps in current workspace
+
+```bash
+aloma step list
+aloma step list --filter "customer"
+```
+
+**Options:**
+
+* `--filter <term>` - Filter steps by name or content
+
+**`aloma step show <step-id>`**
+
+Display detailed step information
+
+```bash
+aloma step show <step-id>
+aloma step show <step-id> --verbose
+```
+
+**Options:**
+
+* `--verbose` - Show detailed step configuration
+
+**`aloma step add <name>`**
+
+Create a new step
+
+```bash
+aloma step add "process_customer"
+aloma step add "validate_email" --description "Email validation logic"
+```
+
+**Options:**
+
+* `--description <text>` - Step description
+
+**`aloma step edit <step-id>`**
+
+Open step editor for quick changes
+
+```bash
+aloma step edit <step-id>
+```
+
+**`aloma step clone <step-id>`**
+
+Create a copy of an existing step
+
+```bash
+aloma step clone <step-id> --name "process_customer_v2"
+```
+
+**Options:**
+
+* `--name <name>` - Name for cloned step
+
+**`aloma step pull`**
+
+Pull steps to local files for IDE editing
+
+```bash
+aloma step pull
+aloma step pull -p ./steps
+aloma step pull --path ./automation/steps
+```
+
+**Options:**
+
+* `-p, --path <path>` - Local directory for step files
+
+**`aloma step sync`**
+
+Sync local step files to workspace
+
+```bash
+aloma step sync -p ./steps
+aloma step sync --path ./automation/steps
+```
+
+**Options:**
+
+* `-p, --path <path>` - Local directory containing step files
+
+***
+
+#### Task Management
+
+**`aloma task list`**
+
+List tasks with optional filtering
+
+```bash
+aloma task list
+aloma task list --state running
+aloma task list --state error
+aloma task list --state done | head -10
+aloma task list --limit 50
+```
+
+**Options:**
+
+* `--state <state>` - Filter by task state (running, done, error, pending)
+* `--limit <number>` - Limit number of results
+
+**`aloma task new <name>`**
+
+Create a new task
+
+```bash
+aloma task new "test customer" -d '{"customer":{"email":"test@example.com"}}'
+aloma task new "health check" -d '{"healthCheck":true}'
+aloma task new "debug task" -f ./task-data.json
+```
+
+**Options:**
+
+* `-d, --data <json>` - Task data as JSON string
+* `-f, --file <path>` - Task data from JSON file
+
+**`aloma task log <task-id>`**
+
+View task execution logs
+
+```bash
+aloma task log <task-id>
+aloma task log <task-id> --logs --changes
+aloma task log <task-id> --step 1 --logs
+aloma task log <task-id> --verbose
+```
+
+**Options:**
+
+* `--logs` - Include execution logs
+* `--changes` - Show data changes between steps
+* `--step <number>` - Show logs for specific step
+* `--verbose` - Show detailed execution information
+
+***
+
+#### Connector Management
+
+**`aloma connector list-available`**
+
+List all available connectors
+
+```bash
+aloma connector list-available
+aloma connector list-available -f slack
+aloma connector list-available -f hubspot
+```
+
+**Options:**
+
+* `-f, --filter <term>` - Filter by service name
+
+**`aloma connector list`**
+
+List connectors in current workspace
+
+```bash
+aloma connector list
+aloma connector list --verbose
+```
+
+**Options:**
+
+* `--verbose` - Show detailed connector information
+
+**`aloma connector add <connector-id>`**
+
+Add connector to workspace
+
+```bash
+aloma connector add <connector-id> -n "My HubSpot Integration"
+aloma connector add <connector-id> --name "Production API"
+```
+
+**Options:**
+
+* `-n, --name <name>` - Custom connector name
+
+**`aloma connector show <instance-id>`**
+
+Show detailed connector information
+
+```bash
+aloma connector show <instance-id>
+aloma connector show <instance-id> --config
+```
+
+**Options:**
+
+* `--config` - Show configuration details
+
+**`aloma connector oauth <instance-id>`**
+
+Configure OAuth authentication
+
+```bash
+aloma connector oauth <instance-id>
+```
+
+**`aloma connector logs <instance-id>`**
+
+View connector execution logs
+
+```bash
+aloma connector logs <instance-id>
+aloma connector logs <instance-id> --tail
+```
+
+**Options:**
+
+* `--tail` - Follow logs in real-time
+
+**`aloma connector update <instance-id>`**
+
+Update connector configuration
+
+```bash
+aloma connector update <instance-id> -n "Updated Name"
+aloma connector update <instance-id> --config '{"apiKey":"new-key"}'
+```
+
+**Options:**
+
+* `-n, --name <name>` - Update connector name
+* `--config <json>` - Update configuration
+
+**`aloma connector delete <instance-id>`**
+
+Remove connector from workspace
+
+```bash
+aloma connector delete <instance-id>
+aloma connector delete <instance-id> --force
+```
+
+**Options:**
+
+* `--force` - Skip confirmation prompt
+
+***
+
+#### Secret Management
+
+**`aloma secret list`**
+
+List all secrets in current workspace
+
+```bash
+aloma secret list
+aloma secret list --show-values
+```
+
+**Options:**
+
+* `--show-values` - Display secret values (use carefully)
+
+**`aloma secret add <name> <value>`**
+
+Add a new secret
+
+```bash
+aloma secret add "API_KEY" "your-api-key-here"
+aloma secret add "DATABASE_URL" "postgresql://user:pass@host:5432/db" --encrypted
+```
+
+**Options:**
+
+* `--encrypted` - Store as encrypted secret
+* `--description <text>` - Add description
+
+**`aloma secret delete <name>`**
+
+Remove a secret
+
+```bash
+aloma secret delete "OLD_API_KEY"
+aloma secret delete "TEMP_TOKEN" --force
+```
+
+**Options:**
+
+* `--force` - Skip confirmation prompt
+
+***
+
+#### Library Management
+
+**`aloma library list`**
+
+List libraries in current workspace
+
+```bash
+aloma library list
+aloma library list --verbose
+```
+
+**Options:**
+
+* `--verbose` - Show library details
+
+**`aloma library pull`**
+
+Pull libraries to local files
+
+```bash
+aloma library pull
+aloma library pull -p ./libraries
+aloma library pull --path ./shared/libraries
+```
+
+**Options:**
+
+* `-p, --path <path>` - Local directory for library files
+
+**`aloma library sync`**
+
+Sync local library files to workspace
+
+```bash
+aloma library sync -p ./libraries
+aloma library sync --path ./shared/libraries
+```
+
+**Options:**
+
+* `-p, --path <path>` - Local directory containing library files
+
+***
+
+#### Webhook Management
+
+**`aloma webhook list`**
+
+List webhooks in current workspace
+
+```bash
+aloma webhook list
+aloma webhook list --show-urls
+```
+
+**Options:**
+
+* `--show-urls` - Display webhook URLs
+
+**`aloma webhook add <name>`**
+
+Create a new webhook
+
+```bash
+aloma webhook add "Customer Events"
+aloma webhook add "Order Processing" --description "Handle order webhooks"
+```
+
+**Options:**
+
+* `--description <text>` - Webhook description
+
+***
+
+#### Deployment Commands
+
+**`aloma deploy <file>`**
+
+Deploy automation from configuration file
+
+```bash
+aloma deploy deploy.yaml
+aloma deploy deploy-prod.yaml --dry-run
+aloma deploy ./config/staging.yaml --force
+```
+
+**Options:**
+
+* `--dry-run` - Preview deployment without executing
+* `--force` - Override safety checks
+
+***
+
+#### Development Workflows
 
 #### Quick Start: Deploy an Example
-
-Get started immediately by deploying a pre-built automation:
 
 ```bash
 # Clone examples repository
 git clone https://github.com/aloma-io/aloma-io.git
 cd aloma-io/examples/hubspot
-
-# Review the deployment configuration
-cat deploy.yaml
-
-# Update API credentials in deploy.yaml
-# Replace "********" with your actual HubSpot API token
 
 # Deploy the complete automation
 aloma deploy deploy.yaml
@@ -92,35 +539,28 @@ aloma connector list
 
 #### Local Development Workflow
 
-Develop automations locally with your preferred IDE:
-
 ```bash
-# Create a new project directory
+# Create new project
 mkdir my-automation && cd my-automation
 
-# Create workspace for your project
-aloma workspace add "My Automation Dev" --tags "development,myproject"
-
-# Switch to your new workspace
+# Set up workspace
+aloma workspace add "My Automation Dev" --tags "development"
 aloma workspace switch "My Automation Dev"
 
-# Pull any existing steps (for existing workspaces)
-aloma step pull
+# Start development
+aloma step pull -p ./steps
+# Edit files in your IDE
+aloma step sync -p ./steps
 
-# Create your first step
-aloma step add "process_customer"
-
-# View created step
-aloma step list
-aloma step show <step-id>
+# Test automation
+aloma task new "test run" -d '{"test": true}'
+aloma task list --state running
 ```
 
 #### IDE Integration
 
-Work with your favorite development tools:
-
 ```bash
-# Pull steps to local files for IDE editing
+# Pull steps for IDE editing
 aloma step pull -p ./steps
 
 # Directory structure created:
@@ -128,149 +568,41 @@ aloma step pull -p ./steps
 #   ├── process_customer.js
 #   ├── validate_email.js
 #   └── send_notification.js
+
+# After editing, sync back
+aloma step sync -p ./steps
 ```
 
-Edit steps in your IDE with full syntax highlighting, debugging, and version control:
-
-```javascript
-// ./steps/process_customer.js
-export const condition = {
-  customer: {
-    email: String,
-    status: "new"
-  }
-};
-
-export const content = async () => {
-  console.log('Processing new customer:', data.customer.email);
-  
-  // Validate email format
-  const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.customer.email);
-  
-  if (emailValid) {
-    data.customer.validated = true;
-    data.customer.validatedAt = new Date().toISOString();
-  } else {
-    data.customer.validationError = "Invalid email format";
-    data.customer.validated = false;
-  }
-  
-  data.customer.processedBy = "automation";
-};
-```
-
-Sync changes back to ALOMA:
+#### Version Control Integration
 
 ```bash
-# Sync local changes to workspace
-aloma step sync
-
-# Sync specific step
-aloma step sync -s step-123 -p ./steps
-
-# Verify changes
-aloma step list
-```
-
-### Version Control Integration
-
-#### Git-Based Development
-
-Integrate ALOMA with your Git workflow:
-
-```bash
-# Initialize Git repository
-git init
-git add .
-git commit -m "Initial automation setup"
-
-# Create .gitignore for ALOMA projects
-cat > .gitignore << EOF
-# ALOMA CLI files
-.aloma/
-*.log
-
-# Node.js
-node_modules/
-npm-debug.log*
-
-# Environment variables
-.env
-.env.local
-EOF
-
-# Set up development branches
-git checkout -b develop
+# 1. Develop feature
 git checkout -b feature/customer-validation
-```
-
-#### Multi-Environment Strategy
-
-Manage development, staging, and production environments:
-
-```bash
-# Create environment-specific workspaces
-aloma workspace add "MyApp Development" --tags "dev,myapp"
-aloma workspace add "MyApp Staging" --tags "staging,myapp"
-aloma workspace add "MyApp Production" --tags "production,myapp"
-
-# Configure each environment
-aloma workspace switch "MyApp Development"
-aloma secret add "API_ENDPOINT" "https://api-dev.mycompany.com"
-aloma secret add "DATABASE_URL" "postgresql://dev-db:5432/myapp"
-
-aloma workspace switch "MyApp Staging"
-aloma secret add "API_ENDPOINT" "https://api-staging.mycompany.com"
-aloma secret add "DATABASE_URL" "postgresql://staging-db:5432/myapp"
-
-aloma workspace switch "MyApp Production"
-aloma secret add "API_ENDPOINT" "https://api.mycompany.com"
-aloma secret add "DATABASE_URL" "postgresql://prod-db:5432/myapp"
-```
-
-#### Development to Production Pipeline
-
-Establish a deployment pipeline:
-
-```bash
-# 1. Develop in feature branch
-git checkout feature/customer-validation
-aloma workspace switch "MyApp Development"
-
-# Create and test steps locally
 aloma step pull -p ./steps
-# ... edit files in IDE ...
-aloma step sync
+# Edit steps in IDE
 
-# Test with development data
-aloma task new "test customer" -d '{"customer":{"email":"test@example.com","status":"new"}}'
-aloma task list --state done
-
-# 2. Commit and merge to develop
+# 2. Commit and test
 git add .
 git commit -m "Add customer validation step"
-git checkout develop
-git merge feature/customer-validation
+aloma step sync -p ./steps
+aloma task new "test validation" -d '{"customer":{"email":"test@example.com"}}'
 
 # 3. Deploy to staging
 aloma workspace switch "MyApp Staging"
 aloma step sync -p ./steps
 
-# Test in staging environment
-aloma task new "staging test" -d '{"customer":{"email":"staging@example.com","status":"new"}}'
-
 # 4. Production deployment
 git checkout main
-git merge develop
+git merge feature/customer-validation
 aloma workspace switch "MyApp Production"
 aloma step sync -p ./steps
 ```
 
+***
+
 ### Infrastructure as Code
 
-#### Deployment Configuration
-
-Define entire automations in YAML:
+#### Deploy File Structure
 
 ```yaml
 # deploy.yaml
@@ -288,15 +620,11 @@ workspaces:
       - connectorName: "hubspot.com (private)"
         config:
           apiToken: "${HUBSPOT_API_TOKEN}"
-      - connectorName: "E-Mail (SMTP - OAuth)"
       - connectorName: "slack.com"
     
     secrets:
       - name: "DATABASE_URL"
         value: "${PROD_DATABASE_URL}"
-        encrypted: true
-      - name: "ENCRYPTION_KEY"
-        value: "${PROD_ENCRYPTION_KEY}"
         encrypted: true
       - name: "SLACK_CHANNEL"
         value: "C1234567890"
@@ -311,160 +639,30 @@ workspaces:
         data: {"test": true, "customer": {"email": "test@example.com"}}
 ```
 
-Deploy complete environments:
+#### Environment Management
 
 ```bash
-# Deploy development environment
-aloma deploy deploy-dev.yaml
-
-# Deploy staging environment  
-aloma deploy deploy-staging.yaml
-
-# Deploy production environment
-aloma deploy deploy-prod.yaml
-
-# Verify deployment
-aloma workspace list
-aloma step list
-aloma connector list
-aloma webhook list
-aloma library list
-```
-
-#### Environment Variables and Secrets
-
-Securely manage configuration across environments:
-
-```bash
-# Set environment variables before deployment
-export HUBSPOT_API_TOKEN="your-hubspot-token"
+# Set environment variables
+export HUBSPOT_API_TOKEN="your-token"
 export PROD_DATABASE_URL="postgresql://prod:5432/app"
-export PROD_ENCRYPTION_KEY="aes256-encryption-key"
 
 # Deploy with environment substitution
 aloma deploy deploy-prod.yaml
 
-# Or manage secrets directly via CLI
-aloma workspace switch "Production"
-aloma secret add "HUBSPOT_API_TOKEN" "your-hubspot-token"
+# Or manage secrets via CLI
+aloma secret add "HUBSPOT_API_TOKEN" "your-token"
 aloma secret add "DATABASE_URL" "postgresql://prod:5432/app"
-aloma secret list
 ```
 
-### Development Best Practices
+***
 
-#### Project Structure
+### Testing and Debugging
 
-Organize your automation projects:
-
-```
-my-automation/
-├── deploy.yaml           # Deployment configuration
-├── deploy-dev.yaml       # Development environment config
-├── deploy-prod.yaml      # Production environment config
-├── steps/                # Step implementation files
-│   ├── validate_customer.js
-│   ├── process_order.js
-│   └── send_notifications.js
-├── tasks/                # Test task data
-│   ├── test_customer.json
-│   └── test_order.json
-├── libraries/                # Library implementation files
-│   ├── validation.js
-│   ├── utilities.js
-├── docs/                 # Documentation
-│   └── README.md
-├── .gitignore
-├── .aloma.yaml          # ALOMA project configuration
-└── package.json         # Node.js dependencies (optional)
-```
-
-#### Step Development Patterns
-
-Follow consistent patterns for maintainable steps:
-
-```javascript
-// steps/validate_customer.js
-export const condition = {
-  customer: {
-    email: String,
-    validated: null  // Only run if not already validated
-  }
-};
-
-export const content = async () => {
-  const startTime = Date.now();
-  
-  try {
-    // Log step execution
-    console.log(`Validating customer: ${data.customer.email}`);
-    
-    // Main business logic
-    const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.customer.email);
-    
-    if (emailValid) {
-      data.customer.validated = true;
-      data.customer.validatedAt = new Date().toISOString();
-      data.customer.validationMethod = "regex";
-    } else {
-      data.customer.validated = false;
-      data.customer.validationError = "Invalid email format";
-      data.customer.validationErrors = data.customer.validationErrors || [];
-      data.customer.validationErrors.push({
-        field: "email",
-        error: "Invalid format",
-        timestamp: new Date().toISOString()
-      });
-    }
-    
-    // Add execution metadata
-    data.customer.lastProcessedAt = new Date().toISOString();
-    data.customer.lastProcessedBy = "validate_customer_step";
-    
-    console.log(`Validation complete: ${data.customer.validated ? 'valid' : 'invalid'}`);
-    
-  } catch (error) {
-    // Error handling
-    console.error('Customer validation failed:', error.message);
-    
-    data.customer.validated = false;
-    data.customer.validationError = error.message;
-    data.customer.lastError = {
-      message: error.message,
-      timestamp: new Date().toISOString(),
-      step: "validate_customer"
-    };
-  } finally {
-    // Performance tracking
-    const duration = Date.now() - startTime;
-    console.log(`Step execution time: ${duration}ms`);
-    data.customer.executionTime = duration;
-  }
-};
-```
-
-#### Testing and Debugging
-
-Develop a systematic testing approach:
+#### Debug Commands
 
 ```bash
-# Create test data files
-mkdir tasks
-cat > tasks/test_customer.json << EOF
-{
-  "customer": {
-    "email": "john.doe@company.com",
-    "firstName": "John",
-    "lastName": "Doe",
-    "status": "new"
-  },
-  "source": "cli_test"
-}
-EOF
-
-# Test specific scenarios
-aloma task new "valid customer test" -f tasks/test_customer.json
-aloma task new "invalid customer test" -d '{"customer":{"email":"invalid-email","status":"new"}}'
+# Create test tasks
+aloma task new "debug customer" -d '{"customer":{"email":"invalid-email","status":"new"}}'
 
 # Monitor execution
 aloma task list --state running
@@ -475,13 +673,11 @@ aloma task log <task-id> --logs --changes
 aloma task log <task-id> --step 1 --logs
 
 # Test step modifications
-aloma step edit <step-id>  # Opens editor for quick changes
-aloma step clone <step-id> # Create copy for testing
+aloma step edit <step-id>
+aloma step clone <step-id> --name "debug_version"
 ```
 
 #### Performance Monitoring
-
-Track automation performance:
 
 ```bash
 # Monitor task execution
@@ -500,56 +696,107 @@ aloma connector logs <connector-id>
 aloma workspace show
 ```
 
-#### Library Management
+***
 
-Create reusable code libraries:
+### Troubleshooting
 
-```bash
-# Pull existing libraries from workspace
-aloma library pull -p ./libraries
+#### Common Issues
 
-# Directory structure for libraries:
-# ./libraries/
-#   ├── validation.js
-#   └── utilities.js
-```
-
-Use libraries in your steps:
-
-```javascript
-// steps/process_customer.js
-export const condition = {
-  customer: { email: String }
-};
-
-export const content = async () => {
-  // Use library functions
-  const isValid = lib.validation.validateEmail(data.customer.email);
-  const formattedDate = lib.utilities.formatDate(new Date());
-  
-  if (isValid) {
-    data.customer.validated = true;
-    data.customer.validatedAt = formattedDate;
-  }
-};
-```
-
-#### Monitoring and Alerting
-
-Set up monitoring for production automations:
+**Authentication Problems:**
 
 ```bash
-# Configure workspace notifications
-aloma workspace update --notification-groups "devops@company.com,alerts@company.com"
+# Re-authenticate
+aloma auth
 
-# Monitor failed tasks
-aloma task list --state error --limit 50
-
-# Set up health checks
-aloma workspace update --health-enabled true
-
-# Create monitoring tasks
-aloma task new "health check" -d '{"healthCheck":true,"timestamp":"'$(date -u +%Y-%m-%dT%H:%M:%SZ)'"}'
+# Verify workspace access
+aloma workspace list
 ```
 
-The CLI workflow enables professional automation development with the tools and practices experienced developers expect. By integrating with version control, supporting team collaboration, and providing infrastructure-as-code deployment, ALOMA scales from individual projects to enterprise automation platforms.
+**Step Sync Issues:**
+
+```bash
+# Check current workspace
+aloma workspace show
+
+# Force sync with verbose output
+aloma step sync -p ./steps --verbose
+```
+
+**Task Execution Problems:**
+
+```bash
+# Check task logs
+aloma task log <task-id> --logs --changes
+
+# Verify step conditions
+aloma step show <step-id>
+
+# Test with simplified data
+aloma task new "simple test" -d '{"test": true}'
+```
+
+**Connector Issues:**
+
+```bash
+# Check connector status
+aloma connector list --verbose
+
+# View connector logs
+aloma connector logs <instance-id>
+
+# Re-configure OAuth if needed
+aloma connector oauth <instance-id>
+```
+
+#### Getting Help
+
+```bash
+# Command-specific help
+aloma <command> --help
+aloma workspace --help
+aloma step --help
+
+# Global help
+aloma --help
+```
+
+***
+
+### Best Practices
+
+#### Project Organization
+
+```
+my-automation/
+├── deploy.yaml           # Deployment configuration
+├── deploy-dev.yaml       # Development environment
+├── deploy-staging.yaml   # Staging environment
+├── deploy-prod.yaml      # Production environment
+├── steps/               # Step definitions
+│   ├── validate_email.js
+│   ├── process_customer.js
+│   └── send_notification.js
+├── libraries/           # Reusable code
+│   ├── validation.js
+│   └── utilities.js
+├── docs/               # Documentation
+│   └── README.md
+└── .gitignore          # Version control
+```
+
+#### Development Workflow
+
+1. **Local Development**: Use `aloma step pull` and IDE editing
+2. **Version Control**: Commit step files with your code
+3. **Testing**: Use staging workspace for integration testing
+4. **Deployment**: Use `aloma deploy` for consistent deployments
+5. **Monitoring**: Regular health checks and log monitoring
+
+#### Security
+
+* Store sensitive data in secrets, not environment variables
+* Use encrypted secrets for production credentials
+* Regularly rotate API keys and tokens
+* Monitor connector access logs
+
+The ALOMA CLI enables professional automation development with the tools and practices experienced developers expect. By integrating with version control, supporting team collaboration, and providing infrastructure-as-code deployment, ALOMA scales from individual projects to enterprise automation platforms.

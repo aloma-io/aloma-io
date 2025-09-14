@@ -35,7 +35,9 @@ This documentation will help you get started quickly, explore core concepts, and
 
 * [What is ALOMA](getting-started/what-is-aloma.md)
 * [5-minute Quickstart](getting-started/5-minute-quickstart.md)
+* [Email Newsletter Automation Example](getting-started/email-newsletter-automation-example.md)
 * [Understanding Conditional Steps](getting-started/understanding-conditional-steps.md)
+* [CLI Setup and Reference Guide](development-guide/cli-setup-and-workflow.md)
 
 ***
 
@@ -50,7 +52,6 @@ This documentation will help you get started quickly, explore core concepts, and
 
 ## 🛠 Development Guide
 
-* [CLI Setup and Workflow](development-guide/cli-setup-and-workflow.md)
 * [Web IDE Development](development-guide/web-ide-development.md)
 * [Step Development Patterns](development-guide/step-development-patterns.md)
 * [Libraries and Code Reuse](development-guide/libraries-and-code-reuse.md)

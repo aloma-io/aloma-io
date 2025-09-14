@@ -2,16 +2,16 @@
 
 ## 5-Minute Quickstart
 
-Build your first ALOMA automation to understand conditional execution. We'll create a multi-step workflow that processes an example cargo ship off-loading with parallel operations and demonstrate how ALOMA's data-driven approach works.
+Build your first ALOMA automation to understand conditional execution. We'll create a multi-step workflow that processes the arrival of a cargo ship and off boarding off cargo and crew with parallel operations. This demonstrate how ALOMA's data-driven approach works with a simple example without integration.&#x20;
 
 ### What You'll Build
 
 A simple automation that:
 
-* Receives ship data as JSON
+* Send cargo ship data as JSON to ALOMA
 * Processes crew offboarding when conditions are met
 * Handles cargo unloading independently in parallel
-* Completes the off-boarding (retires the ship) only after both tasks complete
+* Complete off-boarding only after both tasks complete
 * Demonstrates ALOMA's conditional execution model
 
 ### Prerequisites
@@ -136,7 +136,7 @@ export const content = async () => {
 };
 ```
 
-### Step 6: Final Step - Ship Retirement
+### Step 6: Final Step - Complete Off-Boarding (ship eetirement)
 
 ```bash
 aloma step add "retire_ship"
