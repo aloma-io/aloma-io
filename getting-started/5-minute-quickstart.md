@@ -2,354 +2,250 @@
 
 ## 5-Minute Quickstart
 
-Build your first ALOMA automation in under 5 minutes. We'll create a multi-step workflow that processes ship retirement with conditional logic to demonstrate ALOMA's core concepts.
+Build your first ALOMA automation to understand conditional execution. We'll create a multi-step workflow that processes the arrival of a cargo ship and off boarding off cargo and crew with parallel operations. This demonstrate how ALOMA's data-driven approach works with a simple example without integration.&#x20;
 
 ### What You'll Build
 
 A simple automation that:
 
-* Receives ship data as JSON
+* Send cargo ship data as JSON to ALOMA
 * Processes crew offboarding when conditions are met
-* Handles cargo unloading independently
-* Retires the ship only after both tasks complete
+* Handles cargo unloading independently in parallel
+* Complete off-boarding only after both tasks complete
 * Demonstrates ALOMA's conditional execution model
 
 ### Prerequisites
 
-* [ALOMA account](https://home.aloma.io/) (free signup and free 30 day Pro trial - 5000 tasks)
+* [ALOMA account](https://home.aloma.io/) (free signup with 30-day Pro trial)
 * Basic JavaScript knowledge
 
-### Step 1: Create Your Workspace
+### Step 1: Install and Setup CLI
 
-1. Sign up at [home.aloma.io](https://home.aloma.io/)
-2. You'll automatically get a "Getting Started" workspace
-3. Click on your workspace to enter it
+```bash
+# Install ALOMA CLI globally
+npm install -g @aloma.io/aloma
 
-### Step 2: Create a Task
+# Verify installation
+aloma --version
 
-Tasks are JSON data that trigger your workflows. Let's create our ship data:
+# Authenticate with your account
+aloma auth
+```
 
-1. Navigate to **Tasks** tab in the left sidebar
-2. Click **New Task**
-3. Name it "retire ship"
-4. Paste this JSON data:
+The `aloma auth` command opens your browser to authenticate. Once complete, you're ready to build.
 
-```json
-{
+### Step 2: Create Your First Workspace
+
+```bash
+# Create a new workspace for this tutorial
+aloma workspace add "Ship Management Tutorial" --tags "tutorial,getting-started"
+
+# Switch to your new workspace
+aloma workspace switch "Ship Management Tutorial"
+
+# Verify you're in the right workspace
+aloma workspace show
+```
+
+### Step 3: Create the Initial Task
+
+Let's create a task that represents a ship ready for retirement:
+
+```bash
+# Create a test task with ship data
+aloma task new "retire ship alpha" -d '{
   "ship": {
+    "name": "Alpha",
     "floating": true,
-    "cargo": ["fish", "oil", "tires"],
-    "crew": 100,
+    "cargo": ["fish", "oil", "equipment"],
+    "crew": 25,
     "status": "active"
   }
-}
+}'
 ```
 
-5. Click **Create**
+**What just happened?** You created a JSON task that will flow through your automation. ALOMA doesn't care about the structure - it's just data waiting to be processed.
 
-### Step 3: Build Your First Step - Offboard Crew
+### Step 4: Build Your First Step - Crew Offboarding
 
-Now we'll create conditional steps that respond to data patterns:
-
-1. Click **Add New Step** (you should see this option)
-2. Name the step: "offboard crew"
-3. Set the **Condition** (when this step runs):
-
-```json
-{
-  "ship": {
-    "crew": 100,
-    "floating": true
-  }
-}
+```bash
+# Create your first step
+aloma step add "offboard_crew"
 ```
 
-4. Add the **Code** (what happens when condition matches):
+Now edit the step with these patterns. The step consists of a **condition** (when it runs) and **content** (what it does):
+
+**Condition** (when this step runs):
 
 ```javascript
-  console.log('Offboarding crew...');
+export const condition = {
+  ship: {
+    crew: Number,
+    floating: true,
+    status: "active"
+  }
+};
+```
+
+**Content** (what happens):
+
+```javascript
+export const content = async () => {
+  console.log(`Offboarding ${data.ship.crew} crew members from ${data.ship.name}...`);
+  
+  // Process crew offboarding
   data.ship.crew = 0;
   data.ship.crewOffboarded = true;
-  console.log('Crew offboarded successfully');
+  data.ship.crewOffboardedAt = new Date().toISOString();
+  
+  console.log('Crew offboarding complete');
+};
 ```
 
-5. Save the step
+### Step 5: Second Step - Cargo Unloading (Parallel)
 
-### Step 4: Create Second Step - Unload Cargo
-
-This step runs independently of crew offboarding:
-
-1. Click **Add New Step**
-2. Name: "unload cargo"
-3. **Condition**:
-
-```json
-{
-  "ship": {
-    "cargo": Array,
-    "floating": true
-  }
-}
+```bash
+aloma step add "unload_cargo"
 ```
 
-4. **Code**:
+**Condition**:
 
 ```javascript
-  console.log('Unloading cargo:', data.ship.cargo);
+export const condition = {
+  ship: {
+    cargo: Array,
+    floating: true,
+    status: "active"
+  }
+};
+```
+
+**Content**:
+
+```javascript
+export const content = async () => {
+  console.log(`Unloading cargo from ${data.ship.name}:`, data.ship.cargo);
+  
+  // Store cargo manifest before clearing
+  data.ship.cargoManifest = [...data.ship.cargo];
   data.ship.cargo = [];
   data.ship.cargoUnloaded = true;
-  console.log('Cargo unloaded successfully');
+  data.ship.cargoUnloadedAt = new Date().toISOString();
+  
+  console.log('Cargo unloading complete');
+};
 ```
 
-5. Save the step
+### Step 6: Final Step - Complete Off-Boarding (ship eetirement)
 
-### Step 5: Final Step - Retire Ship
-
-This step only runs after both previous steps complete:
-
-1. Click **Add New Step**
-2. Name: "retire ship"
-3. **Condition** (notice how this waits for both previous steps):
-
-```json
-{
-  "ship": {
-    "crewOffboarded": true,
-    "cargoUnloaded": true,
-    "floating": true
-  }
-}
+```bash
+aloma step add "retire_ship"
 ```
 
-4. **Code**:
+**Condition** (waits for both previous steps):
 
 ```javascript
-  console.log('All prerequisites met. Retiring ship...');
+export const condition = {
+  ship: {
+    crewOffboarded: true,
+    cargoUnloaded: true,
+    floating: true
+  }
+};
+```
+
+**Content**:
+
+```javascript
+export const content = async () => {
+  console.log(`All prerequisites met. Retiring ship ${data.ship.name}...`);
+  
+  // Final retirement
   data.ship.floating = false;
   data.ship.status = "retired";
   data.ship.retiredAt = new Date().toISOString();
-  console.log('Ship retired successfully!');
   
-  // Complete the task
+  // Add completion summary
+  data.retirement = {
+    completedAt: new Date().toISOString(),
+    crewProcessed: data.ship.crewOffboardedAt,
+    cargoProcessed: data.ship.cargoUnloadedAt,
+    success: true
+  };
+  
+  console.log(`Ship ${data.ship.name} successfully retired!`);
+  
+  // Mark task as complete
   task.complete();
+};
 ```
 
-5. Save the step
+### Step 7: Watch the Magic
 
-### Step 6: Test Your Automation
+```bash
+# List your steps
+aloma step list
 
-Now let's see ALOMA's conditional execution in action:
+# Check the task execution
+aloma task list
 
-1. Go back to your **"retire ship"** task
-2. Click **Execute** or **Run**
-3. Watch the real-time execution in the task view
-
-You'll see:
-
-* **Step matching**: ALOMA finds steps with conditions that match current data
-* **Data transformation**: Each step modifies the task data
-* **Conditional progression**: Final step waits for prerequisites
-* **Automatic completion**: Process stops when `task.complete()` is called
-
-### What Just Happened?
-
-You've experienced ALOMA's core innovation: **data-triggered automation**
-
-#### Traditional Approach Would Be:
-
-```javascript
-// Rigid sequence - everything breaks if one step fails
-function retireShip(ship) {
-  offboardCrew(ship);      // Must happen first
-  unloadCargo(ship);       // Must happen second  
-  retireShip(ship);        // Must happen third
-}
+# View detailed logs of the task execution
+aloma task log <task-id> --logs --changes
 ```
 
-#### ALOMA's Conditional Approach:
+**What you'll see:**
 
-```javascript
-// Flexible conditions that adapt to data state
-// When ship has crew AND is floating → Offboard crew
-// When ship has cargo AND is floating → Unload cargo  
-// When crew offboarded AND cargo unloaded → Retire ship
+1. Steps 1 and 2 run in parallel (both conditions match initially)
+2. Step 3 waits until both previous steps complete
+3. The final step processes and completes the task
+
+### Step 8: Test Different Scenarios
+
+```bash
+# Create a ship that's already retired (no steps will run)
+aloma task new "already retired ship" -d '{
+  "ship": {"name": "Beta", "floating": false, "status": "retired"}
+}'
+
+# Create a ship with no cargo (only crew step runs)
+aloma task new "empty cargo ship" -d '{
+  "ship": {"name": "Gamma", "floating": true, "cargo": [], "crew": 10, "status": "active"}
+}'
+
+# Create a ship with no crew (only cargo step runs)
+aloma task new "automated ship" -d '{
+  "ship": {"name": "Delta", "floating": true, "cargo": ["containers"], "crew": 0, "status": "active"}
+}'
 ```
 
-#### Key Benefits You Just Saw:
+### Understanding What Happened
 
-1. **Automatic orchestration**: ALOMA determined execution order based on data
-2. **Self-organizing logic**: Each step knew when it could run
-3. **Fault tolerance**: If one step failed, others could still proceed
-4. **Incremental complexity**: Easy to add new steps without breaking existing logic
+**Conditional Execution**: Each step only ran when its conditions were met. Unlike traditional workflows, there's no predefined sequence.
 
-### Step 7: Add Email Notification (Optional)
+**Parallel Processing**: Crew and cargo steps ran simultaneously because both conditions matched the initial data.
 
-Let's add a connector to send notifications:
+**Data Evolution**: Each step modified the task data, potentially triggering new steps to become eligible.
 
-1. Go to **Integrations** → **Connectors**
-2. Click **Manage Connectors**
-3. Add **"E-Mail (SMTP - OAuth)"** connector
-4. Complete OAuth setup for your email
-5. Create new step "send notification":
+**Automatic Orchestration**: ALOMA handled the execution order based on data dependencies, not manual configuration.
 
-**Condition:**
+**Flexibility**: Different input data triggered different combinations of steps automatically.
 
-```json
-{
-  "ship": {
-    "status": "retired"
-  }
-}
-```
+### Key Insights
 
-**Code:**
+**Think Data State, Not Sequence**: Instead of "do A then B then C", think "when data looks like X, do Y".
 
-```javascript
-  await connectors.eMailSmtpOAuth.sendEmail({
-    to: 'your-email@example.com',
-    subject: 'Ship Retirement Complete',
-    html: `
-      <h2>Ship Retirement Notification</h2>
-      <p>Ship has been successfully retired at ${data.ship.retiredAt}</p>
-      <p>Status: ${data.ship.status}</p>
-    `
-  });
-  
-  console.log('Notification sent successfully');
-```
+**Conditions Drive Flow**: Steps activate when their conditions match the current task data.
 
-### Understanding the Data Flow
+**Parallel by Default**: Multiple steps can run simultaneously if their conditions are met.
 
-Watch how your data transformed through each step:
-
-**Initial data:**
-
-```json
-{
-  "ship": {
-    "floating": true,
-    "cargo": ["fish", "oil", "tires"],
-    "crew": 100,
-    "status": "active"
-  }
-}
-```
-
-**After crew step:**
-
-```json
-{
-  "ship": {
-    "floating": true,
-    "cargo": ["fish", "oil", "tires"],
-    "crew": 0,
-    "crewOffboarded": true,
-    "status": "active"
-  }
-}
-```
-
-**After cargo step:**
-
-```json
-{
-  "ship": {
-    "floating": true,
-    "cargo": [],
-    "crew": 0,
-    "crewOffboarded": true,
-    "cargoUnloaded": true,
-    "status": "active"
-  }
-}
-```
-
-**Final result:**
-
-```json
-{
-  "ship": {
-    "floating": false,
-    "cargo": [],
-    "crew": 0,
-    "crewOffboarded": true,
-    "cargoUnloaded": true,
-    "status": "retired",
-    "retiredAt": "2025-01-15T10:30:00Z"
-  }
-}
-```
-
-### Try Different Scenarios
-
-Experiment with different starting conditions:
-
-**Scenario 1 - Ship with no crew:**
-
-```json
-{
-  "ship": {
-    "floating": true,
-    "cargo": ["containers"],
-    "crew": 0,
-    "status": "active"
-  }
-}
-```
-
-_Result: Only cargo step runs, ship can't be retired without crew step_
-
-**Scenario 2 - Ship with no cargo:**
-
-```json
-{
-  "ship": {
-    "floating": true,
-    "cargo": [],
-    "crew": 50,
-    "status": "active"
-  }
-}
-```
-
-_Result: Only crew step runs, ship can't be retired without cargo step_
-
-**Scenario 3 - Already retired ship:**
-
-```json
-{
-  "ship": {
-    "floating": false,
-    "cargo": [],
-    "crew": 0,
-    "status": "retired"
-  }
-}
-```
-
-_Result: No steps run because conditions aren't met_
+**Self-Organizing**: The workflow emerges from the data patterns, not predefined paths.
 
 ### Next Steps
 
-Now that you understand the basics:
+You've just experienced ALOMA's fundamental difference from traditional automation tools. The conditional execution model scales from this simple example to complex enterprise automations with hundreds of steps.
 
-1. [**Understanding Conditional Steps**](https://claude.ai/chat/understanding-conditional-steps.md) - Deep dive into the paradigm
-2. [**Core Concepts**](https://claude.ai/chat/core-concepts.md) - Learn about workspaces, tasks, and integrations
-3. [**Development Guide**](https://claude.ai/chat/development-guide.md) - Use CLI and advanced patterns
-4. [**Examples & Tutorials**](https://claude.ai/chat/examples-tutorials.md) - See real-world implementations
+**Ready for real integrations?** Try the [Email Newsletter Automation Example](https://claude.ai/chat/email-newsletter-example.md) to see ALOMA working with Gmail and Google Sheets.
 
-### Common Questions
+**Want to understand the paradigm deeper?** Read [Understanding Conditional Steps](https://claude.ai/chat/understanding-conditional-steps.md) to master ALOMA's approach.
 
-**Q: Why doesn't my step run?** A: Check that your condition exactly matches the current data structure. ALOMA only runs steps when conditions are precisely met.
-
-**Q: Can I force a specific order?** A: While ALOMA is designed for conditional execution, you can create dependencies by having later steps require data that earlier steps create.
-
-**Q: How do I debug my automation?** A: Use `console.log()` statements in your steps and check the task execution logs to see what data is available at each step.
-
-**Q: Can steps run multiple times?** A: By default, each step runs once when its condition is met. Use `step.redo()` if you need to repeat execution.
-
-### Congratulations!
-
-You've built your first ALOMA automation and experienced the power of conditional execution. This approach scales from simple workflows like this to complex enterprise automations with hundreds of steps.
-
-**Ready to build something real?** Check out our [Examples & Tutorials](https://claude.ai/chat/examples-tutorials.md) to see ALOMA handling real business processes.
+**Ready to build production automations?** Explore our [Development Guide](https://claude.ai/development-guide/) for advanced patterns and deployment strategies.

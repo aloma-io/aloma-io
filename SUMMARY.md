@@ -39,3 +39,7 @@
 * [Customer Support Escalation Agent breakdown](customer-support-escalation-agent-breakdown/README.md)
   * [Overview & Architecture](customer-support-escalation-agent-breakdown/overview-and-architecture.md)
 * [Agent Memory & Context Management (Critical Technical Topic)](group-1/agent-memory-and-context-management-critical-technical-topic.md)
+
+***
+
+* [Email Newsletter Automation Example](email-newsletter-automation-example.md)

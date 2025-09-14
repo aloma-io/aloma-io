@@ -4,234 +4,100 @@
 
 **No infra. No no-code. Just code and let ALOMA handle the rest.**
 
-ALOMA is a code-first workflow automation platform designed for experienced developers who want the power and flexibility of code without the overhead of building and maintaining infrastructure.&#x20;
+ALOMA is a code-first automation platform designed for experienced developers who want to build workflow automations quickly without the limitations of visual tools. Unlike traditional workflow builders, ALOMA uses conditional execution where you define steps that respond to data patterns rather than predefined sequences.
 
-Unlike visual workflow builders that limit your logic to what is available in preconfigured forms and require you to string together visual workflows, ALOMA lets trigger tasks with JSON, write JavaScript that runs in response to matching data conditions and dynamically builds workflows for you.
+### Core Concepts
 
-### Why Choose ALOMA Over Visual Tools?
+**Tasks** are JSON objects of any structure that represent work to be automated. They flow into your workspace and trigger steps based on their data.
 
-#### The Problem with Visual Workflow Builders
+**Steps** consist of two parts:
 
-**n8n, Zapier, Make, UiPath and similar tools have built-in weaknesses:**
+* **Condition**: A JSON pattern that determines when the step runs
+* **Content**: JavaScript code that processes the data and can trigger additional steps
 
-* Limited pre-configured logic capabilities that can't handle complex or custom requirements
-* Often requires adding and hosting code externally on custom infra
-* Exponentially complex as workflows grow beyond simple automations
-* No or limited tooling to debug automations
+**Workspaces** contain your steps, connectors, and tasks. They provide complete isolation for different environments or projects.
 
-**Traditional automation requires full infrastructure:**
+**Connectors** are pre-built integrations to external services (HubSpot, Slack, Gmail, etc.) with authentication handled once.
 
-* Setting up servers, databases, and monitoring systems
-* Managing deployments, scaling, and updates
-* Handling errors, retries, and edge cases
-* Building authentication and connector management from scratch
-* Maintaining security, compliance, and reliability
+### How ALOMA Works
 
-#### ALOMA's Approach: Data-Triggered Automation
+Instead of building rigid sequential workflows, you create a workspace where "tasks" (JSON objects) are processed by conditional "steps" that respond to data patterns.
 
-Instead of building rigid workflow diagrams, you define **conditional steps** that respond to data patterns:
-
-```javascript
-// Traditional approach: "Always do X, then Y, then Z"
-function processOrder(order) {
-  validatePayment(order);
-  updateInventory(order);
-  sendConfirmation(order);
-}
-
-// ALOMA approach: "When data matches condition, execute logic"
-// Step 1: Payment validation
-export const condition = { 
-  order: { 
-    status: "pending", 
-    payment: { method: String } 
-  } 
-};
-
-export const content = async () => {
-  // Validate payment logic
-  data.order.paymentValidated = true;
-};
-
-// Step 2: Inventory update (only runs after payment validated)
-export const condition = { 
-  order: { 
-    paymentValidated: true, 
-    items: Array 
-  } 
-};
-
-export const content = async () => {
-  // Update inventory logic
-  data.order.inventoryUpdated = true;
-};
-```
-
-### Core Value Propositions
-
-#### 🚀 **Minutes to Automation**
-
-Add your code and deploy instantly. No infrastructure setup, no deployment pipelines to configure, no servers to manage.
-
-#### 🔧 **Use Your Own Tools**
-
-Develop with your preferred IDE with CLI, use proper version control, write actual JavaScript. Option to use ALOMA custom Web based IDE at your discretion.
-
-#### 📈 **Scales with Complexity**
-
-Adding the 100th step is as easy as adding the 1st. No exponential visual routing and display complexity that quickly becomes difficult and annoying to maintain.
-
-#### 🔗 **Built-in Integrations**
-
-Integration made simple with Webhooks, FETCH, CRON, pre-built connectors and an SDK to build your own private connectors.&#x20;
-
-#### 💰 **Task Based Pricing**
-
-ALOMA's fair and transparent pricing is based on tasks executed. Contrast this with other who charge per step in a workflow, per line of data output or a flat monthly fee per bot.
-
-#### 💰 **Parallel Processing**
-
-Architected for parallel processing - every task is processed separately so if one fails or has an error it does not have any impact on other tasks. Forget about sequential task automating in bots and concurrent execution limitations.
-
-### Real-World Use Cases
-
-#### AI Agents & Research Automation
-
-```javascript
-// Automatically research companies and generate reports
-export const condition = { 
-  companies: Array, 
-  research: { type: "competitor_analysis" } 
-};
-
-export const content = async () => {
-  for (const company of data.companies) {
-    const research = await connectors.openai.chat({
-      prompt: `Research ${company.name} for competitive analysis...`,
-      model: "gpt-4"
-    });
-    company.analysis = research.choices[0].message.content;
-  }
-};
-```
-
-#### CRM Data Processing
-
-```javascript
-// Process inbound leads and route to appropriate teams
-export const condition = { 
-  lead: { 
-    source: String, 
-    score: Number 
-  } 
-};
-
-export const content = async () => {
-  if (data.lead.score > 80) {
-    await connectors.hubspotCom.request({
-      url: '/crm/v3/objects/contacts',
-      options: {
-        method: 'POST',
-        body: JSON.stringify({
-          properties: {
-            email: data.lead.email,
-            lead_score: data.lead.score
-          }
-        })
-      }
-    });
-    
-    await connectors.slackCom.send({
-      channel: "#sales-hot-leads",
-      text: `High-value lead from ${data.lead.source}`
-    });
-  }
-};
-```
-
-#### Invoice & Document Processing
-
-```javascript
-// Extract data from invoices and update multiple systems
-export const condition = { 
-  document: { 
-    type: "invoice", 
-    content: String 
-  } 
-};
-
-export const content = async () => {
-  const extracted = await connectors.documentAI.extract({
-    content: data.document.content
-  });
-  
-  await connectors.quickbooks.createInvoice(extracted);
-  
-  await connectors.postgresql.query({
-    sql: 'INSERT INTO invoices (data) VALUES ($1)',
-    params: [JSON.stringify(extracted)]
-  });
-  
-  data.processed = true;
-};
-```
-
-### How ALOMA Differs: Conditional Execution Model
-
-Traditional programming is **imperative**: you specify exactly what to do and when. ALOMA is **conditional**: you specify what to do IF certain data conditions are met.
-
-This paradigm shift provides:
-
-* **Automatic workflow orchestration** based on data state
-* **Parallel processing** of independent tasks
-* **Self-organising logic** that adapts as data changes
-* **Incremental complexity** where adding features doesn't break existing logic
-
-#### From Sequential to Conditional
-
-**Traditional Tools:**
+#### Traditional Workflow Thinking
 
 ```
-Start → Validate → Process → Notify → End
+1. Validate email
+2. Add to CRM  
+3. Send welcome email
+4. Complete onboarding
 ```
 
-_Rigid sequence that breaks if any step fails_
+#### ALOMA Conditional Thinking
 
-**ALOMA:**
-
-```javascript
-// When data has customer email → Validate customer
-export const condition = { customer: { email: String } };
-
-// When validation passes → Process order  
-export const condition = { customer: { validated: true } };
-
-// When processing completes → Send notification
-export const condition = { order: { processed: true } };
-
-// When high-value order → Notify sales team
-export const condition = { order: { highValueOrder: true } } };// eg for total > 1000
+```
+- When data has unvalidated email → validate it
+- When email is validated → add to CRM
+- When email is validated → send welcome email  
+- When both CRM and email are complete → finish onboarding
 ```
 
-_Flexible conditions that adapt to different scenarios_
+This paradigm shift enables:
 
-### Target Developers
+* **Parallel processing** by default
+* **Self-organizing workflows** that adapt to data
+* **Infinite complexity** without exponential maintenance overhead
+* **Natural error handling** through data state management
 
-ALOMA is built for experienced developers who:
+### Key Advantages
 
-✅ **Want automation power** without infrastructure headaches\
-✅ **Prefer code** over visual drag-and-drop interfaces\
-✅ **Need complex logic** that visual tools can't handle\
-✅ **Value maintainability** and want to avoid technical debt\
-✅ **Work in teams** and need proper development workflows\
-✅ **Delegate implementation** to junior developers after design
+**Quick Setup**: First automation running in minutes, not hours. No complex infrastructure setup or workflow design required.
+
+**No Infrastructure Management**: Just upload JavaScript code and ALOMA handles hosting, scaling, and execution environment.
+
+**Pay-per-Task Pricing**: Cost scales with actual usage rather than seats, connectors, or complexity.
+
+**Infinite Scalability**: Adding the 100th step is as easy as adding the 1st. No exponential complexity like traditional RPA tools.
+
+**Code-First Development**: Real JavaScript execution with full IDE support, version control, and debugging capabilities.
+
+**Built-in Integration Management**: OAuth connectors with authentication handled once, then reused across all automations.
+
+### Who ALOMA is For
+
+**Experienced Developers** who want to delegate automation work to junior developers while maintaining code quality and flexibility.
+
+**Teams Building Workflow Automations** who are frustrated with the limitations of visual no-code/low-code tools.
+
+**Organizations Scaling Automation** that need to move beyond simple workflows to complex, intelligent business process automation.
+
+**Technical Teams** who prefer code over visual interfaces and want infrastructure-free development experiences.
+
+### Common Use Cases
+
+**CRM and Sales Automation**: Log inbound emails, process leads, update opportunity stages, sync data across systems.
+
+**Invoice and Financial Processing**: Process invoices, update multiple applications, handle approval workflows, sync with accounting systems.
+
+**Customer Support Automation**: Classify tickets, route to appropriate teams, escalate based on sentiment, update CRM records.
+
+**AI-Powered Research Tasks**: Gather market intelligence, enrich lead data, generate content, process unstructured data.
+
+**Release Management**: Automate CI/CD processes, manage deployments, notify teams, update documentation.
+
+**Data Integration**: Sync data between systems, transform formats, handle webhooks, process bulk operations.
+
+### Why Conditional Execution Matters
+
+Traditional workflow tools force you to predict every possible path and branch in advance. ALOMA's conditional execution allows workflows to emerge naturally from data patterns:
+
+* **Steps activate when conditions are met**, not when scheduled
+* **Multiple steps can run in parallel** without complex orchestration
+* **New requirements become new steps**, not workflow redesign
+* **Error handling happens through data state**, not try-catch blocks
+* **Testing focuses on data scenarios**, not execution paths
+
+This approach scales from simple automations to enterprise-grade systems that handle thousands of different scenarios without becoming unmaintainable.
 
 ### Getting Started
 
-Ready to move from visual tools to code-first automation?
-
-1. [**5-Minute Quickstart**](https://aloma-developer-documentation.gitbook.io/aloma-developer-documentation/getting-started/5-minute-quickstart) - Build your first automation
-2. [**Understanding Conditional Steps**](https://aloma-developer-documentation.gitbook.io/aloma-developer-documentation/getting-started/understanding-conditional-steps) - Learn the paradigm
-3. [**Examples & Tutorials**](https://aloma-developer-documentation.gitbook.io/aloma-developer-documentation/examples-and-tutorials) - See real implementations
-
-**Move Fast and Automate Quickly with ALOMA's Rapid Iteration Approach**
+Ready to experience conditional execution? Start with our [5-Minute Quickstart](https://claude.ai/chat/5-minute-quickstart.md) to build your first ALOMA automation, then explore [Understanding Conditional Steps](https://claude.ai/chat/understanding-conditional-steps.md) to master the paradigm.
