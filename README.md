@@ -45,7 +45,7 @@ This documentation will help you get started quickly, explore core concepts, and
 * [Data-Triggered Automation](core-concepts/data-triggered-automation.md)
 * [Tasks & JSON Processing](core-concepts/tasks-and-json-processing.md)
 * [Conditional Step Matching](core-concepts/conditional-step-matching.md)
-* [Workspace and Isolation](core-concepts/workspace-and-isolation.md)
+* [Workspace Architecture and Management](core-concepts/workspace-and-isolation.md)
 
 ***
 

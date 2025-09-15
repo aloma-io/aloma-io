@@ -10,7 +10,7 @@
   * [Data-Triggered Automation](core-concepts/data-triggered-automation.md)
   * [Tasks & JSON Processing](core-concepts/tasks-and-json-processing.md)
   * [Conditional Step Matching](core-concepts/conditional-step-matching.md)
-  * [Workspace and Isolation](core-concepts/workspace-and-isolation.md)
+  * [Workspace Architecture & Management](core-concepts/workspace-and-isolation.md)
 * [🛠️ Development Guide](development-guide/README.md)
   * [CLI Setup and Reference Guide](development-guide/cli-setup-and-workflow.md)
   * [Testing & Debugging Guide](development-guide/testing-and-debugging-guide.md)

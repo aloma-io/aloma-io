@@ -1,285 +1,266 @@
-# Workspace and Isolation
+# Workspace Architecture & Management
 
-## Workspaces & Isolation
+## Workspace Architecture & Management
 
-**Workspaces are ALOMA's isolated environments where your automations run. Each workspace is completely independent, providing secure separation of data, code, integrations, and execution contexts.**
+### Workspace Architecture & Management
 
-Workspaces enable teams to organize automations by environment (dev/staging/prod), project, client, or any logical boundary. This isolation ensures that development work doesn't affect production systems, different teams can work independently, and sensitive data remains properly segregated.
+**Workspaces are ALOMA's foundational organizational units that provide complete isolation and management for your automations. Understanding workspace architecture is essential for building scalable, secure, and maintainable automation systems.**
 
-### Understanding Workspace Isolation
+Workspaces serve as isolated environments where automations run independently, with their own data, integrations, and execution contexts. This architecture enables teams to organize work by environment, project, client, or any logical boundary while ensuring complete separation and security.
 
-#### Complete Separation
+***
 
-Every workspace operates in complete isolation with its own:
+### Understanding Workspace Architecture
 
-* **Steps** - JavaScript automation logic
-* **Tasks** - JSON data and execution history
-* **Connectors** - External service integrations and credentials
-* **Webhooks** - Inbound data endpoints
-* **Environment variables** - Configuration and secrets
-* **Libraries** - Reusable code modules
-* **Execution environment** - Runtime context and resources
+#### Core Components
 
-#### No Cross-Workspace Access
+Every ALOMA workspace contains six essential components that work together to create complete automation environments:
 
-Workspaces cannot access each other's resources:
+**1. Steps - Automation Logic**
+
+JavaScript code modules that define conditional execution logic:
 
 ```javascript
-// ❌ This won't work - cannot access data from other workspaces
-export const condition = { 
-  needsDataFromProd: true 
+// Each step contains condition + content
+export const condition = {
+  customer: { email: String, validated: null }
 };
 
 export const content = async () => {
-  // Cannot access production workspace data from development workspace
-  // Cannot call steps in other workspaces
-  // Cannot use connectors from other workspaces
-  console.log('Each workspace is completely isolated');
+  // Automation logic here
+  data.customer.validated = true;
 };
 ```
 
-This isolation provides security, prevents accidental cross-environment contamination, and enables teams to work independently.
+**2. Tasks - Data & Execution**
 
-### Creating and Managing Workspaces
+JSON objects that flow through your automation and trigger step execution:
 
-#### Creating a New Workspace
-
-Create workspaces programmatically using the CLI:
-
-```bash
-# Create a new workspace
-aloma workspace add "Customer Onboarding"
-
-# Create with tags for organization
-aloma workspace add "Production CRM" --tags "production,crm,critical"
-
-# Create development workspace
-aloma workspace add "Dev Environment" --tags "development,testing"
+```json
+{
+  "customer": {
+    "email": "user@example.com",
+    "status": "new"
+  },
+  "source": "webhook"
+}
 ```
 
-#### Listing and Switching Workspaces
+**3. Connectors - External Integrations**
+
+Pre-configured integrations to external services with managed authentication:
 
 ```bash
-# List all available workspaces
+# Each workspace has its own connector instances
+aloma connector list
+# - HubSpot (Production API)
+# - Slack (Sales Channel)  
+# - Gmail (Support Email)
+```
+
+**4. Webhooks - Real-time Data Input**
+
+HTTP endpoints that receive external data and create tasks:
+
+```
+https://connect.aloma.io/event/{webhook-id}
+```
+
+**5. Libraries - Reusable Code**
+
+Shared JavaScript modules for common functionality:
+
+```javascript
+// Available across all steps in the workspace
+const isValid = lib.validation.validateEmail(data.customer.email);
+const formatted = lib.utilities.formatDate(new Date());
+```
+
+**6. Configuration - Environment & Secrets**
+
+Workspace-specific environment variables and sensitive data:
+
+```bash
+# Environment variables
+API_ENDPOINT=https://api.prod.company.com
+LOG_LEVEL=info
+
+# Secrets (encrypted)
+STRIPE_SECRET_KEY=sk_live_...
+DATABASE_PASSWORD=...
+```
+
+#### Isolation Architecture
+
+**Complete Separation**
+
+Workspaces operate in complete isolation - no component can access resources from other workspaces:
+
+```javascript
+// ❌ This cannot work - workspaces are completely isolated
+export const content = async () => {
+  // Cannot access steps from other workspaces
+  // Cannot use connectors from other workspaces  
+  // Cannot read data from other workspace tasks
+  // Cannot access libraries from other workspaces
+};
+```
+
+This isolation provides:
+
+* **Security** - Sensitive data and credentials remain contained
+* **Reliability** - Failures in one workspace don't affect others
+* **Scalability** - Workspaces can be optimized independently
+* **Team Independence** - Different teams can work without conflicts
+
+**Data Flow Within Workspaces**
+
+```mermaid
+graph TD
+    A[External Event] --> B[Webhook]
+    B --> C[Task Created]
+    C --> D[Steps Match Conditions]
+    D --> E[Step Execution]
+    E --> F[Data Updated]
+    F --> G[More Steps Triggered]
+    G --> H[Connectors Called]
+    H --> I[External Systems Updated]
+```
+
+***
+
+### Workspace Management
+
+#### Creating and Managing Workspaces
+
+**CLI Workspace Operations**
+
+```bash
+# Create new workspace
+aloma workspace add "Customer Onboarding Production" --tags "production,crm,critical"
+
+# List all workspaces
 aloma workspace list
 
-# Show current workspace
+# Show current workspace details
 aloma workspace show
 
-# Switch to a different workspace by name
-aloma workspace switch "Production CRM"
+# Switch between workspaces
+aloma workspace switch "Customer Onboarding Production"
+aloma workspace switch ws_abc123def456  # By ID
 
-# Switch by workspace ID
-aloma workspace switch ws_abc123def456
-```
-
-#### Workspace Management
-
-```bash
 # Update workspace settings
-aloma workspace update --name "New Production Name"
-aloma workspace update --tags "production,crm,updated"
+aloma workspace update --name "Updated Production Name"
+aloma workspace update --tags "production,crm,updated,v2"
 
-# Archive unused workspaces
+# Archive/unarchive workspaces
 aloma workspace archive "Old Development"
-
-# Unarchive when needed
 aloma workspace archive "Old Development" --unarchive
 
-# Delete workspace (careful - this is permanent)
+# Delete workspace (permanent)
 aloma workspace delete "Unused Workspace"
 ```
 
-### Environment-Based Organization
+**Workspace Naming Conventions**
 
-#### Development → Staging → Production Pipeline
+**✅ Effective Naming Patterns:**
 
-Create separate workspaces for each environment:
+```bash
+# Environment + Purpose + Context
+aloma workspace add "OrderProcessing Production"
+aloma workspace add "CustomerOnboarding Development" 
+aloma workspace add "PaymentFlow Staging"
+
+# Client + Project + Environment
+aloma workspace add "ACME Corp Integration Production"
+aloma workspace add "TechStart Automation Development"
+
+# Team + Function + Environment
+aloma workspace add "Sales Team CRM Production"
+aloma workspace add "Marketing Automation Staging"
+```
+
+**❌ Avoid These Patterns:**
+
+```bash
+# Too vague
+aloma workspace add "Test"
+aloma workspace add "MyWorkspace"
+
+# Environment mixing (dangerous)
+aloma workspace add "All Environments"
+aloma workspace add "Mixed Data"
+```
+
+#### Workspace Organization Strategies
+
+**Environment-Based Organization**
+
+**Standard Development Pipeline:**
 
 ```bash
 # Create environment-specific workspaces
-aloma workspace add "MyApp Development" --tags "dev,myapp"
-aloma workspace add "MyApp Staging" --tags "staging,myapp"  
-aloma workspace add "MyApp Production" --tags "production,myapp"
+aloma workspace add "MyApp Development" --tags "dev,myapp,testing"
+aloma workspace add "MyApp Staging" --tags "staging,myapp,integration"  
+aloma workspace add "MyApp Production" --tags "production,myapp,live"
 ```
 
-Each environment can have identical automation logic but different:
+**Environment Characteristics:**
 
-* **Connector credentials** (dev vs prod API keys)
-* **Environment variables** (different database URLs, service endpoints)
-* **Data volumes** (test data vs production data)
-* **Notification settings** (dev alerts go to developers, prod alerts to operations)
+| Environment     | Purpose             | Data                 | Monitoring      | Access          |
+| --------------- | ------------------- | -------------------- | --------------- | --------------- |
+| **Development** | Feature development | Test/mock data       | Basic logging   | Developers      |
+| **Staging**     | Integration testing | Production-like data | Full monitoring | Dev + QA teams  |
+| **Production**  | Live operations     | Real customer data   | Full alerting   | Operations team |
 
-#### Example: Customer Onboarding Across Environments
+**Project-Based Organization**
 
-**Development Workspace:**
+**Multi-Project Structure:**
 
-```javascript
-export const condition = {
-  customer: {
-    email: String,
-    environment: "development"
-  }
-};
+```bash
+# Separate projects or product lines
+aloma workspace add "E-commerce Platform Production" --tags "ecommerce,production"
+aloma workspace add "Mobile App Backend Production" --tags "mobile,production"
+aloma workspace add "Data Pipeline Production" --tags "analytics,production"
 
-export const content = async () => {
-  // Development environment - use test credentials
-  const testApiKey = task.config('DEV_CRM_API_KEY');
-  const testDatabase = task.config('DEV_DATABASE_URL');
-  
-  console.log('Processing in development environment');
-  
-  // Connect to development CRM
-  const contact = await connectors.devCrm.createContact({
-    email: data.customer.email,
-    source: 'development_testing'
-  });
-  
-  data.customer.devCrmId = contact.id;
-  data.customer.processedAt = new Date().toISOString();
-};
+# Development environments for each
+aloma workspace add "E-commerce Platform Development" --tags "ecommerce,development"
+aloma workspace add "Mobile App Backend Development" --tags "mobile,development"
 ```
 
-**Production Workspace:**
+**Client-Based Organization**
 
-```javascript
-export const condition = {
-  customer: {
-    email: String,
-    environment: "production"
-  }
-};
-
-export const content = async () => {
-  // Production environment - use live credentials
-  const prodApiKey = task.config('PROD_CRM_API_KEY');
-  const prodDatabase = task.config('PROD_DATABASE_URL');
-  
-  console.log('Processing in production environment');
-  
-  // Connect to production CRM
-  const contact = await connectors.prodCrm.createContact({
-    email: data.customer.email,
-    source: 'website_signup'
-  });
-  
-  data.customer.crmId = contact.id;
-  data.customer.processedAt = new Date().toISOString();
-  
-  // Production-only: Send to analytics
-  await connectors.analytics.track({
-    event: 'customer_created',
-    properties: { crmId: contact.id }
-  });
-};
-```
-
-### Project and Team Isolation
-
-#### Multi-Project Organization
-
-Separate different projects or clients:
+**Multi-Tenant Structure:**
 
 ```bash
 # Client-specific workspaces
-aloma workspace add "ACME Corp Integration" --tags "client,acme,integration"
-aloma workspace add "TechStart Automation" --tags "client,techstart,automation"
+aloma workspace add "ACME Corp Production" --tags "client,acme,production"
+aloma workspace add "TechStart Production" --tags "client,techstart,production"
+aloma workspace add "GlobalCorp Production" --tags "client,globalcorp,production"
 
-# Project-specific workspaces  
-aloma workspace add "Invoice Processing" --tags "project,finance,invoices"
-aloma workspace add "Lead Generation" --tags "project,marketing,leads"
+# Shared development workspace
+aloma workspace add "Multi-Client Development" --tags "shared,development"
 ```
 
-#### Team-Based Access Control
+***
 
-Each workspace can have different team members with different permissions:
+### Configuration Management
 
-```bash
-# Developers typically have access to development workspaces
-# Operations team has access to production workspaces
-# Client managers have access to client-specific workspaces
-```
+#### Environment Variables
 
-**Example: E-commerce Order Processing per Client**
+**Workspace-Specific Configuration**
 
-**ACME Corp Workspace:**
-
-```javascript
-export const condition = {
-  order: {
-    client: "acme",
-    status: "new"
-  }
-};
-
-export const content = async () => {
-  // ACME-specific processing
-  const acmeConfig = {
-    taxRate: 0.08,
-    shippingCarrier: 'FedEx',
-    fulfillmentCenter: 'acme-warehouse-east'
-  };
-  
-  console.log('Processing ACME order');
-  
-  // Use ACME-specific connectors and credentials
-  await connectors.acmeInventory.checkStock({
-    items: data.order.items,
-    warehouse: acmeConfig.fulfillmentCenter
-  });
-  
-  data.order.client = "acme";
-  data.order.taxRate = acmeConfig.taxRate;
-  data.order.fulfillmentCenter = acmeConfig.fulfillmentCenter;
-};
-```
-
-**TechStart Workspace:**
-
-```javascript
-export const condition = {
-  order: {
-    client: "techstart",
-    status: "new"
-  }
-};
-
-export const content = async () => {
-  // TechStart-specific processing
-  const techstartConfig = {
-    taxRate: 0.10,
-    shippingCarrier: 'UPS',
-    fulfillmentCenter: 'techstart-fulfillment'
-  };
-  
-  console.log('Processing TechStart order');
-  
-  // Use TechStart-specific connectors and credentials
-  await connectors.techstartERP.processOrder({
-    orderData: data.order,
-    fulfillmentCenter: techstartConfig.fulfillmentCenter
-  });
-  
-  data.order.client = "techstart";
-  data.order.taxRate = techstartConfig.taxRate;
-  data.order.fulfillmentCenter = techstartConfig.fulfillmentCenter;
-};
-```
-
-### Environment Variables and Configuration
-
-#### Workspace-Specific Configuration
-
-Each workspace maintains its own environment variables and secrets:
+Each workspace maintains independent environment variables:
 
 ```bash
 # Set environment variables for current workspace
-aloma workspace update --env-var "API_ENDPOINT=https://api.dev.company.com"
-aloma workspace update --env-var "DATABASE_URL=postgresql://dev-db:5432/app"
-aloma workspace update --env-var "LOG_LEVEL=debug"
+aloma workspace update --env-var "API_ENDPOINT=https://api.prod.company.com"
+aloma workspace update --env-var "DATABASE_URL=postgresql://prod-db:5432/app"
+aloma workspace update --env-var "LOG_LEVEL=info"
+aloma workspace update --env-var "ENVIRONMENT=production"
 ```
 
-Access configuration in your steps:
+**Accessing Configuration in Steps**
 
 ```javascript
 export const condition = {
@@ -294,9 +275,19 @@ export const content = async () => {
   const apiEndpoint = task.config('API_ENDPOINT');
   const databaseUrl = task.config('DATABASE_URL');
   const logLevel = task.config('LOG_LEVEL');
+  const environment = task.config('ENVIRONMENT');
   
+  console.log(`Processing in ${environment} environment`);
   console.log(`Using endpoint: ${apiEndpoint}`);
-  console.log(`Log level: ${logLevel}`);
+  
+  // Environment-specific logic
+  if (environment === 'production') {
+    // Production-only features
+    await connectors.analytics.track({
+      event: 'api_call_made',
+      endpoint: apiEndpoint
+    });
+  }
   
   // Make API call using workspace-specific endpoint
   const response = await connectors.httpClient.request({
@@ -312,22 +303,23 @@ export const content = async () => {
 
 #### Secrets Management
 
-Store sensitive data securely per workspace using CLI commands:
+**Secure Credential Storage**
 
 ```bash
-# Add secrets to the current workspace
+# Add secrets to current workspace
 aloma secret add "STRIPE_SECRET_KEY" "sk_live_abc123..."
-aloma secret add "ENCRYPTION_KEY" "aes256_key_here" 
+aloma secret add "DATABASE_PASSWORD" "secure_password_here"
 aloma secret add "WEBHOOK_SECRET" "webhook_secret_here"
+aloma secret add "ENCRYPTION_KEY" "aes256_key_here"
 
-# List all secrets in workspace
+# List secrets (values hidden)
 aloma secret list
 
 # Delete secrets when no longer needed
 aloma secret delete "OLD_API_KEY"
 ```
 
-Access secrets in your automation steps:
+**Using Secrets in Steps**
 
 ```javascript
 export const condition = {
@@ -338,393 +330,677 @@ export const condition = {
 };
 
 export const content = async () => {
-  // Access sensitive configuration via task.config()
+  // Access secrets securely
   const stripeSecretKey = task.config('STRIPE_SECRET_KEY');
   const encryptionKey = task.config('ENCRYPTION_KEY');
-  const webhookSecret = task.config('WEBHOOK_SECRET');
   
   // Process payment using workspace-specific credentials
   const charge = await connectors.stripe.createCharge({
     amount: data.payment.amount * 100, // Convert to cents
     currency: 'usd',
-    source: data.payment.token
+    source: data.payment.token,
+    // Stripe automatically uses the secret key from connector config
   });
   
   data.payment.chargeId = charge.id;
   data.payment.status = charge.status;
   data.payment.processedAt = new Date().toISOString();
-};
-```
-
-### Git Integration and Source Control
-
-#### Workspace-Code Synchronization
-
-Connect workspaces to Git repositories for version control:
-
-```bash
-# Configure Git sync for workspace
-aloma workspace source --file source-config.json
-
-# Manually trigger sync from Git
-aloma workspace sync
-
-# View current source configuration
-aloma workspace show --source-config
-```
-
-**Example source configuration:**
-
-```json
-{
-  "repository": "https://github.com/company/automation-workflows.git",
-  "branch": "main",
-  "username": "automation-bot",
-  "token": "github_token_here",
-  "autoSync": true,
-  "syncInterval": "5m"
-}
-```
-
-#### Multi-Environment Git Workflow
-
-Use branches for different environments:
-
-```bash
-# Development workspace syncs from 'develop' branch
-aloma workspace switch "Development"
-aloma workspace source --branch "develop" --auto-sync true
-
-# Staging workspace syncs from 'staging' branch  
-aloma workspace switch "Staging"
-aloma workspace source --branch "staging" --auto-sync true
-
-# Production workspace syncs from 'main' branch
-aloma workspace switch "Production"  
-aloma workspace source --branch "main" --auto-sync false  # Manual sync for production
-```
-
-#### Development Workflow
-
-```bash
-# 1. Develop in local workspace
-aloma workspace switch "Development"
-
-# 2. Pull changes from development workspace to Git
-npx @aloma.io/workspace-sdk@latest pull workspace_id_123
-
-# 3. Commit and push to Git
-git add .
-git commit -m "Add customer validation step"
-git push origin develop
-
-# 4. Merge to staging branch
-git checkout staging
-git merge develop  
-git push origin staging
-
-# 5. Production deployment via manual sync
-aloma workspace switch "Production"
-aloma workspace sync  # Pulls from main branch
-```
-
-### Connector and Integration Isolation
-
-#### Workspace-Specific Connectors
-
-Each workspace has its own connector instances and credentials:
-
-```javascript
-// Development workspace
-export const condition = {
-  email: {
-    type: "welcome",
-    environment: "dev"
+  
+  // Encrypt sensitive data before storage
+  if (data.payment.cardInfo) {
+    data.payment.encryptedCardInfo = encrypt(
+      JSON.stringify(data.payment.cardInfo), 
+      encryptionKey
+    );
+    delete data.payment.cardInfo; // Remove plain text
   }
 };
-
-export const content = async () => {
-  // Uses development SMTP settings
-  await connectors.devEmailSmtp.sendEmail({
-    to: data.email.recipient,
-    subject: '[DEV] Welcome to Our Platform',
-    html: `<p>Development environment welcome email</p>`
-  });
-  
-  data.email.sentAt = new Date().toISOString();
-  data.email.environment = "development";
-};
 ```
 
-```javascript
-// Production workspace  
-export const condition = {
-  email: {
-    type: "welcome",
-    environment: "prod"
-  }
-};
+***
 
-export const content = async () => {
-  // Uses production SMTP settings with real credentials
-  await connectors.prodEmailSmtp.sendEmail({
-    to: data.email.recipient,
-    subject: 'Welcome to Our Platform',
-    html: `<p>Thank you for joining our platform!</p>`
-  });
-  
-  data.email.sentAt = new Date().toISOString();
-  data.email.environment = "production";
-};
-```
+### Infrastructure as Code
 
-#### Managing Connectors via CLI
+#### Deploy File Architecture
 
-Each workspace has its own connector instances and credentials managed through CLI:
+**Complete Workspace Definition**
 
-```bash
-# List available connector types
-aloma connector list-available
-
-# Add connectors to current workspace
-aloma connector add w3a1oc32mky6rlpbqwzq1f6opc37z1hs -n "devEmailSmtp"
-aloma connector add a2b1oc42nky7rlpbqwzq2f7opc47z2it -n "prodEmailSmtp"
-
-# List connectors in current workspace
-aloma connector list
-
-# Configure connector with OAuth
-aloma connector oauth <connector-id>
-
-# View connector details and logs
-aloma connector show <connector-id>
-aloma connector logs <connector-id>
-
-# Update connector configuration
-aloma connector update <connector-id> -n "newName"
-
-# Remove connectors from workspace
-aloma connector delete <connector-id>
-```
-
-Use different connector instances per environment:
-
-```javascript
-// Development workspace
-export const condition = {
-  email: {
-    type: "welcome",
-    environment: "dev"
-  }
-};
-
-export const content = async () => {
-  // Uses development SMTP settings
-  await connectors.devEmailSmtp.sendEmail({
-    to: data.email.recipient,
-    subject: '[DEV] Welcome to Our Platform',
-    html: `<p>Development environment welcome email</p>`
-  });
-  
-  data.email.sentAt = new Date().toISOString();
-  data.email.environment = "development";
-};
-```
-
-### Deployment Strategies
-
-#### Infrastructure as Code
-
-Deploy entire workspaces using YAML configuration:
+Define entire workspace configurations in YAML:
 
 ```yaml
-# deploy.yaml
+# deploy-production.yaml
 workspaces:
-  - name: "E-commerce Production"
-    tags: ["production", "ecommerce"]
+  - name: "Customer Processing Production"
+    tags: ["production", "customer-processing", "critical"]
     
+    # Steps configuration
     steps:
       - syncPath: "steps/"
     
+    # Libraries configuration
+    libraries:
+      - syncPath: "libraries/"
+
+    # Connectors configuration
     connectors:
-      - connectorName: "stripe.com"
-        config:
-          apiKey: "${STRIPE_PROD_KEY}"
       - connectorName: "hubspot.com (private)"
+        name: "Production HubSpot"
         config:
-          apiToken: "${HUBSPOT_PROD_TOKEN}"
+          apiToken: "${HUBSPOT_API_TOKEN}"
       - connectorName: "E-Mail (SMTP - OAuth)"
+        name: "Production Email"
+      - connectorName: "slack.com"
+        name: "Production Slack"
     
+    # Secrets configuration
     secrets:
       - name: "DATABASE_URL"
         value: "${PROD_DATABASE_URL}"
+        description: "Production database connection"
         encrypted: true
       - name: "ENCRYPTION_KEY"
         value: "${PROD_ENCRYPTION_KEY}"
+        description: "Data encryption key"
         encrypted: true
+      - name: "SLACK_CHANNEL"
+        value: "C1234567890"
+        description: "Production alerts channel"
+        encrypted: false
     
+    # Environment variables
+    environment:
+      - name: "API_ENDPOINT"
+        value: "https://api.prod.company.com"
+      - name: "LOG_LEVEL"
+        value: "info"
+      - name: "ENVIRONMENT"
+        value: "production"
+    
+    # Webhooks configuration
     webhooks:
+      - name: "Customer Events"
+        description: "Receives customer lifecycle events"
       - name: "Order Processing"
-      - name: "Customer Updates"
+        description: "Handles order status updates"
+    
+    # Test tasks for validation
+    tasks:
+      - name: "production health check"
+        data: {
+          "healthCheck": true, 
+          "environment": "production",
+          "timestamp": "2025-01-15T10:00:00Z"
+        }
 ```
 
-Deploy with:
+**Environment-Specific Deploy Files**
 
 ```bash
-aloma deploy deploy.yaml
+# Create environment-specific configurations
+# deploy-development.yaml
+# deploy-staging.yaml  
+# deploy-production.yaml
 ```
 
-#### Environment-Specific Deployments
+**Development Environment:**
 
-Use different deployment files for each environment:
+```yaml
+# deploy-development.yaml
+workspaces:
+  - name: "Customer Processing Development"
+    tags: ["development", "customer-processing", "testing"]
+    
+    connectors:
+      - connectorName: "hubspot.com (private)"
+        config:
+          apiToken: "${DEV_HUBSPOT_API_TOKEN}"  # Different credentials
+    
+    environment:
+      - name: "API_ENDPOINT"
+        value: "https://api.dev.company.com"    # Different endpoint
+      - name: "LOG_LEVEL"
+        value: "debug"                          # More verbose logging
+      - name: "ENVIRONMENT"
+        value: "development"
+```
+
+#### Deployment Workflows
+
+**Multi-Environment Deployment**
 
 ```bash
+# Set environment-specific variables
+export HUBSPOT_API_TOKEN="dev-token-here"
+export DEV_DATABASE_URL="postgresql://dev-db:5432/app"
+
 # Deploy to development
-aloma deploy deploy-dev.yaml
+aloma deploy deploy-development.yaml
+
+# Verify development deployment
+aloma workspace switch "Customer Processing Development"
+aloma workspace show
+aloma step list
+aloma connector list
+```
+
+```bash
+# Set staging variables
+export HUBSPOT_API_TOKEN="staging-token-here"
+export STAGING_DATABASE_URL="postgresql://staging-db:5432/app"
 
 # Deploy to staging
 aloma deploy deploy-staging.yaml
 
-# Deploy to production
-aloma deploy deploy-prod.yaml
+# Run integration tests in staging
+aloma task new "staging integration test" -f tests/integration-test.json
 ```
-
-### Monitoring and Health Checks
-
-#### Workspace Health Monitoring
-
-Track workspace health and resource utilization:
 
 ```bash
-# View workspace overview and metrics
+# Set production variables
+export HUBSPOT_API_TOKEN="prod-token-here"
+export PROD_DATABASE_URL="postgresql://prod-db:5432/app"
+export PROD_ENCRYPTION_KEY="production-encryption-key"
+
+# Deploy to production
+aloma deploy deploy-production.yaml
+
+# Verify production deployment
+aloma workspace switch "Customer Processing Production"
 aloma workspace show
-
-# Update health check settings
-aloma workspace update --health-enabled true
-
-# Configure notifications for workspace issues
-aloma workspace update --notification-groups "devops@company.com,alerts@company.com"
 ```
 
-#### Automated Health Checks
+**Git Integration Workflow**
 
-ALOMA automatically monitors:
+```bash
+# 1. Develop locally
+aloma workspace switch "Development"
+aloma step pull -p ./steps
 
-* **Unused steps** - Steps that never execute
-* **Unused connectors** - Connectors without associated steps
-* **Unused webhooks** - Webhooks receiving no traffic
-* **Failed tasks** - Tasks with recurring errors
-* **Resource utilization** - Memory and CPU usage patterns
+# 2. Make changes and test
+# Edit steps in IDE
+aloma step sync -p ./steps
 
-#### Error Notifications
+# 3. Commit and push
+git add .
+git commit -m "Add customer validation logic"
+git push origin develop
 
-Configure workspace-specific error notifications:
+# 4. Deploy to staging
+git checkout staging
+git merge develop
+aloma workspace switch "Staging"
+aloma deploy deploy-staging.yaml
+
+# 5. Production deployment
+git checkout main
+git merge staging
+aloma workspace switch "Production"
+aloma deploy deploy-production.yaml
+```
+
+***
+
+### Team Collaboration
+
+#### Access Control Patterns
+
+**Role-Based Workspace Access**
+
+**Developer Access Pattern:**
+
+```bash
+# Developers typically access:
+- Development workspaces (full access)
+- Staging workspaces (deploy access)
+- Production workspaces (read-only access)
+```
+
+**Operations Team Access Pattern:**
+
+```bash
+# Operations typically access:
+- Staging workspaces (full access)
+- Production workspaces (full access)
+- Development workspaces (monitoring access)
+```
+
+**Management Access Pattern:**
+
+```bash
+# Management typically access:
+- Production workspaces (read-only metrics)
+- Staging workspaces (read-only monitoring)
+```
+
+**Client-Specific Access Control**
+
+**Multi-Client Organization:**
 
 ```javascript
+// ACME Corp workspace - isolated client processing
 export const condition = {
-  error: {
-    type: "critical",
-    source: String
+  order: {
+    client: "acme",
+    status: "new"
   }
 };
 
 export const content = async () => {
-  // Get workspace notification settings
-  const alertChannel = task.config('ALERT_SLACK_CHANNEL');
-  const onCallEmail = task.config('ONCALL_EMAIL');
+  // ACME-specific processing with isolated credentials
+  const acmeConfig = {
+    taxRate: 0.08,
+    shippingCarrier: 'FedEx',
+    fulfillmentCenter: 'acme-warehouse-east'
+  };
   
-  // Send workspace-specific alerts
-  await connectors.slackCom.send({
-    channel: alertChannel,
-    text: `🚨 Critical error in ${data.error.source}: ${data.error.message}`,
-    attachments: [{
-      color: 'danger',
-      fields: [{
-        title: 'Workspace',
-        value: task.workspace.name,
-        short: true
-      }, {
-        title: 'Environment', 
-        value: task.config('ENVIRONMENT'),
-        short: true
-      }]
-    }]
+  console.log('Processing ACME Corp order');
+  
+  // Use ACME-specific connectors (separate credentials)
+  await connectors.acmeInventory.checkStock({
+    items: data.order.items,
+    warehouse: acmeConfig.fulfillmentCenter
   });
   
-  data.error.notifiedAt = new Date().toISOString();
-  data.error.workspace = task.workspace.name;
+  data.order.client = "acme";
+  data.order.taxRate = acmeConfig.taxRate;
+  data.order.fulfillmentCenter = acmeConfig.fulfillmentCenter;
+  data.order.processedAt = new Date().toISOString();
 };
 ```
+
+#### Development Workflow Patterns
+
+**Feature Development Workflow**
+
+```bash
+# 1. Create feature branch workspace
+aloma workspace add "Feature-CustomerValidation Dev" --tags "feature,development"
+
+# 2. Develop feature
+aloma workspace switch "Feature-CustomerValidation Dev"
+aloma step pull -p ./steps
+# Edit and test feature
+
+# 3. Integration testing
+aloma workspace switch "Integration Testing"
+aloma step sync -p ./steps
+# Run integration tests
+
+# 4. Merge to main development
+aloma workspace switch "Development"
+aloma step sync -p ./steps
+```
+
+**Hotfix Workflow**
+
+```bash
+# 1. Create hotfix workspace from production
+aloma workspace add "Hotfix-CriticalBug Staging" --tags "hotfix,staging"
+
+# 2. Apply hotfix
+aloma workspace switch "Hotfix-CriticalBug Staging"
+aloma step pull -p ./steps
+# Apply urgent fix and test
+
+# 3. Deploy to production
+aloma workspace switch "Production"
+aloma step sync -p ./steps
+```
+
+***
+
+### Monitoring and Observability
+
+#### Workspace Health Monitoring
+
+**Health Check Implementation**
+
+```bash
+# Enable workspace health monitoring
+aloma workspace update --health-enabled true
+aloma workspace update --notification-groups "devops@company.com,alerts@company.com"
+
+# Create automated health checks
+aloma task new "Workspace Health Check" -d '{
+  "healthCheck": true,
+  "timestamp": "'$(date -u +%Y-%m-%dT%H:%M:%SZ)'",
+  "automated": true,
+  "workspace": "'$(aloma workspace show --name-only)'"
+}'
+```
+
+**Health Check Step Implementation**
+
+```javascript
+// Health monitoring step
+export const condition = {
+  healthCheck: true
+};
+
+export const content = async () => {
+  const workspaceName = task.workspace();
+  const healthMetrics = {
+    timestamp: new Date().toISOString(),
+    workspace: workspaceName,
+    
+    // Task metrics
+    tasks: {
+      running: await getTaskCount('running'),
+      completed: await getTaskCount('done'),
+      failed: await getTaskCount('error'),
+      pending: await getTaskCount('pending')
+    },
+    
+    // Step metrics
+    steps: {
+      total: await getStepCount(),
+      active: await getActiveStepCount(),
+      errorRate: await getStepErrorRate()
+    },
+    
+    // Connector metrics
+    connectors: await getConnectorHealth(),
+    
+    // Performance metrics
+    performance: {
+      avgExecutionTime: await getAvgExecutionTime(),
+      taskThroughput: await getTaskThroughput(),
+      errorRate: await getErrorRate()
+    }
+  };
+  
+  // Store health metrics
+  data.healthMetrics = healthMetrics;
+  
+  // Alert on thresholds
+  if (healthMetrics.performance.errorRate > 0.05) { // 5% error rate
+    await alertOpsTeam('High error rate detected', healthMetrics);
+  }
+  
+  if (healthMetrics.tasks.failed > 50) { // 50 failed tasks
+    await alertOpsTeam('High failure count detected', healthMetrics);
+  }
+  
+  console.log(`Health check complete for ${workspaceName}:`, JSON.stringify(healthMetrics, null, 2));
+  
+  data.healthCheckComplete = true;
+};
+
+async function alertOpsTeam(message, metrics) {
+  await connectors.slack.send({
+    channel: '#ops-alerts',
+    text: `🚨 ${message}`,
+    attachments: [{
+      color: 'danger',
+      fields: [
+        { title: 'Workspace', value: metrics.workspace, short: true },
+        { title: 'Error Rate', value: `${(metrics.performance.errorRate * 100).toFixed(2)}%`, short: true },
+        { title: 'Failed Tasks', value: metrics.tasks.failed.toString(), short: true },
+        { title: 'Timestamp', value: metrics.timestamp, short: true }
+      ]
+    }]
+  });
+}
+```
+
+#### Performance Monitoring
+
+**Workspace-Level Metrics**
+
+```javascript
+// Performance tracking step
+export const condition = {
+  trackPerformance: true
+};
+
+export const content = async () => {
+  const metrics = {
+    workspace: task.workspace(),
+    timestamp: new Date().toISOString(),
+    
+    // Execution metrics
+    execution: {
+      totalTasks: data.performanceTracking?.totalTasks || 0,
+      avgExecutionTime: data.performanceTracking?.avgExecutionTime || 0,
+      taskThroughput: await calculateTaskThroughput(),
+      peakHourThroughput: await getPeakHourThroughput()
+    },
+    
+    // Resource utilization
+    resources: {
+      stepExecutionCount: await getStepExecutionCount(),
+      connectorCallCount: await getConnectorCallCount(),
+      dataVolumeProcessed: await getDataVolumeProcessed()
+    },
+    
+    // Quality metrics
+    quality: {
+      successRate: await getSuccessRate(),
+      retryRate: await getRetryRate(),
+      timeoutRate: await getTimeoutRate()
+    }
+  };
+  
+  // Store performance data
+  data.performanceMetrics = metrics;
+  
+  // Performance optimization alerts
+  if (metrics.execution.avgExecutionTime > 30000) { // 30 seconds
+    await notifyPerformanceIssue('High execution time', metrics);
+  }
+  
+  if (metrics.quality.successRate < 0.95) { // 95% success rate threshold
+    await notifyPerformanceIssue('Low success rate', metrics);
+  }
+  
+  console.log('Performance metrics collected:', JSON.stringify(metrics, null, 2));
+  
+  data.performanceTrackingComplete = true;
+};
+```
+
+***
 
 ### Best Practices
 
-#### Workspace Naming Conventions
+#### Workspace Organization Guidelines
 
-Use clear, descriptive names:
+**✅ Recommended Practices**
 
-```bash
-# ✅ Good naming patterns
-aloma workspace add "CustomerCRM Production"
-aloma workspace add "InvoiceProcessing Development" 
-aloma workspace add "ACME Corp Integration"
-aloma workspace add "Marketing Automation Staging"
-
-# ❌ Avoid vague names
-aloma workspace add "Test"
-aloma workspace add "MyWorkspace"
-aloma workspace add "Backup"
-```
-
-#### Environment Segregation
-
-Always separate environments:
+**1. Environment Separation**
 
 ```bash
-# ✅ Environment-specific workspaces
-aloma workspace add "OrderProcessing Dev" --tags "development,orders"
-aloma workspace add "OrderProcessing Staging" --tags "staging,orders"
-aloma workspace add "OrderProcessing Prod" --tags "production,orders"
-
-# ❌ Don't mix environments
-aloma workspace add "OrderProcessing All Environments"  # Dangerous mixing
+# Always separate environments
+aloma workspace add "MyApp Development" --tags "dev,myapp"
+aloma workspace add "MyApp Staging" --tags "staging,myapp"
+aloma workspace add "MyApp Production" --tags "prod,myapp"
 ```
 
-#### Resource Organization
+**2. Descriptive Naming**
 
-Group related automations:
-
-```javascript
-// ✅ Related steps in same workspace
-export const condition = { order: { status: "new" } };
-export const condition = { order: { status: "paid" } };
-export const condition = { order: { status: "shipped" } };
-
-// ❌ Don't put unrelated automations together
-// Order processing + HR onboarding + Marketing campaigns in one workspace
+```bash
+# Clear, descriptive names
+aloma workspace add "E-commerce Order Processing Production"
+aloma workspace add "Customer Support Automation Development"
 ```
 
-#### Configuration Management
+**3. Consistent Tagging**
 
-Use environment variables consistently:
+```bash
+# Consistent tag strategy
+--tags "environment,project,team,criticality"
+--tags "production,ecommerce,sales,critical"
+--tags "development,crm,marketing,normal"
+```
+
+**4. Configuration Management**
 
 ```javascript
+// Use environment variables consistently
+const apiEndpoint = task.config('API_ENDPOINT');
+const environment = task.config('ENVIRONMENT');
+
+// Environment-specific logic
+if (environment === 'production') {
+  // Production-only features
+}
+```
+
+**❌ Practices to Avoid**
+
+**1. Environment Mixing**
+
+```bash
+# Never mix environments
+# ❌ aloma workspace add "All Environments Mixed"
+```
+
+**2. Vague Naming**
+
+```bash
+# Avoid unclear names
+# ❌ aloma workspace add "Test"
+# ❌ aloma workspace add "MyWorkspace"
+```
+
+**3. Hardcoded Values**
+
+```javascript
+// ❌ Don't hardcode environment-specific values
+const prodUrl = 'https://api.prod.company.com'; // Won't work in dev
+
+// ✅ Use configuration instead
+const apiUrl = task.config('API_ENDPOINT');
+```
+
+**4. Shared Credentials**
+
+```bash
+# ❌ Don't share credentials between environments
+# Each workspace should have its own secrets
+```
+
+#### Security Best Practices
+
+**Credential Management**
+
+**1. Environment-Specific Credentials**
+
+```bash
+# Development credentials
+aloma workspace switch "Development"
+aloma secret add "API_KEY" "dev_key_here"
+
+# Production credentials (different)
+aloma workspace switch "Production"  
+aloma secret add "API_KEY" "prod_key_here"
+```
+
+**2. Least Privilege Access**
+
+```bash
+# Only grant necessary access
+# Developers: dev + staging (limited prod)
+# Operations: staging + prod
+# Clients: only their dedicated workspaces
+```
+
+**3. Secret Rotation**
+
+```bash
+# Regular secret rotation
+aloma secret delete "OLD_API_KEY"
+aloma secret add "API_KEY" "new_rotated_key"
+```
+
+**Data Protection**
+
+**1. Sensitive Data Handling**
+
+```javascript
+// Properly handle sensitive data
 export const content = async () => {
-  // ✅ Good: Use environment-specific configuration
-  const apiEndpoint = task.config('API_ENDPOINT');  // Different per workspace
-  const environment = task.config('ENVIRONMENT');   // 'dev', 'staging', 'prod'
+  // Process sensitive data
+  const result = await processPayment(data.payment);
   
-  // ❌ Avoid: Hardcoded environment-specific values
-  const hardcodedUrl = 'https://api.prod.company.com';  // Won't work in dev
+  // Store only necessary data
+  data.payment = {
+    id: result.id,
+    status: result.status,
+    // Don't store full card details
+  };
+  
+  // Use secrets for sensitive operations
+  const encryptionKey = task.config('ENCRYPTION_KEY');
+  if (result.sensitiveData) {
+    data.payment.encrypted = encrypt(result.sensitiveData, encryptionKey);
+  }
 };
 ```
 
-#### Access Control
+**2. Audit Trail Maintenance**
 
-Limit workspace access appropriately:
+```javascript
+// Maintain audit trails
+export const content = async () => {
+  // Log important actions (without sensitive data)
+  console.log(`Payment processed: ${data.payment.id}`);
+  
+  // Track processing metadata
+  data.audit = {
+    processedAt: new Date().toISOString(),
+    processedBy: task.workspace(),
+    operation: 'payment_processing'
+  };
+};
+```
 
-* **Developers**: Access to development and staging workspaces
-* **Operations**: Access to staging and production workspaces
-* **Management**: Read-only access to production metrics
-* **Clients**: Access only to their dedicated workspaces
+#### Performance Optimization
 
-Workspaces provide the foundation for secure, scalable automation architecture. By properly isolating environments, projects, and teams, you can build robust automation systems that grow with your organization while maintaining security and operational excellence.
+**Resource Management**
+
+**1. Efficient Step Design**
+
+```javascript
+// Optimize step conditions for performance
+export const condition = {
+  order: {
+    status: "pending",
+    priority: "high"  // Specific conditions reduce unnecessary executions
+  }
+};
+```
+
+**2. Connector Optimization**
+
+```javascript
+// Batch connector operations when possible
+export const content = async () => {
+  // Batch process multiple items
+  const results = await connectors.crm.bulkCreate(data.customers);
+  
+  // Update all at once
+  data.customers.forEach((customer, index) => {
+    customer.crmId = results[index].id;
+  });
+};
+```
+
+**3. Memory Management**
+
+```javascript
+// Manage large data efficiently
+export const content = async () => {
+  // Process data in chunks
+  const chunkSize = 100;
+  for (let i = 0; i < data.items.length; i += chunkSize) {
+    const chunk = data.items.slice(i, i + chunkSize);
+    await processChunk(chunk);
+  }
+  
+  // Clean up large temporary data
+  delete data.largeTemporaryData;
+};
+```
+
+This comprehensive workspace architecture enables teams to build scalable, secure, and maintainable automation systems that grow with organizational needs while maintaining operational excellence.
