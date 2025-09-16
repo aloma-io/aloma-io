@@ -1,0 +1,84 @@
+# Deploy configuration for Advantage Prod
+workspaces:
+  - name: "Advantage Prod"
+    
+    # Steps configuration
+    steps:
+      - syncPath: "steps/"
+
+    # Connectors configuration
+    connectors:
+      - connectorName: "openai.com"
+        config:
+          apiKey: "*******"
+      - connectorName: "slack.com"
+      - connectorName: "E-Mail (SMTP)"
+        config:
+          smtpUser: "*******" # optional
+          smtpPassword: "*******" # optional
+          smtpHost: "*******"
+      - connectorName: "DuxSoup"
+        config:
+          userId: "*******"
+          authKey: "*******"
+      - connectorName: "DuxSoup (duxSoup2)"
+        config:
+          userId: "*******"
+          authKey: "*******"
+      - connectorName: "Cron"
+        config:
+          cron: "*******" # optional
+      - connectorName: "Claude-ai"
+        config:
+          apiKey: "*******"
+      - connectorName: "E-Mail (SMTP - OAuth)"
+      - connectorName: "Google Sheets"
+        config:
+          googleServiceAccountKey: "*******" # optional
+      - connectorName: "hubspot.com (private)"
+        config:
+          apiToken: "*******"
+      - connectorName: "Perplexity"
+        config:
+          apiKey: "*******"
+
+    # Secrets configuration
+    secrets:
+      - name: "JAMES_DUX_SPREADSHEET"
+        value: "**********"
+        encrypted: false
+      - name: "TIM_DUX_SPREADSHEET"
+        value: "**********"
+        encrypted: false
+      - name: "LINKEDIN_SPREADSHEET"
+        value: "**********"
+        encrypted: false
+      - name: "NEVERBOUNCE_KEY"
+        value: "**********"
+        encrypted: true
+      - name: "FULLENRICH_KEY"
+        value: "**********"
+        encrypted: true
+      - name: "COMPANIES_SPREADSHEET"
+        value: "**********"
+        encrypted: false
+      - name: "UCPassword"
+        value: "**********"
+        encrypted: true
+      - name: "HUBSPOT_LIST_IDS"
+        value: "**********"
+        description: "Hubspot list ids to get companies"
+        encrypted: false
+
+    # Webhooks configuration
+    webhooks:
+      - name: "hubspot"
+      - name: "dux-soup-Tim"
+      - name: "full-enrich"
+      - name: "dux-soup-James"
+      - name: "googleSheet"
+    
+    # Tasks configuration
+    tasks:
+      # - name: "task name"
+      #   file: "task/task.yaml"
