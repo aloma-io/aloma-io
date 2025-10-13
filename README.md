@@ -74,6 +74,7 @@ This documentation will help you get started quickly, explore core concepts, and
 * [Building Your First AI Agent](ai-agents-and-intelligent-automation/building-your-first-ai-agent-hands-on-tutorial.md)
 * [Multi-Step AI Workflows](ai-agents-and-intelligent-automation/multi-step-ai-workflows-advanced-implementation.md)
 * [Agent Memory & Context Management](ai-agents-and-intelligent-automation/agent-memory-and-context-management-critical-technical-topic.md)
+* [AI Agent Evaluations](ai-agents-and-intelligent-automation/ai-agent-evaluations.md)
 * [Human-in-the-Loop Patterns](ai-agents-and-intelligent-automation/human-in-the-loop-patterns-business-critical.md)
 
 **Advanced Agent Examples**
