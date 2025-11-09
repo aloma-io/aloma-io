@@ -90,7 +90,3 @@ This documentation will help you get started quickly, explore core concepts, and
 * [E-commerce Order Processing](examples-and-tutorials/e-commerce-order-processing.md)
 
 ***
-
-## :scroll: White Papers
-
-* [Aloma: Code-First Automation for Workflows, Data Operations, and AI Agents](white-papers/aloma-code-first-automation-for-workflows-data-operations-and-ai-agents.md)
