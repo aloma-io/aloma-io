@@ -36,8 +36,15 @@
 * [📚 Examples & Tutorials](examples-and-tutorials/README.md)
   * [Customer on-boarding Pipeline](examples-and-tutorials/customer-on-boarding-pipeline.md)
   * [E-commerce Order Processing](examples-and-tutorials/e-commerce-order-processing.md)
+  * [Customer Support Escalation Agent](examples-and-tutorials/overview-and-architecture.md)
+
+## White Papers
+
+* [White Papers](white-papers/white-papers/README.md)
+  * [ALOMA: Code-First Automation for Workflows, Data Operations, and AI Agents](white-papers/white-papers/customer-support-escalation-agent-breakdown.md)
 
 ## Group 1
 
-* [Customer Support Escalation Agent breakdown](customer-support-escalation-agent-breakdown/README.md)
-  * [Overview & Architecture](customer-support-escalation-agent-breakdown/overview-and-architecture.md)
+***
+
+* [ALOMA: Code-First Automation for Workflows, Data Operations, and AI Agents](aloma-code-first-automation-for-workflows-data-operations-and-ai-agents.md)
