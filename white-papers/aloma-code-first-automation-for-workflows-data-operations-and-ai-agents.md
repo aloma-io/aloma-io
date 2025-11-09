@@ -1,7 +1,5 @@
 # ALOMA: Code-First Automation for Workflows, Data Operations, and AI Agents
 
-## ALOMA: Code-First Automation for Workflows, Data Operations, and AI Agents
-
 **A Technical White Paper for CTOs and Engineering Leaders**
 
 **Version 2.0 | November 2025**
